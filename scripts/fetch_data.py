@@ -157,6 +157,56 @@ def clean_wow_text(text):
     return WOW_MARKUP_RE.sub("", text).strip()
 
 
+def merge_item_stacks(items):
+    """Combine entries for the same item id (e.g. the same item split across
+    multiple bag/bank slots as separate stacks) into one row with a summed
+    count, preserving first-seen order. If merged entries span more than one
+    "location" value (e.g. Bags + Bank), that field becomes a joined string
+    ("Bags, Bank") rather than silently keeping just the first one seen.
+    """
+    merged = {}
+    locations = {}
+    order = []
+    for item in items:
+        key = item["itemId"]
+        if key in merged:
+            merged[key]["count"] += item["count"]
+            loc = item.get("location")
+            if loc:
+                locations[key].add(loc)
+        else:
+            merged[key] = dict(item)
+            locations[key] = {item["location"]} if item.get("location") else set()
+            order.append(key)
+    result = []
+    for key in order:
+        item = merged[key]
+        if locations[key] and len(locations[key]) > 1:
+            item["location"] = ", ".join(sorted(locations[key]))
+        result.append(item)
+    return result
+
+
+def merge_item_stacks(items, key_fn=None):
+    """Combine entries with the same key (default: itemId) into one, summing
+    their counts. The same item can legitimately show up as several separate
+    stacks (e.g. split across bag slots or bank tabs) -- this collapses them
+    into a single row per distinct key, keeping first-seen field values
+    other than count.
+    """
+    key_fn = key_fn or (lambda item: item["itemId"])
+    merged = {}
+    order = []
+    for item in items:
+        key = key_fn(item)
+        if key in merged:
+            merged[key]["count"] += item["count"]
+        else:
+            merged[key] = dict(item)
+            order.append(key)
+    return [merged[key] for key in order]
+
+
 def _headers():
     headers = {"User-Agent": "wowthing-site-builder/1.0"}
     if SESSION_COOKIE:
@@ -416,6 +466,7 @@ def main():
             "category": item_category_name(item_id),
             "wowheadUrl": f"https://www.wowhead.com/item={item_id}" + (f"?ilvl={item_level}" if item_level else ""),
         })
+    warband_items_out = merge_item_stacks(warband_items_out)
 
     # --- Build character output ----------------------------------------
     def short_currency_name(name):
@@ -552,6 +603,7 @@ def main():
                 "category": item_category_name(item_id),
                 "wowheadUrl": wowhead_url(item_id, item_level=item_level or None),
             })
+        bag_items_out = merge_item_stacks(bag_items_out)
 
         # Used internally below to build raidGrids (the actual UI-facing
         # boss-kill data); not shipped in the output itself, since raidGrids

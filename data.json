@@ -1,6 +1,6 @@
 {
  "account": "cta",
- "generatedAt": "2026-09-12T22:37:50.856658+00:00",
+ "generatedAt": "2026-09-12T22:42:24.040493+00:00",
  "minLevel": 90,
  "minItemLevel": 290,
  "warbandGold": 1710769,
@@ -53,25 +53,7 @@
   {
    "itemId": 132514,
    "itemName": "Auto-Hammer",
-   "count": 3,
-   "itemLevel": 0,
-   "quality": 2,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=132514"
-  },
-  {
-   "itemId": 132514,
-   "itemName": "Auto-Hammer",
-   "count": 20,
-   "itemLevel": 0,
-   "quality": 2,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=132514"
-  },
-  {
-   "itemId": 132514,
-   "itemName": "Auto-Hammer",
-   "count": 20,
+   "count": 43,
    "itemLevel": 0,
    "quality": 2,
    "category": "Consumable",
@@ -224,79 +206,7 @@
   {
    "itemId": 241289,
    "itemName": "Potion of Recklessness",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241289"
-  },
-  {
-   "itemId": 241289,
-   "itemName": "Potion of Recklessness",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241289"
-  },
-  {
-   "itemId": 241289,
-   "itemName": "Potion of Recklessness",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241289"
-  },
-  {
-   "itemId": 241289,
-   "itemName": "Potion of Recklessness",
-   "count": 9,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241289"
-  },
-  {
-   "itemId": 241289,
-   "itemName": "Potion of Recklessness",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241289"
-  },
-  {
-   "itemId": 241289,
-   "itemName": "Potion of Recklessness",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241289"
-  },
-  {
-   "itemId": 241289,
-   "itemName": "Potion of Recklessness",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241289"
-  },
-  {
-   "itemId": 241289,
-   "itemName": "Potion of Recklessness",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241289"
-  },
-  {
-   "itemId": 241289,
-   "itemName": "Potion of Recklessness",
-   "count": 200,
+   "count": 1609,
    "itemLevel": 0,
    "quality": 1,
    "category": "Consumable",
@@ -305,106 +215,7 @@
   {
    "itemId": 241309,
    "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=241309"
-  },
-  {
-   "itemId": 241309,
-   "itemName": "Light's Potential",
-   "count": 200,
+   "count": 2400,
    "itemLevel": 0,
    "quality": 1,
    "category": "Consumable",
@@ -440,52 +251,7 @@
   {
    "itemId": 243734,
    "itemName": "Thalassian Phoenix Oil",
-   "count": 20,
-   "itemLevel": 0,
-   "quality": 2,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=243734"
-  },
-  {
-   "itemId": 243734,
-   "itemName": "Thalassian Phoenix Oil",
-   "count": 20,
-   "itemLevel": 0,
-   "quality": 2,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=243734"
-  },
-  {
-   "itemId": 243734,
-   "itemName": "Thalassian Phoenix Oil",
-   "count": 20,
-   "itemLevel": 0,
-   "quality": 2,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=243734"
-  },
-  {
-   "itemId": 243734,
-   "itemName": "Thalassian Phoenix Oil",
-   "count": 20,
-   "itemLevel": 0,
-   "quality": 2,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=243734"
-  },
-  {
-   "itemId": 243734,
-   "itemName": "Thalassian Phoenix Oil",
-   "count": 20,
-   "itemLevel": 0,
-   "quality": 2,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=243734"
-  },
-  {
-   "itemId": 243734,
-   "itemName": "Thalassian Phoenix Oil",
-   "count": 7,
+   "count": 107,
    "itemLevel": 0,
    "quality": 2,
    "category": "Consumable",
@@ -755,52 +521,7 @@
   {
    "itemId": 271883,
    "itemName": "Concentrated Silvermoon Health Potion",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=271883"
-  },
-  {
-   "itemId": 271883,
-   "itemName": "Concentrated Silvermoon Health Potion",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=271883"
-  },
-  {
-   "itemId": 271883,
-   "itemName": "Concentrated Silvermoon Health Potion",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=271883"
-  },
-  {
-   "itemId": 271883,
-   "itemName": "Concentrated Silvermoon Health Potion",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=271883"
-  },
-  {
-   "itemId": 271883,
-   "itemName": "Concentrated Silvermoon Health Potion",
-   "count": 200,
-   "itemLevel": 0,
-   "quality": 1,
-   "category": "Consumable",
-   "wowheadUrl": "https://www.wowhead.com/item=271883"
-  },
-  {
-   "itemId": 271883,
-   "itemName": "Concentrated Silvermoon Health Potion",
-   "count": 73,
+   "count": 1073,
    "itemLevel": 0,
    "quality": 1,
    "category": "Consumable",
@@ -845,16 +566,7 @@
   {
    "itemId": 272235,
    "itemName": "Pyrewalker's Treads",
-   "count": 1,
-   "itemLevel": 282,
-   "quality": 4,
-   "category": "Armor",
-   "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=282"
-  },
-  {
-   "itemId": 272235,
-   "itemName": "Pyrewalker's Treads",
-   "count": 1,
+   "count": 2,
    "itemLevel": 282,
    "quality": 4,
    "category": "Armor",
@@ -908,20 +620,11 @@
   {
    "itemId": 272254,
    "itemName": "Galerider's Mesh Wraps",
-   "count": 1,
+   "count": 2,
    "itemLevel": 276,
    "quality": 3,
    "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=276"
-  },
-  {
-   "itemId": 272254,
-   "itemName": "Galerider's Mesh Wraps",
-   "count": 1,
-   "itemLevel": 282,
-   "quality": 4,
-   "category": "Armor",
-   "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=282"
   },
   {
    "itemId": 272256,
@@ -944,16 +647,7 @@
   {
    "itemId": 272274,
    "itemName": "Realm Splitter",
-   "count": 1,
-   "itemLevel": 282,
-   "quality": 4,
-   "category": "Weapon",
-   "wowheadUrl": "https://www.wowhead.com/item=272274?ilvl=282"
-  },
-  {
-   "itemId": 272274,
-   "itemName": "Realm Splitter",
-   "count": 1,
+   "count": 2,
    "itemLevel": 282,
    "quality": 4,
    "category": "Weapon",
@@ -1097,16 +791,7 @@
   {
    "itemId": 280715,
    "itemName": "Eye of Skully",
-   "count": 1,
-   "itemLevel": 266,
-   "quality": 3,
-   "category": "Armor",
-   "wowheadUrl": "https://www.wowhead.com/item=280715?ilvl=266"
-  },
-  {
-   "itemId": 280715,
-   "itemName": "Eye of Skully",
-   "count": 1,
+   "count": 2,
    "itemLevel": 266,
    "quality": 3,
    "category": "Armor",
@@ -5838,17 +5523,7 @@
     {
      "itemId": 241309,
      "itemName": "Light's Potential",
-     "count": 163,
-     "itemLevel": 0,
-     "quality": 1,
-     "location": "Bags",
-     "category": "Consumable",
-     "wowheadUrl": "https://www.wowhead.com/item=241309"
-    },
-    {
-     "itemId": 241309,
-     "itemName": "Light's Potential",
-     "count": 200,
+     "count": 363,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -6675,7 +6350,7 @@
     {
      "itemId": 241289,
      "itemName": "Potion of Recklessness",
-     "count": 196,
+     "count": 396,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -6703,16 +6378,6 @@
      "wowheadUrl": "https://www.wowhead.com/item=272225?ilvl=256"
     },
     {
-     "itemId": 241289,
-     "itemName": "Potion of Recklessness",
-     "count": 200,
-     "itemLevel": 0,
-     "quality": 1,
-     "location": "Bags",
-     "category": "Consumable",
-     "wowheadUrl": "https://www.wowhead.com/item=241289"
-    },
-    {
      "itemId": 250214,
      "itemName": "Lightspire Core",
      "count": 1,
@@ -6735,7 +6400,7 @@
     {
      "itemId": 271883,
      "itemName": "Concentrated Silvermoon Health Potion",
-     "count": 198,
+     "count": 398,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -6761,16 +6426,6 @@
      "location": "Bags",
      "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
-    },
-    {
-     "itemId": 271883,
-     "itemName": "Concentrated Silvermoon Health Potion",
-     "count": 200,
-     "itemLevel": 0,
-     "quality": 1,
-     "location": "Bags",
-     "category": "Consumable",
-     "wowheadUrl": "https://www.wowhead.com/item=271883"
     },
     {
      "itemId": 256978,
@@ -8321,7 +7976,7 @@
     {
      "itemId": 241309,
      "itemName": "Light's Potential",
-     "count": 190,
+     "count": 390,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -8337,16 +7992,6 @@
      "location": "Bags",
      "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=272273?ilvl=256"
-    },
-    {
-     "itemId": 241309,
-     "itemName": "Light's Potential",
-     "count": 200,
-     "itemLevel": 0,
-     "quality": 1,
-     "location": "Bags",
-     "category": "Consumable",
-     "wowheadUrl": "https://www.wowhead.com/item=241309"
     },
     {
      "itemId": 251142,
@@ -8391,7 +8036,7 @@
     {
      "itemId": 271883,
      "itemName": "Concentrated Silvermoon Health Potion",
-     "count": 196,
+     "count": 396,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -8407,16 +8052,6 @@
      "location": "Bags",
      "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260619"
-    },
-    {
-     "itemId": 271883,
-     "itemName": "Concentrated Silvermoon Health Potion",
-     "count": 200,
-     "itemLevel": 0,
-     "quality": 1,
-     "location": "Bags",
-     "category": "Consumable",
-     "wowheadUrl": "https://www.wowhead.com/item=271883"
     },
     {
      "itemId": 260659,
@@ -10306,7 +9941,7 @@
     {
      "itemId": 242275,
      "itemName": "Royal Roast",
-     "count": 1000,
+     "count": 1410,
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
@@ -10366,7 +10001,7 @@
     {
      "itemId": 242643,
      "itemName": "A Big Ol' Stick of Butter",
-     "count": 118,
+     "count": 2118,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -10384,16 +10019,6 @@
      "wowheadUrl": "https://www.wowhead.com/item=256988?ilvl=285"
     },
     {
-     "itemId": 242643,
-     "itemName": "A Big Ol' Stick of Butter",
-     "count": 1000,
-     "itemLevel": 0,
-     "quality": 1,
-     "location": "Bags",
-     "category": "Trade Goods",
-     "wowheadUrl": "https://www.wowhead.com/item=242643"
-    },
-    {
      "itemId": 269862,
      "itemName": "Thalassian Token of Merit",
      "count": 6,
@@ -10404,44 +10029,14 @@
      "wowheadUrl": "https://www.wowhead.com/item=269862"
     },
     {
-     "itemId": 242643,
-     "itemName": "A Big Ol' Stick of Butter",
-     "count": 1000,
-     "itemLevel": 0,
-     "quality": 1,
-     "location": "Bags",
-     "category": "Trade Goods",
-     "wowheadUrl": "https://www.wowhead.com/item=242643"
-    },
-    {
-     "itemId": 242275,
-     "itemName": "Royal Roast",
-     "count": 375,
-     "itemLevel": 0,
-     "quality": 3,
-     "location": "Bags",
-     "category": "Consumable",
-     "wowheadUrl": "https://www.wowhead.com/item=242275"
-    },
-    {
      "itemId": 272235,
      "itemName": "Pyrewalker's Treads",
-     "count": 1,
+     "count": 2,
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
      "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=256"
-    },
-    {
-     "itemId": 242275,
-     "itemName": "Royal Roast",
-     "count": 14,
-     "itemLevel": 0,
-     "quality": 3,
-     "location": "Bags",
-     "category": "Consumable",
-     "wowheadUrl": "https://www.wowhead.com/item=242275"
     },
     {
      "itemId": 242747,
@@ -10456,7 +10051,7 @@
     {
      "itemId": 242645,
      "itemName": "Ripened Vegetable Assortment",
-     "count": 121,
+     "count": 2121,
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
@@ -10474,16 +10069,6 @@
      "wowheadUrl": "https://www.wowhead.com/item=250059?ilvl=289"
     },
     {
-     "itemId": 242645,
-     "itemName": "Ripened Vegetable Assortment",
-     "count": 1000,
-     "itemLevel": 0,
-     "quality": 2,
-     "location": "Bags",
-     "category": "Trade Goods",
-     "wowheadUrl": "https://www.wowhead.com/item=242645"
-    },
-    {
      "itemId": 272234,
      "itemName": "Pyrewalker's Miter",
      "count": 1,
@@ -10494,29 +10079,9 @@
      "wowheadUrl": "https://www.wowhead.com/item=272234?ilvl=256"
     },
     {
-     "itemId": 242645,
-     "itemName": "Ripened Vegetable Assortment",
-     "count": 1000,
-     "itemLevel": 0,
-     "quality": 2,
-     "location": "Bags",
-     "category": "Trade Goods",
-     "wowheadUrl": "https://www.wowhead.com/item=242645"
-    },
-    {
      "itemId": 242647,
      "itemName": "Tavern Fixings",
-     "count": 120,
-     "itemLevel": 0,
-     "quality": 2,
-     "location": "Bags",
-     "category": "Trade Goods",
-     "wowheadUrl": "https://www.wowhead.com/item=242647"
-    },
-    {
-     "itemId": 242647,
-     "itemName": "Tavern Fixings",
-     "count": 1000,
+     "count": 1120,
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
@@ -10532,26 +10097,6 @@
      "location": "Bags",
      "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272232?ilvl=207"
-    },
-    {
-     "itemId": 272235,
-     "itemName": "Pyrewalker's Treads",
-     "count": 1,
-     "itemLevel": 256,
-     "quality": 2,
-     "location": "Bags",
-     "category": "Armor",
-     "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=256"
-    },
-    {
-     "itemId": 242275,
-     "itemName": "Royal Roast",
-     "count": 21,
-     "itemLevel": 0,
-     "quality": 3,
-     "location": "Bags",
-     "category": "Consumable",
-     "wowheadUrl": "https://www.wowhead.com/item=242275"
     },
     {
      "itemId": 242639,
@@ -10586,27 +10131,7 @@
     {
      "itemId": 246951,
      "itemName": "Stormarion Core",
-     "count": 20,
-     "itemLevel": 0,
-     "quality": 3,
-     "location": "Bank",
-     "category": "Miscellaneous",
-     "wowheadUrl": "https://www.wowhead.com/item=246951"
-    },
-    {
-     "itemId": 246951,
-     "itemName": "Stormarion Core",
-     "count": 100,
-     "itemLevel": 0,
-     "quality": 3,
-     "location": "Bank",
-     "category": "Miscellaneous",
-     "wowheadUrl": "https://www.wowhead.com/item=246951"
-    },
-    {
-     "itemId": 246951,
-     "itemName": "Stormarion Core",
-     "count": 100,
+     "count": 220,
      "itemLevel": 0,
      "quality": 3,
      "location": "Bank",
@@ -12682,7 +12207,7 @@
     {
      "itemId": 272229,
      "itemName": "Serpentine Talisman",
-     "count": 1,
+     "count": 2,
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
@@ -12708,16 +12233,6 @@
      "location": "Bags",
      "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250033?ilvl=298"
-    },
-    {
-     "itemId": 272229,
-     "itemName": "Serpentine Talisman",
-     "count": 1,
-     "itemLevel": 256,
-     "quality": 2,
-     "location": "Bags",
-     "category": "Armor",
-     "wowheadUrl": "https://www.wowhead.com/item=272229?ilvl=256"
     },
     {
      "itemId": 272246,
