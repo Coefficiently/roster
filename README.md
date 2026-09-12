@@ -33,6 +33,28 @@ If the site's bag/warband data suddenly goes empty again, this is why --
 check the "Fetch latest WoWthing data" Action log for a cookie-expired
 warning before assuming something else broke.
 
+## Encrypted data.json
+
+The repo and site are public, but `data.json` is encrypted (AES-256-GCM, key
+derived via PBKDF2) so the raw file itself is unreadable without the
+passphrase -- set via the `DATA_ENCRYPTION_PASSPHRASE` repo secret. The
+browser decrypts it client-side (Web Crypto API) and remembers the
+passphrase in that browser's localStorage after the first correct entry, so
+it won't ask again on that device/browser. Clearing browser data, or using
+a different browser/device, means entering it once more there.
+
+This is genuinely enough to stop passive discovery (search engines,
+casually finding the repo, someone fetching data.json directly expecting
+plain JSON) -- but it's static-site crypto with no rate-limiting on guesses,
+so it rests entirely on the passphrase being strong. It is not intended to
+resist a determined, resourced attacker. To rotate the passphrase: generate
+a new one, update the `DATA_ENCRYPTION_PASSPHRASE` secret, done -- next
+fetch re-encrypts with it, and any browser with the old one cached will
+just fail to decrypt and re-prompt.
+
+If `DATA_ENCRYPTION_PASSPHRASE` is unset, `data.json` is written as plain
+JSON as before (this is purely additive, not required).
+
 ## Season-specific constants (scripts/fetch_data.py) -- bump these when stale
 
 | Constant | Update when | How |

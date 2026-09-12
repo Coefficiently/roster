@@ -3,6 +3,7 @@
 Fetches WoWthing profile data for a given account and produces a compact
 data.json consumed by the static site.
 """
+import base64
 import json
 import os
 import re
@@ -27,6 +28,14 @@ BASE = "https://wowthing.org"
 # Session cookies expire periodically and need re-generating (log into
 # wowthing.org, copy the fresh cookie value, update the repo secret).
 SESSION_COOKIE = os.environ.get("WOWTHING_SESSION_COOKIE", "").strip()
+
+# Optional: encrypts data.json so it's unreadable to anyone without the
+# passphrase, even though the repo/site are public. Set via the
+# DATA_ENCRYPTION_PASSPHRASE repo secret; if unset, data.json is written as
+# plain JSON as before (this is purely additive -- see README for what this
+# actually protects against and its real limits).
+ENCRYPTION_PASSPHRASE = os.environ.get("DATA_ENCRYPTION_PASSPHRASE", "").strip()
+ENCRYPTION_ITERATIONS = 250000
 
 # Currency IDs we care about (Midnight Season 2, as of this writing).
 # These can drift each season -- update if wowthing adds a new crest tier.
@@ -212,6 +221,30 @@ def _headers():
     if SESSION_COOKIE:
         headers["Cookie"] = f".AspNetCore.Identity.Application={SESSION_COOKIE}"
     return headers
+
+
+def encrypt_output(data_dict):
+    """Encrypts the final data dict into an envelope the site's own
+    JavaScript (Web Crypto API) can decrypt client-side with the same
+    passphrase. Format matches what app.js expects exactly -- see the
+    decryptData() function there if changing this."""
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    plaintext = json.dumps(data_dict).encode("utf-8")
+    salt = os.urandom(16)
+    kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=ENCRYPTION_ITERATIONS)
+    key = kdf.derive(ENCRYPTION_PASSPHRASE.encode("utf-8"))
+    iv = os.urandom(12)
+    ciphertext = AESGCM(key).encrypt(iv, plaintext, None)
+    return {
+        "encrypted": True,
+        "salt": base64.b64encode(salt).decode("ascii"),
+        "iv": base64.b64encode(iv).decode("ascii"),
+        "ciphertext": base64.b64encode(ciphertext).decode("ascii"),
+        "iterations": ENCRYPTION_ITERATIONS,
+    }
 
 
 def fetch_json(url):
@@ -837,8 +870,14 @@ def main():
         "characters": characters_out,
     }
 
+    if ENCRYPTION_PASSPHRASE:
+        print("Encrypting data.json...")
+        to_write = encrypt_output(output)
+    else:
+        to_write = output
+
     with open("data.json", "w") as f:
-        json.dump(output, f, indent=1)
+        json.dump(to_write, f, indent=1)
 
     print(f"Wrote data.json with {len(characters_out)} characters.")
 

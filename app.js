@@ -712,14 +712,96 @@
     if (allItemsBtn) allItemsBtn.hidden = !DATA.hasPrivateData;
   }
 
+  // ---------------- Encrypted data.json support ----------------
+  // data.json is optionally encrypted (AES-256-GCM, key derived via PBKDF2)
+  // so the raw file is unreadable to anyone without the passphrase, even
+  // though the repo/site are public. See scripts/fetch_data.py's
+  // encrypt_output() for the matching Python-side implementation -- the
+  // envelope format there must stay in sync with what's decoded here.
+  const PASSPHRASE_STORAGE_KEY = "roster_passphrase";
+
+  function base64ToBuffer(b64) {
+    return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  }
+
+  async function decryptEnvelope(envelope, passphrase) {
+    const salt = base64ToBuffer(envelope.salt);
+    const iv = base64ToBuffer(envelope.iv);
+    const ciphertext = base64ToBuffer(envelope.ciphertext);
+    const passKey = await crypto.subtle.importKey(
+      "raw", new TextEncoder().encode(passphrase), "PBKDF2", false, ["deriveKey"]
+    );
+    const key = await crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt, iterations: envelope.iterations, hash: "SHA-256" },
+      passKey, { name: "AES-GCM", length: 256 }, false, ["decrypt"]
+    );
+    const plaintextBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+    return JSON.parse(new TextDecoder().decode(plaintextBuf));
+  }
+
+  function promptForPassphrase(envelope) {
+    return new Promise((resolve) => {
+      const lockScreen = document.getElementById("lock-screen");
+      const form = document.getElementById("lock-form");
+      const input = document.getElementById("lock-input");
+      const errorEl = document.getElementById("lock-error");
+
+      document.body.classList.add("is-locked");
+      lockScreen.hidden = false;
+      errorEl.hidden = true;
+      input.value = "";
+      input.focus();
+
+      const onSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          const decrypted = await decryptEnvelope(envelope, input.value);
+          try { localStorage.setItem(PASSPHRASE_STORAGE_KEY, input.value); } catch (err) { /* storage unavailable, fine */ }
+          form.removeEventListener("submit", onSubmit);
+          lockScreen.hidden = true;
+          document.body.classList.remove("is-locked");
+          resolve(decrypted);
+        } catch (err) {
+          errorEl.hidden = false;
+          input.select();
+        }
+      };
+      form.addEventListener("submit", onSubmit);
+    });
+  }
+
+  async function resolveData(rawData) {
+    if (!rawData || !rawData.encrypted) {
+      return rawData;
+    }
+    let saved = null;
+    try { saved = localStorage.getItem(PASSPHRASE_STORAGE_KEY); } catch (err) { /* storage unavailable, fine */ }
+    if (saved) {
+      try {
+        return await decryptEnvelope(rawData, saved);
+      } catch (err) {
+        try { localStorage.removeItem(PASSPHRASE_STORAGE_KEY); } catch (e2) { /* fine */ }
+      }
+    }
+    return promptForPassphrase(rawData);
+  }
+
   async function loadAndRender() {
+    let rawData;
     try {
       // Cache-bust with a timestamp query param so a manual refresh always
       // hits the network, even on browsers that ignore cache:"no-store".
       const res = await fetch(`data.json?t=${Date.now()}`, { cache: "no-store" });
-      DATA = await res.json();
+      rawData = await res.json();
     } catch (err) {
       tbodyEl.innerHTML = `<tr><td class="empty-msg">Could not load character data. Try again shortly.</td></tr>`;
+      console.error(err);
+      return false;
+    }
+    try {
+      DATA = await resolveData(rawData);
+    } catch (err) {
+      tbodyEl.innerHTML = `<tr><td class="empty-msg">Could not decrypt character data.</td></tr>`;
       console.error(err);
       return false;
     }

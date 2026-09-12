@@ -11,6 +11,16 @@
 </head>
 <body>
 
+<div id="lock-screen" class="lock-screen" hidden>
+  <form id="lock-form" class="lock-form">
+    <h1 class="lock-title">Current Roster</h1>
+    <p class="lock-sub">This data is encrypted. Enter the passphrase to view it.</p>
+    <input id="lock-input" type="password" autocomplete="current-password" placeholder="Passphrase" />
+    <button type="submit" class="page-btn lock-submit">Unlock</button>
+    <p id="lock-error" class="lock-error" hidden>Incorrect passphrase. Try again.</p>
+  </form>
+</div>
+
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
