@@ -531,9 +531,87 @@
   }
 
   function renderWarbandList(items) {
-    const listEl = document.getElementById("warband-list");
+    renderGroupedItemList("warband-list", items, renderBagItemRow, "Warband bank is empty.");
+  }
+
+  function wireWarbandPanel() {
+    const btn = document.getElementById("warband-btn");
+    const panel = document.getElementById("warband-panel");
+    const closeBtn = document.getElementById("warband-close");
+    if (!btn || !panel) return;
+
+    btn.addEventListener("click", () => {
+      renderWarbandList(DATA.warbandItems);
+      panel.hidden = false;
+      if (typeof panel.scrollIntoView === "function") {
+        panel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    if (closeBtn) closeBtn.addEventListener("click", () => { panel.hidden = true; });
+  }
+
+  // ---------------- "All Items" aggregate view (bags + warband) ----------
+
+  function escapeAttr(str) {
+    return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+  }
+
+  function buildAllItemsAggregate() {
+    const byId = new Map();
+
+    const addSource = (item, sourceName) => {
+      let entry = byId.get(item.itemId);
+      if (!entry) {
+        entry = {
+          itemId: item.itemId,
+          itemName: item.itemName,
+          quality: item.quality,
+          itemLevel: item.itemLevel,
+          category: item.category,
+          wowheadUrl: item.wowheadUrl,
+          totalCount: 0,
+          bySource: new Map(),
+        };
+        byId.set(item.itemId, entry);
+      }
+      entry.totalCount += item.count;
+      entry.bySource.set(sourceName, (entry.bySource.get(sourceName) || 0) + item.count);
+    };
+
+    for (const item of DATA.warbandItems || []) {
+      addSource(item, "Warband Bank");
+    }
+    for (const char of DATA.characters || []) {
+      for (const item of char.bagItems || []) {
+        addSource(item, char.name);
+      }
+    }
+
+    return [...byId.values()].map((entry) => {
+      const breakdown = [...entry.bySource.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([source, count]) => `${fmtNumber(count)} ${source}`)
+        .join(", ");
+      return { ...entry, count: entry.totalCount, breakdown };
+    });
+  }
+
+  function renderAllItemsRow(item) {
+    const border = qualityColor(item.quality);
+    return `<li class="gear-row" style="border-left-color:${border}">
+      <div class="gear-row-main">
+        <div class="gear-row-top">
+          <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}</span>
+          <span class="item-count-breakdown" data-tooltip="${escapeAttr(item.breakdown)}" aria-label="${escapeAttr(item.breakdown)}">\u00d7${fmtNumber(item.count)}</span>
+        </div>
+      </div>
+    </li>`;
+  }
+
+  function renderGroupedItemList(listElId, items, rowRenderFn, emptyText) {
+    const listEl = document.getElementById(listElId);
     if (!items || items.length === 0) {
-      listEl.innerHTML = `<li class="empty-msg">Warband bank is empty.</li>`;
+      listEl.innerHTML = `<li class="empty-msg">${emptyText}</li>`;
       return;
     }
 
@@ -557,19 +635,20 @@
     for (const bucket of orderedBuckets) {
       const bucketItems = groups.get(bucket).slice().sort((a, b) => a.itemName.localeCompare(b.itemName));
       html += `<li class="warband-category-header">${bucket} <span class="warband-category-count">(${bucketItems.length})</span></li>`;
-      html += bucketItems.map(renderBagItemRow).join("");
+      html += bucketItems.map(rowRenderFn).join("");
     }
     listEl.innerHTML = html;
   }
 
-  function wireWarbandPanel() {
-    const btn = document.getElementById("warband-btn");
-    const panel = document.getElementById("warband-panel");
-    const closeBtn = document.getElementById("warband-close");
+  function wireAllItemsPanel() {
+    const btn = document.getElementById("allitems-btn");
+    const panel = document.getElementById("allitems-panel");
+    const closeBtn = document.getElementById("allitems-close");
     if (!btn || !panel) return;
 
     btn.addEventListener("click", () => {
-      renderWarbandList(DATA.warbandItems);
+      const items = buildAllItemsAggregate();
+      renderGroupedItemList("allitems-list", items, renderAllItemsRow, "No items found.");
       panel.hidden = false;
       if (typeof panel.scrollIntoView === "function") {
         panel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -629,6 +708,8 @@
 
     const warbandBtn = document.getElementById("warband-btn");
     if (warbandBtn) warbandBtn.hidden = !DATA.hasPrivateData;
+    const allItemsBtn = document.getElementById("allitems-btn");
+    if (allItemsBtn) allItemsBtn.hidden = !DATA.hasPrivateData;
   }
 
   async function loadAndRender() {
@@ -669,6 +750,7 @@
     wireRefreshButton();
     wirePaginationControls();
     wireWarbandPanel();
+    wireAllItemsPanel();
     await loadAndRender();
     setInterval(renderResetCountdown, 60000);
   }

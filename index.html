@@ -31,6 +31,7 @@
       <button id="page-next" class="page-btn" type="button">Next &rarr;</button>
     </div>
     <button id="warband-btn" class="page-btn" type="button" hidden>Warband Bank</button>
+    <button id="allitems-btn" class="page-btn" type="button" hidden>All Items</button>
   </div>
 
   <div class="table-scroll">
@@ -45,6 +46,15 @@
       <button id="warband-close" class="detail-close" aria-label="Close">&times;</button>
       <h2>Warband Bank</h2>
       <ul id="warband-list" class="gear-list"></ul>
+    </div>
+  </section>
+
+  <section id="allitems-panel" class="detail-panel" hidden>
+    <div class="detail-panel-inner">
+      <button id="allitems-close" class="detail-close" aria-label="Close">&times;</button>
+      <h2>All Items (bags + warband bank)</h2>
+      <p class="detail-meta">Hover the count on any item to see which characters (or the warband bank) it's coming from.</p>
+      <ul id="allitems-list" class="gear-list"></ul>
     </div>
   </section>
 

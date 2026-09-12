@@ -361,6 +361,13 @@ a { color: var(--gold-2); }
 .gear-row-top .slot { color: var(--ink-dim); flex-shrink: 0; width: 5.5rem; font-size: 0.78rem; }
 .gear-row-top .item-name { flex: 1; min-width: 0; overflow-wrap: break-word; }
 .gear-row-top .item-ilvl { color: var(--gold-2); flex-shrink: 0; font-variant-numeric: tabular-nums; font-weight: 600; position: relative; }
+.item-count-breakdown {
+  color: var(--gold-2);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  position: relative;
+}
 
 .item-tier-badge {
   display: inline-block;
