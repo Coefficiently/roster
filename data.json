@@ -1,6 +1,6 @@
 {
  "account": "cta",
- "generatedAt": "2026-09-12T23:03:12.421539+00:00",
+ "generatedAt": "2026-09-12T23:18:38.888788+00:00",
  "minLevel": 90,
  "minItemLevel": 290,
  "warbandGold": 1710769,
@@ -5091,7 +5091,7 @@
    "realmId": 11,
    "gender": 0,
    "faction": 0,
-   "gold": 10000,
+   "gold": 12373,
    "equipped": [
     {
      "slot": 1,
@@ -5413,7 +5413,7 @@
     {
      "itemId": 241323,
      "itemName": "Flask of the Magisters",
-     "count": 9,
+     "count": 8,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -5431,9 +5431,19 @@
      "wowheadUrl": "https://www.wowhead.com/item=271530?ilvl=331"
     },
     {
+     "itemId": 251285,
+     "itemName": "Petrified Root",
+     "count": 7,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "category": "Trade Goods",
+     "wowheadUrl": "https://www.wowhead.com/item=251285"
+    },
+    {
      "itemId": 242747,
      "itemName": "Hearty Royal Roast",
-     "count": 81,
+     "count": 79,
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
@@ -5501,9 +5511,19 @@
      "wowheadUrl": "https://www.wowhead.com/item=270161?ilvl=321"
     },
     {
+     "itemId": 251124,
+     "itemName": "Gauntlets of Fevered Defense",
+     "count": 1,
+     "itemLevel": 311,
+     "quality": 4,
+     "location": "Bags",
+     "category": "Armor",
+     "wowheadUrl": "https://www.wowhead.com/item=251124?ilvl=311"
+    },
+    {
      "itemId": 271883,
      "itemName": "Concentrated Silvermoon Health Potion",
-     "count": 185,
+     "count": 179,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -5523,7 +5543,7 @@
     {
      "itemId": 241309,
      "itemName": "Light's Potential",
-     "count": 363,
+     "count": 352,
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
@@ -5553,7 +5573,7 @@
     {
      "itemId": 243734,
      "itemName": "Thalassian Phoenix Oil",
-     "count": 5,
+     "count": 4,
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
@@ -5573,7 +5593,7 @@
     {
      "itemId": 259085,
      "itemName": "Void-Touched Augment Rune",
-     "count": 72,
+     "count": 70,
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
@@ -5658,9 +5678,9 @@
       "id": 3443,
       "name": "Veteran Mistcrest",
       "shortName": "Veteran",
-      "quantity": 339,
+      "quantity": 371,
       "max": 500,
-      "totalQuantity": 219,
+      "totalQuantity": 251,
       "isMovingMax": true,
       "wowheadUrl": "https://www.wowhead.com/currency=3443"
      },
@@ -5731,7 +5751,7 @@
     ]
    },
    "mythicPlus": {
-    "rating": 3101,
+    "rating": 3190,
     "currentKeystone": {
      "dungeonName": "Altar of Fangs",
      "level": 10
@@ -5740,8 +5760,8 @@
      {
       "mapId": 588,
       "name": "Altar of Fangs",
-      "level": 12,
-      "score": 373
+      "level": 14,
+      "score": 399
      },
      {
       "mapId": 586,
@@ -5752,8 +5772,8 @@
      {
       "mapId": 587,
       "name": "Murder Row",
-      "level": 10,
-      "score": 335
+      "level": 14,
+      "score": 398
      },
      {
       "mapId": 584,
@@ -5813,7 +5833,7 @@
      },
      {
       "met": true,
-      "label": "12"
+      "label": "14"
      }
     ],
     "world": [
