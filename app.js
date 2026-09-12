@@ -512,12 +512,23 @@
 
   // ---------------- Warband Bank panel ----------------
 
-  // Roughly matches how WoW's own bag/bank UI orders item categories.
-  const CATEGORY_ORDER = [
-    "Weapon", "Armor", "Gem", "Consumable", "Trade Goods", "Reagent",
-    "Recipe", "Quest Item", "Container", "Key", "Glyph", "Battle Pet",
-    "Currency", "WoW Token", "Profession", "Miscellaneous",
-  ];
+  // Consolidates the finer-grained item categories from data.json into the
+  // 5 buckets requested for the Warband Bank view specifically. Detail
+  // panels (equipped gear, per-character bags) aren't affected by this --
+  // only where this bucket function is actually used.
+  const WARBAND_BUCKET_MAP = {
+    "Weapon": "Gear",
+    "Armor": "Gear",
+    "Gem": "Gear",
+    "Consumable": "Combat Consumables",
+    "Miscellaneous": "Account Bound Currencies",
+    "Quest Item": "Quest Items",
+  };
+  const WARBAND_BUCKET_ORDER = ["Gear", "Combat Consumables", "Account Bound Currencies", "Quest Items", "Other"];
+
+  function warbandBucket(category) {
+    return WARBAND_BUCKET_MAP[category] || "Other";
+  }
 
   function renderWarbandList(items) {
     const listEl = document.getElementById("warband-list");
@@ -528,14 +539,14 @@
 
     const groups = new Map();
     for (const item of items) {
-      const cat = item.category || "Miscellaneous";
-      if (!groups.has(cat)) groups.set(cat, []);
-      groups.get(cat).push(item);
+      const bucket = warbandBucket(item.category);
+      if (!groups.has(bucket)) groups.set(bucket, []);
+      groups.get(bucket).push(item);
     }
 
-    const orderedCats = [...groups.keys()].sort((a, b) => {
-      const ia = CATEGORY_ORDER.indexOf(a);
-      const ib = CATEGORY_ORDER.indexOf(b);
+    const orderedBuckets = [...groups.keys()].sort((a, b) => {
+      const ia = WARBAND_BUCKET_ORDER.indexOf(a);
+      const ib = WARBAND_BUCKET_ORDER.indexOf(b);
       if (ia === -1 && ib === -1) return a.localeCompare(b);
       if (ia === -1) return 1;
       if (ib === -1) return -1;
@@ -543,10 +554,10 @@
     });
 
     let html = "";
-    for (const cat of orderedCats) {
-      const catItems = groups.get(cat).slice().sort((a, b) => a.itemName.localeCompare(b.itemName));
-      html += `<li class="warband-category-header">${cat} <span class="warband-category-count">(${catItems.length})</span></li>`;
-      html += catItems.map(renderBagItemRow).join("");
+    for (const bucket of orderedBuckets) {
+      const bucketItems = groups.get(bucket).slice().sort((a, b) => a.itemName.localeCompare(b.itemName));
+      html += `<li class="warband-category-header">${bucket} <span class="warband-category-count">(${bucketItems.length})</span></li>`;
+      html += bucketItems.map(renderBagItemRow).join("");
     }
     listEl.innerHTML = html;
   }
