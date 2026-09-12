@@ -512,6 +512,45 @@
 
   // ---------------- Warband Bank panel ----------------
 
+  // Roughly matches how WoW's own bag/bank UI orders item categories.
+  const CATEGORY_ORDER = [
+    "Weapon", "Armor", "Gem", "Consumable", "Trade Goods", "Reagent",
+    "Recipe", "Quest Item", "Container", "Key", "Glyph", "Battle Pet",
+    "Currency", "WoW Token", "Profession", "Miscellaneous",
+  ];
+
+  function renderWarbandList(items) {
+    const listEl = document.getElementById("warband-list");
+    if (!items || items.length === 0) {
+      listEl.innerHTML = `<li class="empty-msg">Warband bank is empty.</li>`;
+      return;
+    }
+
+    const groups = new Map();
+    for (const item of items) {
+      const cat = item.category || "Miscellaneous";
+      if (!groups.has(cat)) groups.set(cat, []);
+      groups.get(cat).push(item);
+    }
+
+    const orderedCats = [...groups.keys()].sort((a, b) => {
+      const ia = CATEGORY_ORDER.indexOf(a);
+      const ib = CATEGORY_ORDER.indexOf(b);
+      if (ia === -1 && ib === -1) return a.localeCompare(b);
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
+
+    let html = "";
+    for (const cat of orderedCats) {
+      const catItems = groups.get(cat).slice().sort((a, b) => a.itemName.localeCompare(b.itemName));
+      html += `<li class="warband-category-header">${cat} <span class="warband-category-count">(${catItems.length})</span></li>`;
+      html += catItems.map(renderBagItemRow).join("");
+    }
+    listEl.innerHTML = html;
+  }
+
   function wireWarbandPanel() {
     const btn = document.getElementById("warband-btn");
     const panel = document.getElementById("warband-panel");
@@ -519,7 +558,7 @@
     if (!btn || !panel) return;
 
     btn.addEventListener("click", () => {
-      fillList("warband-list", DATA.warbandItems, renderBagItemRow, "Warband bank is empty.");
+      renderWarbandList(DATA.warbandItems);
       panel.hidden = false;
       if (typeof panel.scrollIntoView === "function") {
         panel.scrollIntoView({ behavior: "smooth", block: "start" });

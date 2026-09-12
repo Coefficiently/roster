@@ -1,6 +1,6 @@
 {
  "account": "cta",
- "generatedAt": "2026-09-12T21:07:57.825061+00:00",
+ "generatedAt": "2026-09-12T21:47:34.435310+00:00",
  "minLevel": 90,
  "minItemLevel": 290,
  "warbandGold": 1710769,
@@ -11,6 +11,7 @@
    "count": 1,
    "itemLevel": 12,
    "quality": 1,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=3420?ilvl=12"
   },
   {
@@ -19,6 +20,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=8383"
   },
   {
@@ -27,6 +29,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=49802?ilvl=253"
   },
   {
@@ -35,6 +38,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=50233?ilvl=253"
   },
   {
@@ -43,6 +47,7 @@
    "count": 78,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=86143"
   },
   {
@@ -51,6 +56,7 @@
    "count": 3,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=132514"
   },
   {
@@ -59,6 +65,7 @@
    "count": 20,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=132514"
   },
   {
@@ -67,6 +74,7 @@
    "count": 20,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=132514"
   },
   {
@@ -75,6 +83,7 @@
    "count": 99,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=137642"
   },
   {
@@ -83,6 +92,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=138488"
   },
   {
@@ -91,6 +101,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=138727"
   },
   {
@@ -99,6 +110,7 @@
    "count": 65,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=151134"
   },
   {
@@ -107,6 +119,7 @@
    "count": 1,
    "itemLevel": 298,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=159247?ilvl=298"
   },
   {
@@ -115,6 +128,7 @@
    "count": 1,
    "itemLevel": 298,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=159645?ilvl=298"
   },
   {
@@ -123,6 +137,7 @@
    "count": 68,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=163036"
   },
   {
@@ -131,6 +146,7 @@
    "count": 171,
    "itemLevel": 0,
    "quality": 4,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=190189"
   },
   {
@@ -139,6 +155,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=193705?ilvl=253"
   },
   {
@@ -147,6 +164,7 @@
    "count": 1,
    "itemLevel": 298,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=193755?ilvl=298"
   },
   {
@@ -155,6 +173,7 @@
    "count": 1,
    "itemLevel": 298,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=193757?ilvl=298"
   },
   {
@@ -163,6 +182,7 @@
    "count": 6,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=200443"
   },
   {
@@ -171,6 +191,7 @@
    "count": 43,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=200447"
   },
   {
@@ -179,6 +200,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 4,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=224025"
   },
   {
@@ -187,6 +209,7 @@
    "count": 10,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=225557"
   },
   {
@@ -195,6 +218,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=228228"
   },
   {
@@ -203,6 +227,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -211,6 +236,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -219,6 +245,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -227,6 +254,7 @@
    "count": 9,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -235,6 +263,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -243,6 +272,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -251,6 +281,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -259,6 +290,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -267,6 +299,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241289"
   },
   {
@@ -275,6 +308,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -283,6 +317,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -291,6 +326,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -299,6 +335,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -307,6 +344,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -315,6 +353,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -323,6 +362,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -331,6 +371,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -339,6 +380,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -347,6 +389,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -355,6 +398,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -363,6 +407,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241309"
   },
   {
@@ -371,6 +416,7 @@
    "count": 59,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=241327"
   },
   {
@@ -379,6 +425,7 @@
    "count": 166,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=242241"
   },
   {
@@ -387,6 +434,7 @@
    "count": 345,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=242747"
   },
   {
@@ -395,6 +443,7 @@
    "count": 20,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=243734"
   },
   {
@@ -403,6 +452,7 @@
    "count": 20,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=243734"
   },
   {
@@ -411,6 +461,7 @@
    "count": 20,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=243734"
   },
   {
@@ -419,6 +470,7 @@
    "count": 20,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=243734"
   },
   {
@@ -427,6 +479,7 @@
    "count": 20,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=243734"
   },
   {
@@ -435,6 +488,7 @@
    "count": 7,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=243734"
   },
   {
@@ -443,6 +497,7 @@
    "count": 2,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=244193"
   },
   {
@@ -451,6 +506,7 @@
    "count": 10,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=246240"
   },
   {
@@ -459,6 +515,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=246314"
   },
   {
@@ -467,6 +524,7 @@
    "count": 1,
    "itemLevel": 269,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=249288?ilvl=269"
   },
   {
@@ -475,6 +533,7 @@
    "count": 1,
    "itemLevel": 259,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=249323?ilvl=259"
   },
   {
@@ -483,6 +542,7 @@
    "count": 1,
    "itemLevel": 263,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=249374?ilvl=263"
   },
   {
@@ -491,6 +551,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=250453?ilvl=253"
   },
   {
@@ -499,6 +560,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=251208?ilvl=253"
   },
   {
@@ -507,6 +569,7 @@
    "count": 1,
    "itemLevel": 227,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=251219?ilvl=227"
   },
   {
@@ -515,6 +578,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=251789?ilvl=282"
   },
   {
@@ -523,6 +587,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=251790?ilvl=276"
   },
   {
@@ -531,6 +596,7 @@
    "count": 5,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=255825"
   },
   {
@@ -539,6 +605,7 @@
    "count": 83,
    "itemLevel": 1,
    "quality": 3,
+   "category": "Reagent",
    "wowheadUrl": "https://www.wowhead.com/item=255826?ilvl=1"
   },
   {
@@ -547,6 +614,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Trade Goods",
    "wowheadUrl": "https://www.wowhead.com/item=256963"
   },
   {
@@ -555,6 +623,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 2,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=258923?ilvl=253"
   },
   {
@@ -563,6 +632,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 2,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=258929?ilvl=253"
   },
   {
@@ -571,6 +641,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 2,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=258938?ilvl=253"
   },
   {
@@ -579,6 +650,7 @@
    "count": 11,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=259361"
   },
   {
@@ -587,6 +659,7 @@
    "count": 1,
    "itemLevel": 253,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=260312?ilvl=253"
   },
   {
@@ -595,6 +668,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=265560"
   },
   {
@@ -603,6 +677,7 @@
    "count": 1,
    "itemLevel": 1,
    "quality": 1,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=265814?ilvl=1"
   },
   {
@@ -611,6 +686,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=268197?ilvl=282"
   },
   {
@@ -619,6 +695,7 @@
    "count": 1,
    "itemLevel": 292,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=268232?ilvl=292"
   },
   {
@@ -627,6 +704,7 @@
    "count": 1,
    "itemLevel": 279,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=268235?ilvl=279"
   },
   {
@@ -635,6 +713,7 @@
    "count": 1,
    "itemLevel": 298,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=268264?ilvl=298"
   },
   {
@@ -643,6 +722,7 @@
    "count": 5,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=269586"
   },
   {
@@ -651,6 +731,7 @@
    "count": 1,
    "itemLevel": 308,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=270160?ilvl=308"
   },
   {
@@ -659,6 +740,7 @@
    "count": 1,
    "itemLevel": 308,
    "quality": 4,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=270925?ilvl=308"
   },
   {
@@ -667,6 +749,7 @@
    "count": 1,
    "itemLevel": 289,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=271876?ilvl=289"
   },
   {
@@ -675,6 +758,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=271883"
   },
   {
@@ -683,6 +767,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=271883"
   },
   {
@@ -691,6 +776,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=271883"
   },
   {
@@ -699,6 +785,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=271883"
   },
   {
@@ -707,6 +794,7 @@
    "count": 200,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=271883"
   },
   {
@@ -715,6 +803,7 @@
    "count": 73,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=271883"
   },
   {
@@ -723,6 +812,7 @@
    "count": 43,
    "itemLevel": 0,
    "quality": 1,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=271884"
   },
   {
@@ -731,6 +821,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=272195"
   },
   {
@@ -739,6 +830,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272228?ilvl=276"
   },
   {
@@ -747,6 +839,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272232?ilvl=282"
   },
   {
@@ -755,6 +848,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=282"
   },
   {
@@ -763,6 +857,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=282"
   },
   {
@@ -771,6 +866,7 @@
    "count": 1,
    "itemLevel": 272,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272237?ilvl=272"
   },
   {
@@ -779,6 +875,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272238?ilvl=276"
   },
   {
@@ -787,6 +884,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272247?ilvl=276"
   },
   {
@@ -795,6 +893,7 @@
    "count": 1,
    "itemLevel": 269,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272250?ilvl=269"
   },
   {
@@ -803,6 +902,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272251?ilvl=276"
   },
   {
@@ -811,6 +911,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=276"
   },
   {
@@ -819,6 +920,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=282"
   },
   {
@@ -827,6 +929,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272256?ilvl=282"
   },
   {
@@ -835,6 +938,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=272259?ilvl=276"
   },
   {
@@ -843,6 +947,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=272274?ilvl=282"
   },
   {
@@ -851,6 +956,7 @@
    "count": 1,
    "itemLevel": 282,
    "quality": 4,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=272274?ilvl=282"
   },
   {
@@ -859,6 +965,7 @@
    "count": 46,
    "itemLevel": 0,
    "quality": 4,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=273000"
   },
   {
@@ -867,6 +974,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 2,
+   "category": "Miscellaneous",
    "wowheadUrl": "https://www.wowhead.com/item=274469"
   },
   {
@@ -875,6 +983,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=274493?ilvl=276"
   },
   {
@@ -883,6 +992,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=274495?ilvl=276"
   },
   {
@@ -891,6 +1001,7 @@
    "count": 1,
    "itemLevel": 276,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=274496?ilvl=276"
   },
   {
@@ -899,6 +1010,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=274499?ilvl=266"
   },
   {
@@ -907,6 +1019,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=276013?ilvl=266"
   },
   {
@@ -915,6 +1028,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=276025?ilvl=266"
   },
   {
@@ -923,6 +1037,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=276026?ilvl=266"
   },
   {
@@ -931,6 +1046,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=276028?ilvl=266"
   },
   {
@@ -939,6 +1055,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Weapon",
    "wowheadUrl": "https://www.wowhead.com/item=276054?ilvl=266"
   },
   {
@@ -947,6 +1064,7 @@
    "count": 1,
    "itemLevel": 0,
    "quality": 3,
+   "category": "Consumable",
    "wowheadUrl": "https://www.wowhead.com/item=279449"
   },
   {
@@ -955,6 +1073,7 @@
    "count": 2,
    "itemLevel": 0,
    "quality": 4,
+   "category": "Quest Item",
    "wowheadUrl": "https://www.wowhead.com/item=279575"
   },
   {
@@ -963,6 +1082,7 @@
    "count": 2,
    "itemLevel": 0,
    "quality": 4,
+   "category": "Quest Item",
    "wowheadUrl": "https://www.wowhead.com/item=279576"
   },
   {
@@ -971,6 +1091,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=280713?ilvl=266"
   },
   {
@@ -979,6 +1100,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=280715?ilvl=266"
   },
   {
@@ -987,6 +1109,7 @@
    "count": 1,
    "itemLevel": 266,
    "quality": 3,
+   "category": "Armor",
    "wowheadUrl": "https://www.wowhead.com/item=280715?ilvl=266"
   }
  ],
@@ -5609,6 +5732,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=241323"
     },
     {
@@ -5618,6 +5742,7 @@
      "itemLevel": 331,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=271530?ilvl=331"
     },
     {
@@ -5627,6 +5752,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=242747"
     },
     {
@@ -5636,6 +5762,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250243?ilvl=321"
     },
     {
@@ -5645,6 +5772,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Reagent",
      "wowheadUrl": "https://www.wowhead.com/item=180653"
     },
     {
@@ -5654,6 +5782,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=271528?ilvl=321"
     },
     {
@@ -5663,6 +5792,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -5672,6 +5802,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=132514"
     },
     {
@@ -5681,6 +5812,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=270161?ilvl=321"
     },
     {
@@ -5690,6 +5822,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=271883"
     },
     {
@@ -5699,6 +5832,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     },
     {
@@ -5708,6 +5842,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=241309"
     },
     {
@@ -5717,6 +5852,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=241309"
     },
     {
@@ -5726,6 +5862,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=188152"
     },
     {
@@ -5735,6 +5872,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=273792?ilvl=321"
     },
     {
@@ -5744,6 +5882,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=243734"
     },
     {
@@ -5753,6 +5892,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251135?ilvl=321"
     },
     {
@@ -5762,6 +5902,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=259085"
     },
     {
@@ -5771,6 +5912,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251136?ilvl=321"
     },
     {
@@ -5780,6 +5922,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=273000"
     },
     {
@@ -5789,6 +5932,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=279449"
     },
     {
@@ -5798,6 +5942,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=268215?ilvl=321"
     },
     {
@@ -5807,6 +5952,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=270167?ilvl=321"
     },
     {
@@ -5816,6 +5962,7 @@
      "itemLevel": 28,
      "quality": 6,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=158075?ilvl=28"
     }
    ],
@@ -6412,6 +6559,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     },
     {
@@ -6421,6 +6569,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=273000"
     },
     {
@@ -6430,6 +6579,7 @@
      "itemLevel": 298,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=249346?ilvl=298"
     },
     {
@@ -6439,6 +6589,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=171618?ilvl=321"
     },
     {
@@ -6448,6 +6599,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Recipe",
      "wowheadUrl": "https://www.wowhead.com/item=256704"
     },
     {
@@ -6457,6 +6609,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=243734"
     },
     {
@@ -6466,6 +6619,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=268251?ilvl=321"
     },
     {
@@ -6475,6 +6629,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=272273?ilvl=256"
     },
     {
@@ -6484,6 +6639,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251234?ilvl=321"
     },
     {
@@ -6493,6 +6649,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=242747"
     },
     {
@@ -6502,6 +6659,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251141?ilvl=321"
     },
     {
@@ -6511,6 +6669,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260652"
     },
     {
@@ -6520,6 +6679,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=241289"
     },
     {
@@ -6529,6 +6689,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=188152"
     },
     {
@@ -6538,6 +6699,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272225?ilvl=256"
     },
     {
@@ -6547,6 +6709,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=241289"
     },
     {
@@ -6556,6 +6719,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250214?ilvl=321"
     },
     {
@@ -6565,6 +6729,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=245784"
     },
     {
@@ -6574,6 +6739,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=271883"
     },
     {
@@ -6583,6 +6749,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=268552"
     },
     {
@@ -6592,6 +6759,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -6601,6 +6769,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=271883"
     },
     {
@@ -6610,6 +6779,7 @@
      "itemLevel": 282,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=256978?ilvl=282"
     },
     {
@@ -6619,6 +6789,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Reagent",
      "wowheadUrl": "https://www.wowhead.com/item=180653"
     },
     {
@@ -6628,6 +6799,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250224?ilvl=321"
     },
     {
@@ -6637,6 +6809,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=193763?ilvl=321"
     },
     {
@@ -6646,6 +6819,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=271504?ilvl=321"
     },
     {
@@ -6655,6 +6829,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Recipe",
      "wowheadUrl": "https://www.wowhead.com/item=201742"
     },
     {
@@ -6664,6 +6839,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260659"
     },
     {
@@ -6673,6 +6849,7 @@
      "itemLevel": 334,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=270164?ilvl=334"
     },
     {
@@ -6682,6 +6859,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260638"
     },
     {
@@ -6691,6 +6869,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=239034?ilvl=321"
     },
     {
@@ -6700,6 +6879,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272251?ilvl=256"
     },
     {
@@ -6709,6 +6889,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=270170?ilvl=321"
     },
     {
@@ -6718,6 +6899,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260619"
     },
     {
@@ -6727,6 +6909,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=256"
     }
    ],
@@ -7406,6 +7589,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Reagent",
      "wowheadUrl": "https://www.wowhead.com/item=180653"
     },
     {
@@ -7415,6 +7599,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -7424,6 +7609,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250254?ilvl=321"
     },
     {
@@ -7433,6 +7619,7 @@
      "itemLevel": 298,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=249346?ilvl=298"
     },
     {
@@ -7442,6 +7629,7 @@
      "itemLevel": 311,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=193763?ilvl=311"
     },
     {
@@ -7451,6 +7639,7 @@
      "itemLevel": 298,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=193759?ilvl=298"
     },
     {
@@ -7460,6 +7649,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=273000"
     },
     {
@@ -7469,6 +7659,7 @@
      "itemLevel": 308,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=270168?ilvl=308"
     },
     {
@@ -7478,6 +7669,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=188152"
     },
     {
@@ -7487,6 +7679,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     }
    ],
@@ -8082,6 +8275,7 @@
      "itemLevel": 308,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=270169?ilvl=308"
     },
     {
@@ -8091,6 +8285,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=236770"
     },
     {
@@ -8100,6 +8295,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     },
     {
@@ -8109,6 +8305,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Reagent",
      "wowheadUrl": "https://www.wowhead.com/item=180653"
     },
     {
@@ -8118,6 +8315,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251784?ilvl=256"
     },
     {
@@ -8127,6 +8325,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=241309"
     },
     {
@@ -8136,6 +8335,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=272273?ilvl=256"
     },
     {
@@ -8145,6 +8345,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=241309"
     },
     {
@@ -8154,6 +8355,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251142?ilvl=321"
     },
     {
@@ -8163,6 +8365,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=188152"
     },
     {
@@ -8172,6 +8375,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -8181,6 +8385,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250224?ilvl=321"
     },
     {
@@ -8190,6 +8395,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=271883"
     },
     {
@@ -8199,6 +8405,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260619"
     },
     {
@@ -8208,6 +8415,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=271883"
     },
     {
@@ -8217,6 +8425,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260659"
     },
     {
@@ -8226,6 +8435,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=273781?ilvl=321"
     },
     {
@@ -8235,6 +8445,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=242747"
     },
     {
@@ -8244,6 +8455,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=156058?ilvl=321"
     },
     {
@@ -8253,6 +8465,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=241321"
     },
     {
@@ -8262,6 +8475,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260638"
     },
     {
@@ -8271,6 +8485,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=271562?ilvl=321"
     },
     {
@@ -8280,6 +8495,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=243734"
     },
     {
@@ -8289,6 +8505,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=269862"
     },
     {
@@ -8298,6 +8515,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272150?ilvl=256"
     },
     {
@@ -8307,6 +8525,7 @@
      "itemLevel": 201,
      "quality": 0,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=258869?ilvl=201"
     },
     {
@@ -8316,6 +8535,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251154?ilvl=321"
     },
     {
@@ -8325,6 +8545,7 @@
      "itemLevel": 282,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=256986?ilvl=282"
     },
     {
@@ -8334,6 +8555,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=273000"
     },
     {
@@ -8343,6 +8565,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251792?ilvl=321"
     },
     {
@@ -8352,6 +8575,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=274497?ilvl=256"
     },
     {
@@ -8361,6 +8585,7 @@
      "itemLevel": 318,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=268242?ilvl=318"
     },
     {
@@ -8370,6 +8595,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260652"
     },
     {
@@ -8379,6 +8605,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=268221?ilvl=321"
     },
     {
@@ -8388,6 +8615,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=193757?ilvl=321"
     }
    ],
@@ -9088,6 +9316,7 @@
      "itemLevel": 217,
      "quality": 3,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=255263?ilvl=217"
     },
     {
@@ -9097,6 +9326,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     },
     {
@@ -9106,6 +9336,7 @@
      "itemLevel": 236,
      "quality": 4,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=239677?ilvl=236"
     },
     {
@@ -9115,6 +9346,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Reagent",
      "wowheadUrl": "https://www.wowhead.com/item=180653"
     },
     {
@@ -9124,6 +9356,7 @@
      "itemLevel": 263,
      "quality": 4,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=255399?ilvl=263"
     },
     {
@@ -9133,6 +9366,7 @@
      "itemLevel": 308,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251127?ilvl=308"
     },
     {
@@ -9142,6 +9376,7 @@
      "itemLevel": 217,
      "quality": 3,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=255328?ilvl=217"
     },
     {
@@ -9151,6 +9386,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250042?ilvl=289"
     },
     {
@@ -9160,6 +9396,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=188152"
     },
     {
@@ -9169,6 +9406,7 @@
      "itemLevel": 217,
      "quality": 3,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=255327?ilvl=217"
     },
     {
@@ -9178,6 +9416,7 @@
      "itemLevel": 217,
      "quality": 3,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=255279?ilvl=217"
     },
     {
@@ -9187,6 +9426,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -9196,6 +9436,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260659"
     },
     {
@@ -9205,6 +9446,7 @@
      "itemLevel": 217,
      "quality": 3,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=255268?ilvl=217"
     },
     {
@@ -9214,6 +9456,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272237?ilvl=256"
     },
     {
@@ -9223,6 +9466,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=269862"
     },
     {
@@ -9232,6 +9476,7 @@
      "itemLevel": 242,
      "quality": 4,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=240952?ilvl=242"
     },
     {
@@ -9241,6 +9486,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=224154"
     },
     {
@@ -9250,6 +9496,7 @@
      "itemLevel": 239,
      "quality": 4,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=240951?ilvl=239"
     },
     {
@@ -9259,6 +9506,7 @@
      "itemLevel": 263,
      "quality": 4,
      "location": "Bank",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=255607?ilvl=263"
     },
     {
@@ -9268,6 +9516,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260638"
     },
     {
@@ -9277,6 +9526,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260677"
     },
     {
@@ -9286,6 +9536,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272231?ilvl=256"
     },
     {
@@ -9295,6 +9546,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260652"
     },
     {
@@ -9304,6 +9556,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=193748?ilvl=321"
     },
     {
@@ -9313,6 +9566,7 @@
      "itemLevel": 298,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=249343?ilvl=298"
     },
     {
@@ -9322,6 +9576,7 @@
      "itemLevel": 207,
      "quality": 3,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=272266?ilvl=207"
     },
     {
@@ -9331,6 +9586,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260648"
     },
     {
@@ -9340,6 +9596,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272232?ilvl=256"
     },
     {
@@ -9349,6 +9606,7 @@
      "itemLevel": 279,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=256984?ilvl=279"
     }
    ],
@@ -10052,6 +10310,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=242275"
     },
     {
@@ -10061,6 +10320,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=236761"
     },
     {
@@ -10070,6 +10330,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     },
     {
@@ -10079,6 +10340,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -10088,6 +10350,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250063?ilvl=289"
     },
     {
@@ -10097,6 +10360,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250061?ilvl=289"
     },
     {
@@ -10106,6 +10370,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242643"
     },
     {
@@ -10115,6 +10380,7 @@
      "itemLevel": 285,
      "quality": 4,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=256988?ilvl=285"
     },
     {
@@ -10124,6 +10390,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242643"
     },
     {
@@ -10133,6 +10400,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=269862"
     },
     {
@@ -10142,6 +10410,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242643"
     },
     {
@@ -10151,6 +10420,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=242275"
     },
     {
@@ -10160,6 +10430,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=256"
     },
     {
@@ -10169,6 +10440,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=242275"
     },
     {
@@ -10178,6 +10450,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=242747"
     },
     {
@@ -10187,6 +10460,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242645"
     },
     {
@@ -10196,6 +10470,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250059?ilvl=289"
     },
     {
@@ -10205,6 +10480,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242645"
     },
     {
@@ -10214,6 +10490,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272234?ilvl=256"
     },
     {
@@ -10223,6 +10500,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242645"
     },
     {
@@ -10232,6 +10510,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242647"
     },
     {
@@ -10241,6 +10520,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242647"
     },
     {
@@ -10250,6 +10530,7 @@
      "itemLevel": 207,
      "quality": 3,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272232?ilvl=207"
     },
     {
@@ -10259,6 +10540,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=256"
     },
     {
@@ -10268,6 +10550,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=242275"
     },
     {
@@ -10277,6 +10560,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=242639"
     },
     {
@@ -10286,6 +10570,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=158368?ilvl=321"
     },
     {
@@ -10295,6 +10580,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=188152"
     },
     {
@@ -10304,6 +10590,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bank",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=246951"
     },
     {
@@ -10313,6 +10600,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bank",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=246951"
     },
     {
@@ -10322,6 +10610,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bank",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=246951"
     },
     {
@@ -10331,6 +10620,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bank",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=250741"
     }
    ],
@@ -10865,6 +11155,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=236770"
     },
     {
@@ -10874,6 +11165,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     },
     {
@@ -10883,6 +11175,7 @@
      "itemLevel": 298,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=268291?ilvl=298"
     },
     {
@@ -10892,6 +11185,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250041?ilvl=289"
     },
     {
@@ -10901,6 +11195,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Reagent",
      "wowheadUrl": "https://www.wowhead.com/item=180653"
     },
     {
@@ -10910,6 +11205,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -10919,6 +11215,7 @@
      "itemLevel": 260,
      "quality": 3,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=258936?ilvl=260"
     },
     {
@@ -10928,6 +11225,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272233?ilvl=256"
     },
     {
@@ -10937,6 +11235,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=268211?ilvl=321"
     },
     {
@@ -10946,6 +11245,7 @@
      "itemLevel": 207,
      "quality": 3,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=272271?ilvl=207"
     },
     {
@@ -10955,6 +11255,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=269862"
     },
     {
@@ -10964,6 +11265,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Consumable",
      "wowheadUrl": "https://www.wowhead.com/item=243734"
     },
     {
@@ -10973,6 +11275,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272149?ilvl=256"
     },
     {
@@ -10982,6 +11285,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=188152"
     },
     {
@@ -10991,6 +11295,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=268297"
     },
     {
@@ -11000,6 +11305,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260659"
     },
     {
@@ -11009,6 +11315,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272225?ilvl=256"
     },
     {
@@ -11018,6 +11325,7 @@
      "itemLevel": 282,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=259360?ilvl=282"
     },
     {
@@ -11027,6 +11335,7 @@
      "itemLevel": 321,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272231?ilvl=321"
     }
    ],
@@ -11582,6 +11891,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=236761"
     },
     {
@@ -11591,6 +11901,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     },
     {
@@ -11600,6 +11911,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Reagent",
      "wowheadUrl": "https://www.wowhead.com/item=180653"
     },
     {
@@ -11609,6 +11921,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251215?ilvl=289"
     },
     {
@@ -11618,6 +11931,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -11627,6 +11941,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=249980?ilvl=289"
     },
     {
@@ -11636,6 +11951,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=256"
     },
     {
@@ -11645,6 +11961,7 @@
      "itemLevel": 279,
      "quality": 4,
      "location": "Bags",
+     "category": "Weapon",
      "wowheadUrl": "https://www.wowhead.com/item=259356?ilvl=279"
     },
     {
@@ -11654,6 +11971,7 @@
      "itemLevel": 285,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=244584?ilvl=285"
     },
     {
@@ -11663,6 +11981,7 @@
      "itemLevel": 285,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=239656?ilvl=285"
     },
     {
@@ -11672,6 +11991,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=269862"
     },
     {
@@ -11681,6 +12001,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272226?ilvl=256"
     },
     {
@@ -11690,6 +12011,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272249?ilvl=256"
     },
     {
@@ -11699,6 +12021,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272250?ilvl=256"
     },
     {
@@ -11708,6 +12031,7 @@
      "itemLevel": 0,
      "quality": 3,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=188152"
     }
    ],
@@ -12322,6 +12646,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Reagent",
      "wowheadUrl": "https://www.wowhead.com/item=180653"
     },
     {
@@ -12331,6 +12656,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=236761"
     },
     {
@@ -12340,6 +12666,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260659"
     },
     {
@@ -12349,6 +12676,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250034?ilvl=289"
     },
     {
@@ -12358,6 +12686,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272229?ilvl=256"
     },
     {
@@ -12367,6 +12696,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=260652"
     },
     {
@@ -12376,6 +12706,7 @@
      "itemLevel": 298,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250033?ilvl=298"
     },
     {
@@ -12385,6 +12716,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272229?ilvl=256"
     },
     {
@@ -12394,6 +12726,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272246?ilvl=256"
     },
     {
@@ -12403,6 +12736,7 @@
      "itemLevel": 0,
      "quality": 0,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=213240"
     },
     {
@@ -12412,6 +12746,7 @@
      "itemLevel": 0,
      "quality": 2,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=264336"
     },
     {
@@ -12421,6 +12756,7 @@
      "itemLevel": 256,
      "quality": 2,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=272240?ilvl=256"
     },
     {
@@ -12430,6 +12766,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Trade Goods",
      "wowheadUrl": "https://www.wowhead.com/item=274476"
     },
     {
@@ -12439,6 +12776,7 @@
      "itemLevel": 279,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=257019?ilvl=279"
     },
     {
@@ -12448,6 +12786,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Quest Item",
      "wowheadUrl": "https://www.wowhead.com/item=279576"
     },
     {
@@ -12457,6 +12796,7 @@
      "itemLevel": 0,
      "quality": 4,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=269862"
     },
     {
@@ -12466,6 +12806,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=250028?ilvl=289"
     },
     {
@@ -12475,6 +12816,7 @@
      "itemLevel": 289,
      "quality": 4,
      "location": "Bags",
+     "category": "Armor",
      "wowheadUrl": "https://www.wowhead.com/item=251099?ilvl=289"
     },
     {
@@ -12484,6 +12826,7 @@
      "itemLevel": 0,
      "quality": 1,
      "location": "Bags",
+     "category": "Miscellaneous",
      "wowheadUrl": "https://www.wowhead.com/item=6948"
     }
    ],

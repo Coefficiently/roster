@@ -315,6 +315,20 @@ a { color: var(--gold-2); }
 
 .gear-list, .currency-list { list-style: none; margin: 0 0 0.9rem; padding: 0; max-width: 640px; }
 
+.warband-category-header {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--gold-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.9rem 0 0.35rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0.35rem;
+}
+.warband-category-header:first-child { padding-top: 0; }
+.warband-category-count { color: var(--ink-dim); font-weight: 400; text-transform: none; letter-spacing: normal; }
+
 .gear-row {
   display: flex;
   align-items: flex-start;

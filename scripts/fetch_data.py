@@ -307,12 +307,16 @@ def main():
 
     item_data = fetch_json(BASE + paths["data-item"])
     names_array = item_data.get("names", [])
+    class_lookup = item_data.get("classIdSubclassIdInventoryTypes", [])
 
     item_names = {}
+    item_categories = {}
     if needed_item_ids:
         # rawItems is delta-encoded: running item id = sum of arr[0] so far,
         # and the item's name is names_array[arr[1]] (arr[1] is a *name index*,
-        # not the item id).
+        # not the item id). arr[4] indexes into classIdSubclassIdInventoryTypes
+        # to get [classId, subclassId, inventoryType] -- classId is WoW's
+        # broad item category (Weapon, Armor, Consumable, Trade Goods, etc).
         running_id = 0
         remaining = set(needed_item_ids)
         for arr in item_data.get("rawItems", []):
@@ -321,9 +325,25 @@ def main():
                 name_idx = arr[1]
                 if 0 <= name_idx < len(names_array) and names_array[name_idx]:
                     item_names[running_id] = names_array[name_idx]
+                class_idx = arr[4] if len(arr) > 4 else None
+                if class_idx is not None and 0 <= class_idx < len(class_lookup):
+                    item_categories[running_id] = class_lookup[class_idx][0]
                 remaining.discard(running_id)
                 if not remaining:
                     break
+
+    # Standard Blizzard item class ids (ItemClass.db2) -- stable across
+    # expansions, not something that needs seasonal updates.
+    ITEM_CATEGORY_NAMES = {
+        0: "Consumable", 1: "Container", 2: "Weapon", 3: "Gem", 4: "Armor",
+        5: "Reagent", 6: "Projectile", 7: "Trade Goods", 8: "Item Enhancement",
+        9: "Recipe", 10: "Currency", 11: "Quiver", 12: "Quest Item", 13: "Key",
+        14: "Permanent", 15: "Miscellaneous", 16: "Glyph", 17: "Battle Pet",
+        18: "WoW Token", 19: "Profession",
+    }
+
+    def item_category_name(item_id):
+        return ITEM_CATEGORY_NAMES.get(item_categories.get(item_id), "Miscellaneous")
 
     # --- Gear upgrade tracks (Explorer..Myth) decoded from bonus ids -----
     # itemBonusListGroups[groupId][sharedStringId] = [bonusId rank1, rank2, ...]
@@ -393,6 +413,7 @@ def main():
             "count": count,
             "itemLevel": item_level,
             "quality": quality,
+            "category": item_category_name(item_id),
             "wowheadUrl": f"https://www.wowhead.com/item={item_id}" + (f"?ilvl={item_level}" if item_level else ""),
         })
 
@@ -528,6 +549,7 @@ def main():
                 "itemLevel": item_level,
                 "quality": quality,
                 "location": {1: "Bags", 2: "Bank", 3: "Reagent Bank", 5: "Warband Bank"}.get(location, "Bags"),
+                "category": item_category_name(item_id),
                 "wowheadUrl": wowhead_url(item_id, item_level=item_level or None),
             })
 
