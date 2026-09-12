@@ -94,11 +94,17 @@ a { color: var(--gold-2); }
 
 /* ---------- Roster table ---------- */
 
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
 .page-controls {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.85rem;
 }
 .page-btn {
   background: var(--panel-2);

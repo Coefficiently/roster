@@ -32,6 +32,8 @@ jobs:
           python-version: "3.12"
 
       - name: Fetch latest WoWthing data
+        env:
+          WOWTHING_SESSION_COOKIE: ${{ secrets.WOWTHING_SESSION_COOKIE }}
         run: python3 scripts/fetch_data.py
 
       - name: Check for changes

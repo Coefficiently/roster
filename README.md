@@ -13,6 +13,26 @@ python3 -m http.server 8080     # serve locally
 Manual re-scrape: Actions tab -> "Update roster data and deploy" -> Run workflow.
 (The in-page Refresh button only re-fetches `data.json`; it doesn't re-scrape wowthing.)
 
+## Private data (bag/bank contents, Warband Bank)
+
+wowthing's public feed never includes bag/bank contents or a couple of
+specific tracked items (Spark of Tides, Thalassian Token of Merit) for any
+account -- confirmed in their backend source, not a setting. To get this
+data, `fetch_data.py` optionally uses an authenticated session cookie
+(`WOWTHING_SESSION_COOKIE` repo secret) if set; without it, everything just
+falls back to public data as before.
+
+**This cookie expires periodically and needs manual rotation:**
+1. Log into wowthing.org.
+2. DevTools -> Application/Storage -> Cookies -> `wowthing.org` ->
+   `.AspNetCore.Identity.Application` -> copy the value.
+3. Repo Settings -> Secrets and variables -> Actions -> update
+   `WOWTHING_SESSION_COOKIE` with the new value.
+
+If the site's bag/warband data suddenly goes empty again, this is why --
+check the "Fetch latest WoWthing data" Action log for a cookie-expired
+warning before assuming something else broke.
+
 ## Season-specific constants (scripts/fetch_data.py) -- bump these when stale
 
 | Constant | Update when | How |

@@ -461,6 +461,21 @@
     </li>`;
   }
 
+  function renderBagItemRow(item) {
+    const border = qualityColor(item.quality);
+    const countTxt = item.count > 1 ? ` \u00d7${item.count}` : "";
+    const ilvlTxt = item.itemLevel > 0 ? item.itemLevel : "\u2014";
+    return `<li class="gear-row" style="border-left-color:${border}">
+      <div class="gear-row-main">
+        <div class="gear-row-top">
+          <span class="slot">${item.location || "Bags"}</span>
+          <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}${countTxt}</span>
+          <span class="item-ilvl">${ilvlTxt}</span>
+        </div>
+      </div>
+    </li>`;
+  }
+
   function fillList(id, items, renderFn, emptyText) {
     const el = document.getElementById(id);
     if (!items || items.length === 0) {
@@ -480,6 +495,10 @@
       `${classInfo(char).name} \u00b7 ${realmName(char)} \u00b7 level ${char.level} \u00b7 ilvl ${char.itemLevel} \u00b7 tier ${char.tierPieceCount}pc`;
 
     fillList("detail-equipped", char.equipped, renderGearRow, "No equipped gear data.");
+    fillList(
+      "detail-bags", char.bagItems, renderBagItemRow,
+      DATA.hasPrivateData ? "Bags are empty." : "Not available -- bag/bank contents require an authenticated session (see README)."
+    );
 
     detailPanel.hidden = false;
     if (typeof detailPanel.scrollIntoView === "function") {
@@ -490,6 +509,24 @@
   document.getElementById("detail-close").addEventListener("click", () => {
     detailPanel.hidden = true;
   });
+
+  // ---------------- Warband Bank panel ----------------
+
+  function wireWarbandPanel() {
+    const btn = document.getElementById("warband-btn");
+    const panel = document.getElementById("warband-panel");
+    const closeBtn = document.getElementById("warband-close");
+    if (!btn || !panel) return;
+
+    btn.addEventListener("click", () => {
+      fillList("warband-list", DATA.warbandItems, renderBagItemRow, "Warband bank is empty.");
+      panel.hidden = false;
+      if (typeof panel.scrollIntoView === "function") {
+        panel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    if (closeBtn) closeBtn.addEventListener("click", () => { panel.hidden = true; });
+  }
 
   // ---------------- Header stats + init ----------------
 
@@ -539,6 +576,9 @@
     document.getElementById("generated-at").textContent =
       "Last updated " + generated.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
     renderResetCountdown();
+
+    const warbandBtn = document.getElementById("warband-btn");
+    if (warbandBtn) warbandBtn.hidden = !DATA.hasPrivateData;
   }
 
   async function loadAndRender() {
@@ -578,6 +618,7 @@
   async function init() {
     wireRefreshButton();
     wirePaginationControls();
+    wireWarbandPanel();
     await loadAndRender();
     setInterval(renderResetCountdown, 60000);
   }

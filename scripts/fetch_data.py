@@ -4,6 +4,7 @@ Fetches WoWthing profile data for a given account and produces a compact
 data.json consumed by the static site.
 """
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -11,6 +12,21 @@ from datetime import datetime, timezone
 
 WOWTHING_USER = "cta"
 BASE = "https://wowthing.org"
+
+# Optional: an authenticated wowthing session cookie, which unlocks private
+# data the public feed never includes at all (confirmed against wowthing's
+# own backend source) -- bag/inventory contents, warband bank contents, and
+# a couple of specific tracked items (Spark of Tides, Thalassian Token of
+# Merit) that aren't in the public item-exposure allowlist. Set via the
+# WOWTHING_SESSION_COOKIE repo secret in CI; falls back to public data if
+# unset (e.g. for local runs), so this is additive, not required.
+#
+# This is a session cookie (.AspNetCore.Identity.Application), not a
+# password -- if it ever leaked, it would expose read access to this
+# wowthing account's private data, not Battle.net/account-level access.
+# Session cookies expire periodically and need re-generating (log into
+# wowthing.org, copy the fresh cookie value, update the repo secret).
+SESSION_COOKIE = os.environ.get("WOWTHING_SESSION_COOKIE", "").strip()
 
 # Currency IDs we care about (Midnight Season 2, as of this writing).
 # These can drift each season -- update if wowthing adds a new crest tier.
@@ -141,14 +157,21 @@ def clean_wow_text(text):
     return WOW_MARKUP_RE.sub("", text).strip()
 
 
+def _headers():
+    headers = {"User-Agent": "wowthing-site-builder/1.0"}
+    if SESSION_COOKIE:
+        headers["Cookie"] = f".AspNetCore.Identity.Application={SESSION_COOKIE}"
+    return headers
+
+
 def fetch_json(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "wowthing-site-builder/1.0"})
+    req = urllib.request.Request(url, headers=_headers())
     with urllib.request.urlopen(req, timeout=60) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
 def fetch_text(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "wowthing-site-builder/1.0"})
+    req = urllib.request.Request(url, headers=_headers())
     with urllib.request.urlopen(req, timeout=60) as resp:
         return resp.read().decode("utf-8")
 
@@ -163,7 +186,8 @@ def get_asset_paths(html):
 
 
 def main():
-    print(f"Fetching profile page for {WOWTHING_USER}...")
+    mode = "authenticated (private data)" if SESSION_COOKIE else "public data only"
+    print(f"Fetching profile page for {WOWTHING_USER}... [{mode}]")
     html = fetch_text(f"{BASE}/user/{WOWTHING_USER}")
     paths = get_asset_paths(html)
     if "data-user" not in paths:
@@ -171,6 +195,15 @@ def main():
         sys.exit(1)
 
     print("Fetching user data...")
+    if SESSION_COOKIE and "private" not in paths["data-user"]:
+        print(
+            "WARNING: WOWTHING_SESSION_COOKIE is set but the served data path "
+            f"({paths['data-user']}) doesn't look private -- the cookie may have "
+            "expired. Falling back to public data for this run; log into "
+            "wowthing.org and update the WOWTHING_SESSION_COOKIE secret with a "
+            "fresh value.",
+            file=sys.stderr,
+        )
     user_url = BASE + paths["data-user"]
     # This is often a redirect to a versioned file
     user_data = fetch_json(user_url)
@@ -228,6 +261,12 @@ def main():
             needed_item_ids.add(item[3])
 
     print(f"{len(qualifying)} characters qualify (level>={MIN_LEVEL}, ilvl>={MIN_ITEM_LEVEL})")
+
+    # Warband bank contents (account-wide, only present with an
+    # authenticated session -- see SESSION_COOKIE above).
+    raw_warband_items = user_data.get("rawWarbankItems") or []
+    for item in raw_warband_items:
+        needed_item_ids.add(item[3])
 
     # --- Identify raids + canonical boss order ---------------------------
     # Every distinct lockout name found is treated as its own raid, since
@@ -343,6 +382,20 @@ def main():
     # --- Current tier set item ids, per class -----------------------------
     item_set_by_id = {s[0]: s[2] for s in item_data.get("rawItemSets", [])}
 
+    warband_items_out = []
+    for item in raw_warband_items:
+        location, bag_id, slot, item_id, count = item[0], item[1], item[2], item[3], item[4]
+        item_level = item[8] if len(item) > 8 else 0
+        quality = item[9] if len(item) > 9 else 1
+        warband_items_out.append({
+            "itemId": item_id,
+            "itemName": item_names.get(item_id, f"Item #{item_id}"),
+            "count": count,
+            "itemLevel": item_level,
+            "quality": quality,
+            "wowheadUrl": f"https://www.wowhead.com/item={item_id}" + (f"?ilvl={item_level}" if item_level else ""),
+        })
+
     # --- Build character output ----------------------------------------
     def short_currency_name(name):
         # "Adventurer Mistcrest" -> "Adventurer", etc. No-op for names that
@@ -455,6 +508,27 @@ def main():
                     item_id, bonus_ids=bonus_ids, enchant_ids=enchant_ids,
                     gem_ids=gem_ids, item_level=arr[3] or None,
                 ),
+            })
+
+        # Bag/bank contents. Only available with an authenticated session
+        # (SESSION_COOKIE) -- wowthing's public feed never includes these
+        # (only equipped bag containers), confirmed against their backend
+        # source. With no cookie this list is just always empty.
+        bag_items_out = []
+        for item in (raw_items or []):
+            location, bag_id, slot, item_id, count = item[0], item[1], item[2], item[3], item[4]
+            if slot == 0:
+                continue  # a bag container itself, not something inside a bag
+            item_level = item[8] if len(item) > 8 else 0
+            quality = item[9] if len(item) > 9 else 1
+            bag_items_out.append({
+                "itemId": item_id,
+                "itemName": item_names.get(item_id, f"Item #{item_id}"),
+                "count": count,
+                "itemLevel": item_level,
+                "quality": quality,
+                "location": {1: "Bags", 2: "Bank", 3: "Reagent Bank", 5: "Warband Bank"}.get(location, "Bags"),
+                "wowheadUrl": wowhead_url(item_id, item_level=item_level or None),
             })
 
         # Used internally below to build raidGrids (the actual UI-facing
@@ -594,6 +668,7 @@ def main():
             "faction": faction,
             "gold": gold,
             "equipped": equipped_out,
+            "bagItems": bag_items_out,
             "tierPieceCount": tier_piece_count,
             "currencies": {
                 "crests": currency_group(raw_currencies, CREST_IDS),
@@ -677,6 +752,8 @@ def main():
         "minLevel": MIN_LEVEL,
         "minItemLevel": MIN_ITEM_LEVEL,
         "warbandGold": user_data.get("warbankGold", 0),
+        "warbandItems": warband_items_out,
+        "hasPrivateData": bool(SESSION_COOKIE),
         "classes": classes,
         "races": races,
         "realms": realms,

@@ -24,10 +24,13 @@
 
 <main class="page">
 
-  <div id="page-controls" class="page-controls" hidden>
-    <button id="page-prev" class="page-btn" type="button">&larr; Prev</button>
-    <span id="page-indicator" class="page-indicator"></span>
-    <button id="page-next" class="page-btn" type="button">Next &rarr;</button>
+  <div class="page-toolbar">
+    <div id="page-controls" class="page-controls" hidden>
+      <button id="page-prev" class="page-btn" type="button">&larr; Prev</button>
+      <span id="page-indicator" class="page-indicator"></span>
+      <button id="page-next" class="page-btn" type="button">Next &rarr;</button>
+    </div>
+    <button id="warband-btn" class="page-btn" type="button" hidden>Warband Bank</button>
   </div>
 
   <div class="table-scroll">
@@ -36,6 +39,14 @@
       <tbody id="roster-tbody"></tbody>
     </table>
   </div>
+
+  <section id="warband-panel" class="detail-panel" hidden>
+    <div class="detail-panel-inner">
+      <button id="warband-close" class="detail-close" aria-label="Close">&times;</button>
+      <h2>Warband Bank</h2>
+      <ul id="warband-list" class="gear-list"></ul>
+    </div>
+  </section>
 
   <section id="detail-panel" class="detail-panel" hidden>
     <div class="detail-panel-inner">
@@ -46,6 +57,11 @@
       <section class="detail-block">
         <h3>Equipped gear</h3>
         <ul id="detail-equipped" class="gear-list"></ul>
+      </section>
+
+      <section class="detail-block">
+        <h3>Bag &amp; bank items</h3>
+        <ul id="detail-bags" class="gear-list"></ul>
       </section>
     </div>
   </section>

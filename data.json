@@ -1,9 +1,996 @@
 {
  "account": "cta",
- "generatedAt": "2026-09-12T20:33:07.801623+00:00",
+ "generatedAt": "2026-09-12T21:07:46.981758+00:00",
  "minLevel": 90,
  "minItemLevel": 290,
- "warbandGold": 0,
+ "warbandGold": 1710769,
+ "warbandItems": [
+  {
+   "itemId": 3420,
+   "itemName": "Black Rose",
+   "count": 1,
+   "itemLevel": 12,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=3420?ilvl=12"
+  },
+  {
+   "itemId": 8383,
+   "itemName": "Plain Letter",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=8383"
+  },
+  {
+   "itemId": 49802,
+   "itemName": "Garfrost's Two-Ton Hammer",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=49802?ilvl=253"
+  },
+  {
+   "itemId": 50233,
+   "itemName": "Spurned Val'kyr Shoulderguards",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=50233?ilvl=253"
+  },
+  {
+   "itemId": 86143,
+   "itemName": "Battle Pet Bandage",
+   "count": 78,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=86143"
+  },
+  {
+   "itemId": 132514,
+   "itemName": "Auto-Hammer",
+   "count": 3,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=132514"
+  },
+  {
+   "itemId": 132514,
+   "itemName": "Auto-Hammer",
+   "count": 20,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=132514"
+  },
+  {
+   "itemId": 132514,
+   "itemName": "Auto-Hammer",
+   "count": 20,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=132514"
+  },
+  {
+   "itemId": 137642,
+   "itemName": "Mark of Honor",
+   "count": 99,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=137642"
+  },
+  {
+   "itemId": 138488,
+   "itemName": "Saltwater Potion",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=138488"
+  },
+  {
+   "itemId": 138727,
+   "itemName": "Potion of Defiance",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=138727"
+  },
+  {
+   "itemId": 151134,
+   "itemName": "Trial of Style Token",
+   "count": 65,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=151134"
+  },
+  {
+   "itemId": 159247,
+   "itemName": "Handwraps of Oscillating Polarity",
+   "count": 1,
+   "itemLevel": 298,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=159247?ilvl=298"
+  },
+  {
+   "itemId": 159645,
+   "itemName": "Headcracker of Supplication",
+   "count": 1,
+   "itemLevel": 298,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=159645?ilvl=298"
+  },
+  {
+   "itemId": 163036,
+   "itemName": "Polished Pet Charm",
+   "count": 68,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=163036"
+  },
+  {
+   "itemId": 190189,
+   "itemName": "Sandworn Relic",
+   "count": 171,
+   "itemLevel": 0,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=190189"
+  },
+  {
+   "itemId": 193705,
+   "itemName": "Breastplate of Proven Knowledge",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=193705?ilvl=253"
+  },
+  {
+   "itemId": 193755,
+   "itemName": "Backdraft Cleaver",
+   "count": 1,
+   "itemLevel": 298,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=193755?ilvl=298"
+  },
+  {
+   "itemId": 193757,
+   "itemName": "Ruby Whelp Shell",
+   "count": 1,
+   "itemLevel": 298,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=193757?ilvl=298"
+  },
+  {
+   "itemId": 200443,
+   "itemName": "Dragon Isles Artifact",
+   "count": 6,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=200443"
+  },
+  {
+   "itemId": 200447,
+   "itemName": "Centaur Hunting Trophy",
+   "count": 43,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=200447"
+  },
+  {
+   "itemId": 224025,
+   "itemName": "Crackling Shard",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=224025"
+  },
+  {
+   "itemId": 225557,
+   "itemName": "Sizzling Cinderpollen",
+   "count": 10,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=225557"
+  },
+  {
+   "itemId": 228228,
+   "itemName": "Strange Lump of Wax",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=228228"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 9,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241289,
+   "itemName": "Potion of Recklessness",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241289"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241309,
+   "itemName": "Light's Potential",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241309"
+  },
+  {
+   "itemId": 241327,
+   "itemName": "Flask of the Shattered Sun",
+   "count": 59,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=241327"
+  },
+  {
+   "itemId": 242241,
+   "itemName": "Latent Arcana",
+   "count": 166,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=242241"
+  },
+  {
+   "itemId": 242747,
+   "itemName": "Hearty Royal Roast",
+   "count": 345,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=242747"
+  },
+  {
+   "itemId": 243734,
+   "itemName": "Thalassian Phoenix Oil",
+   "count": 20,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=243734"
+  },
+  {
+   "itemId": 243734,
+   "itemName": "Thalassian Phoenix Oil",
+   "count": 20,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=243734"
+  },
+  {
+   "itemId": 243734,
+   "itemName": "Thalassian Phoenix Oil",
+   "count": 20,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=243734"
+  },
+  {
+   "itemId": 243734,
+   "itemName": "Thalassian Phoenix Oil",
+   "count": 20,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=243734"
+  },
+  {
+   "itemId": 243734,
+   "itemName": "Thalassian Phoenix Oil",
+   "count": 20,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=243734"
+  },
+  {
+   "itemId": 243734,
+   "itemName": "Thalassian Phoenix Oil",
+   "count": 7,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=243734"
+  },
+  {
+   "itemId": 244193,
+   "itemName": "L00T RAID-R Mini",
+   "count": 2,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=244193"
+  },
+  {
+   "itemId": 246240,
+   "itemName": "Devoured Energy-Pod",
+   "count": 10,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=246240"
+  },
+  {
+   "itemId": 246314,
+   "itemName": "Burbling Blob of Paint",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=246314"
+  },
+  {
+   "itemId": 249288,
+   "itemName": "Ranger-Captain's Lethal Recurve",
+   "count": 1,
+   "itemLevel": 269,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=249288?ilvl=269"
+  },
+  {
+   "itemId": 249323,
+   "itemName": "Leggings of the Devouring Advance",
+   "count": 1,
+   "itemLevel": 259,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=249323?ilvl=259"
+  },
+  {
+   "itemId": 249374,
+   "itemName": "Scorn-Scarred Shul'ka's Belt",
+   "count": 1,
+   "itemLevel": 263,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=249374?ilvl=263"
+  },
+  {
+   "itemId": 250453,
+   "itemName": "Scepter of the Unbound Light",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=250453?ilvl=253"
+  },
+  {
+   "itemId": 251208,
+   "itemName": "Lightscarred Cuisses",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=251208?ilvl=253"
+  },
+  {
+   "itemId": 251219,
+   "itemName": "Riftworn Stompers",
+   "count": 1,
+   "itemLevel": 227,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=251219?ilvl=227"
+  },
+  {
+   "itemId": 251789,
+   "itemName": "Consecrated Chalice",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=251789?ilvl=282"
+  },
+  {
+   "itemId": 251790,
+   "itemName": "Desecrated Chalice",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=251790?ilvl=276"
+  },
+  {
+   "itemId": 255825,
+   "itemName": "Disarmed Trap",
+   "count": 5,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=255825"
+  },
+  {
+   "itemId": 255826,
+   "itemName": "Mysterious Skyshards",
+   "count": 83,
+   "itemLevel": 1,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=255826?ilvl=1"
+  },
+  {
+   "itemId": 256963,
+   "itemName": "Thalassian Lumber",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=256963"
+  },
+  {
+   "itemId": 258923,
+   "itemName": "Tarnished Dawnlit Corsair's Hood",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=258923?ilvl=253"
+  },
+  {
+   "itemId": 258929,
+   "itemName": "Tarnished Dawnlit Sentinel's Sabatons",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=258929?ilvl=253"
+  },
+  {
+   "itemId": 258938,
+   "itemName": "Tarnished Dawnlit Commander's Gauntlets",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=258938?ilvl=253"
+  },
+  {
+   "itemId": 259361,
+   "itemName": "Vile Essence",
+   "count": 11,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=259361"
+  },
+  {
+   "itemId": 260312,
+   "itemName": "Defiant Defender's Drape",
+   "count": 1,
+   "itemLevel": 253,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=260312?ilvl=253"
+  },
+  {
+   "itemId": 265560,
+   "itemName": "Toughened Amani Leather Wrap",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=265560"
+  },
+  {
+   "itemId": 265814,
+   "itemName": "Noble's Signet Ring",
+   "count": 1,
+   "itemLevel": 1,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=265814?ilvl=1"
+  },
+  {
+   "itemId": 268197,
+   "itemName": "Spine of the Hissing Abyss",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=268197?ilvl=282"
+  },
+  {
+   "itemId": 268232,
+   "itemName": "Cincture of the Abyssal Grotto",
+   "count": 1,
+   "itemLevel": 292,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=268232?ilvl=292"
+  },
+  {
+   "itemId": 268235,
+   "itemName": "Vestment of the Awakening",
+   "count": 1,
+   "itemLevel": 279,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=268235?ilvl=279"
+  },
+  {
+   "itemId": 268264,
+   "itemName": "Ravenous Feaster's Fang",
+   "count": 1,
+   "itemLevel": 298,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=268264?ilvl=298"
+  },
+  {
+   "itemId": 269586,
+   "itemName": "Emergency Soul Link",
+   "count": 5,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=269586"
+  },
+  {
+   "itemId": 270160,
+   "itemName": "First Mate's Shellward",
+   "count": 1,
+   "itemLevel": 308,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=270160?ilvl=308"
+  },
+  {
+   "itemId": 270925,
+   "itemName": "Venomforged Remnant",
+   "count": 1,
+   "itemLevel": 308,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=270925?ilvl=308"
+  },
+  {
+   "itemId": 271876,
+   "itemName": "Awoken Dreadfang Cuirass",
+   "count": 1,
+   "itemLevel": 289,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=271876?ilvl=289"
+  },
+  {
+   "itemId": 271883,
+   "itemName": "Concentrated Silvermoon Health Potion",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=271883"
+  },
+  {
+   "itemId": 271883,
+   "itemName": "Concentrated Silvermoon Health Potion",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=271883"
+  },
+  {
+   "itemId": 271883,
+   "itemName": "Concentrated Silvermoon Health Potion",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=271883"
+  },
+  {
+   "itemId": 271883,
+   "itemName": "Concentrated Silvermoon Health Potion",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=271883"
+  },
+  {
+   "itemId": 271883,
+   "itemName": "Concentrated Silvermoon Health Potion",
+   "count": 200,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=271883"
+  },
+  {
+   "itemId": 271883,
+   "itemName": "Concentrated Silvermoon Health Potion",
+   "count": 73,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=271883"
+  },
+  {
+   "itemId": 271884,
+   "itemName": "Concentrated Silvermoon Health Potion",
+   "count": 43,
+   "itemLevel": 0,
+   "quality": 1,
+   "wowheadUrl": "https://www.wowhead.com/item=271884"
+  },
+  {
+   "itemId": 272195,
+   "itemName": "Vantus Rune: Tides",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272195"
+  },
+  {
+   "itemId": 272228,
+   "itemName": "Whispering Periapt",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272228?ilvl=276"
+  },
+  {
+   "itemId": 272232,
+   "itemName": "Pyrewalker's Buskins",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=272232?ilvl=282"
+  },
+  {
+   "itemId": 272235,
+   "itemName": "Pyrewalker's Treads",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=282"
+  },
+  {
+   "itemId": 272235,
+   "itemName": "Pyrewalker's Treads",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=282"
+  },
+  {
+   "itemId": 272237,
+   "itemName": "Pyrewalker's Obi",
+   "count": 1,
+   "itemLevel": 272,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272237?ilvl=272"
+  },
+  {
+   "itemId": 272238,
+   "itemName": "Pyrewalker's Wraps",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272238?ilvl=276"
+  },
+  {
+   "itemId": 272247,
+   "itemName": "Galerider's Byrnie",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272247?ilvl=276"
+  },
+  {
+   "itemId": 272250,
+   "itemName": "Galerider's Gaze",
+   "count": 1,
+   "itemLevel": 269,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272250?ilvl=269"
+  },
+  {
+   "itemId": 272251,
+   "itemName": "Galerider's Chausses",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272251?ilvl=276"
+  },
+  {
+   "itemId": 272254,
+   "itemName": "Galerider's Mesh Wraps",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=276"
+  },
+  {
+   "itemId": 272254,
+   "itemName": "Galerider's Mesh Wraps",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=282"
+  },
+  {
+   "itemId": 272256,
+   "itemName": "Pledgebearer's Sabatons",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=272256?ilvl=282"
+  },
+  {
+   "itemId": 272259,
+   "itemName": "Pledgebearer's Poleyns",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=272259?ilvl=276"
+  },
+  {
+   "itemId": 272274,
+   "itemName": "Realm Splitter",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=272274?ilvl=282"
+  },
+  {
+   "itemId": 272274,
+   "itemName": "Realm Splitter",
+   "count": 1,
+   "itemLevel": 282,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=272274?ilvl=282"
+  },
+  {
+   "itemId": 273000,
+   "itemName": "Corrosive Soul",
+   "count": 46,
+   "itemLevel": 0,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=273000"
+  },
+  {
+   "itemId": 274469,
+   "itemName": "Brown Housing Dye",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 2,
+   "wowheadUrl": "https://www.wowhead.com/item=274469"
+  },
+  {
+   "itemId": 274493,
+   "itemName": "Effigy of Ula'tek's Faithful",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=274493?ilvl=276"
+  },
+  {
+   "itemId": 274495,
+   "itemName": "Pulse Seeker's Oculus",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=274495?ilvl=276"
+  },
+  {
+   "itemId": 274496,
+   "itemName": "Ophidian Bone Whistle",
+   "count": 1,
+   "itemLevel": 276,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=274496?ilvl=276"
+  },
+  {
+   "itemId": 274499,
+   "itemName": "Toxiferous Transfusion",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=274499?ilvl=266"
+  },
+  {
+   "itemId": 276013,
+   "itemName": "Skytalon Hauberk",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=276013?ilvl=266"
+  },
+  {
+   "itemId": 276025,
+   "itemName": "Skytalon Breeches",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=276025?ilvl=266"
+  },
+  {
+   "itemId": 276026,
+   "itemName": "Shadowclaw Legguards",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=276026?ilvl=266"
+  },
+  {
+   "itemId": 276028,
+   "itemName": "Stonehide Girdle",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=276028?ilvl=266"
+  },
+  {
+   "itemId": 276054,
+   "itemName": "Serpentvine Machete",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=276054?ilvl=266"
+  },
+  {
+   "itemId": 279449,
+   "itemName": "Hex Troll Mask Fragment",
+   "count": 1,
+   "itemLevel": 0,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=279449"
+  },
+  {
+   "itemId": 279575,
+   "itemName": "Silvermoon Citizen's Emblem",
+   "count": 2,
+   "itemLevel": 0,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=279575"
+  },
+  {
+   "itemId": 279576,
+   "itemName": "Void Vestige",
+   "count": 2,
+   "itemLevel": 0,
+   "quality": 4,
+   "wowheadUrl": "https://www.wowhead.com/item=279576"
+  },
+  {
+   "itemId": 280713,
+   "itemName": "Big Mon's Buckle",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=280713?ilvl=266"
+  },
+  {
+   "itemId": 280715,
+   "itemName": "Eye of Skully",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=280715?ilvl=266"
+  },
+  {
+   "itemId": 280715,
+   "itemName": "Eye of Skully",
+   "count": 1,
+   "itemLevel": 266,
+   "quality": 3,
+   "wowheadUrl": "https://www.wowhead.com/item=280715?ilvl=266"
+  }
+ ],
+ "hasPrivateData": true,
  "classes": {
   "1": {
    "name": "Warrior",
@@ -4296,7 +5283,7 @@
    "realmId": 11,
    "gender": 0,
    "faction": 0,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -4614,6 +5601,224 @@
      "wowheadUrl": "https://www.wowhead.com/item=268205?bonus=6652:13335:12854:13696&ench=8689&ilvl=334"
     }
    ],
+   "bagItems": [
+    {
+     "itemId": 241323,
+     "itemName": "Flask of the Magisters",
+     "count": 9,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=241323"
+    },
+    {
+     "itemId": 271530,
+     "itemName": "Enigmatic Dreamwatcher's Sandals",
+     "count": 1,
+     "itemLevel": 331,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271530?ilvl=331"
+    },
+    {
+     "itemId": 242747,
+     "itemName": "Hearty Royal Roast",
+     "count": 81,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242747"
+    },
+    {
+     "itemId": 250243,
+     "itemName": "Manaheart's Binding Flame",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250243?ilvl=321"
+    },
+    {
+     "itemId": 180653,
+     "itemName": "Mythic Keystone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=180653"
+    },
+    {
+     "itemId": 271528,
+     "itemName": "Enigmatic Dreamwatcher's Somnolent Stare",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271528?ilvl=321"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 132514,
+     "itemName": "Auto-Hammer",
+     "count": 20,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=132514"
+    },
+    {
+     "itemId": 270161,
+     "itemName": "Fang of Umbral Malignance",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=270161?ilvl=321"
+    },
+    {
+     "itemId": 271883,
+     "itemName": "Concentrated Silvermoon Health Potion",
+     "count": 185,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271883"
+    },
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
+    },
+    {
+     "itemId": 241309,
+     "itemName": "Light's Potential",
+     "count": 163,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=241309"
+    },
+    {
+     "itemId": 241309,
+     "itemName": "Light's Potential",
+     "count": 200,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=241309"
+    },
+    {
+     "itemId": 188152,
+     "itemName": "Gateway Control Shard",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=188152"
+    },
+    {
+     "itemId": 273792,
+     "itemName": "Band of the Amani Warlord",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=273792?ilvl=321"
+    },
+    {
+     "itemId": 243734,
+     "itemName": "Thalassian Phoenix Oil",
+     "count": 5,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=243734"
+    },
+    {
+     "itemId": 251135,
+     "itemName": "Fury-fletched Armlets",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251135?ilvl=321"
+    },
+    {
+     "itemId": 259085,
+     "itemName": "Void-Touched Augment Rune",
+     "count": 72,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=259085"
+    },
+    {
+     "itemId": 251136,
+     "itemName": "Signet of Snarling Servitude",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251136?ilvl=321"
+    },
+    {
+     "itemId": 273000,
+     "itemName": "Corrosive Soul",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=273000"
+    },
+    {
+     "itemId": 279449,
+     "itemName": "Hex Troll Mask Fragment",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=279449"
+    },
+    {
+     "itemId": 268215,
+     "itemName": "Abyssal Broodfiend's Bardiche",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=268215?ilvl=321"
+    },
+    {
+     "itemId": 270167,
+     "itemName": "Wavecaller's Seastone",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=270167?ilvl=321"
+    },
+    {
+     "itemId": 158075,
+     "itemName": "Heart of Azeroth",
+     "count": 1,
+     "itemLevel": 28,
+     "quality": 6,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=158075?ilvl=28"
+    }
+   ],
    "tierPieceCount": 4,
    "currencies": {
     "crests": [
@@ -4872,7 +6077,7 @@
    "realmId": 57,
    "gender": 0,
    "faction": 1,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -5199,6 +6404,332 @@
      "wowheadUrl": "https://www.wowhead.com/item=245769?bonus=12214:13667:12497:13751:14001:13771:8960:8791:13836&ilvl=331"
     }
    ],
+   "bagItems": [
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
+    },
+    {
+     "itemId": 273000,
+     "itemName": "Corrosive Soul",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=273000"
+    },
+    {
+     "itemId": 249346,
+     "itemName": "Vaelgor's Final Stare",
+     "count": 1,
+     "itemLevel": 298,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=249346?ilvl=298"
+    },
+    {
+     "itemId": 171618,
+     "itemName": "Amulet of Autopsy",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=171618?ilvl=321"
+    },
+    {
+     "itemId": 256704,
+     "itemName": "Design: Powerful Eversong Diamond",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=256704"
+    },
+    {
+     "itemId": 243734,
+     "itemName": "Thalassian Phoenix Oil",
+     "count": 19,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=243734"
+    },
+    {
+     "itemId": 268251,
+     "itemName": "Amulet of the Twin Fangs",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=268251?ilvl=321"
+    },
+    {
+     "itemId": 272273,
+     "itemName": "Enshrined Ceremonial Scepter",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272273?ilvl=256"
+    },
+    {
+     "itemId": 251234,
+     "itemName": "Graft of the Domanaar",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251234?ilvl=321"
+    },
+    {
+     "itemId": 242747,
+     "itemName": "Hearty Royal Roast",
+     "count": 100,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242747"
+    },
+    {
+     "itemId": 251141,
+     "itemName": "Lithiel's Linked Leggings",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251141?ilvl=321"
+    },
+    {
+     "itemId": 260652,
+     "itemName": "Broken Wildlife Claw",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260652"
+    },
+    {
+     "itemId": 241289,
+     "itemName": "Potion of Recklessness",
+     "count": 196,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=241289"
+    },
+    {
+     "itemId": 188152,
+     "itemName": "Gateway Control Shard",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=188152"
+    },
+    {
+     "itemId": 272225,
+     "itemName": "Pyrewalker's Mantle",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272225?ilvl=256"
+    },
+    {
+     "itemId": 241289,
+     "itemName": "Potion of Recklessness",
+     "count": 200,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=241289"
+    },
+    {
+     "itemId": 250214,
+     "itemName": "Lightspire Core",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250214?ilvl=321"
+    },
+    {
+     "itemId": 245784,
+     "itemName": "Thalassian Missive of the Feverflare",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=245784"
+    },
+    {
+     "itemId": 271883,
+     "itemName": "Concentrated Silvermoon Health Potion",
+     "count": 198,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271883"
+    },
+    {
+     "itemId": 268552,
+     "itemName": "Ascendant Voidcore",
+     "count": 2,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=268552"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 271883,
+     "itemName": "Concentrated Silvermoon Health Potion",
+     "count": 200,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271883"
+    },
+    {
+     "itemId": 256978,
+     "itemName": "Rootspeaker's Branches",
+     "count": 1,
+     "itemLevel": 282,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=256978?ilvl=282"
+    },
+    {
+     "itemId": 180653,
+     "itemName": "Mythic Keystone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=180653"
+    },
+    {
+     "itemId": 250224,
+     "itemName": "Mindpiercer's Sigil",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250224?ilvl=321"
+    },
+    {
+     "itemId": 193763,
+     "itemName": "Fireproof Drape",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=193763?ilvl=321"
+    },
+    {
+     "itemId": 271504,
+     "itemName": "Searing Caldera of Calamity",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271504?ilvl=321"
+    },
+    {
+     "itemId": 201742,
+     "itemName": "Technique: Renewed Proto-Drake: Silver and Blue Armor",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=201742"
+    },
+    {
+     "itemId": 260659,
+     "itemName": "Stellar Vortex Residue",
+     "count": 2,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260659"
+    },
+    {
+     "itemId": 270164,
+     "itemName": "Gebbo's Bottomless Bag",
+     "count": 1,
+     "itemLevel": 334,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=270164?ilvl=334"
+    },
+    {
+     "itemId": 260638,
+     "itemName": "Fine Void Residue",
+     "count": 2,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260638"
+    },
+    {
+     "itemId": 239034,
+     "itemName": "Corrupted Hexxer's Vestments",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=239034?ilvl=321"
+    },
+    {
+     "itemId": 272251,
+     "itemName": "Galerider's Chausses",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272251?ilvl=256"
+    },
+    {
+     "itemId": 270170,
+     "itemName": "Vexhul's Everflowing Gland",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=270170?ilvl=321"
+    },
+    {
+     "itemId": 260619,
+     "itemName": "Colorful Leaves",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260619"
+    },
+    {
+     "itemId": 272254,
+     "itemName": "Galerider's Mesh Wraps",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=256"
+    }
+   ],
    "tierPieceCount": 4,
    "currencies": {
     "crests": [
@@ -5457,7 +6988,7 @@
    "realmId": 11,
    "gender": 0,
    "faction": 1,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -5867,6 +7398,98 @@
      "wowheadUrl": "https://www.wowhead.com/item=193528?bonus=8841:8842:8807&ilvl=74"
     }
    ],
+   "bagItems": [
+    {
+     "itemId": 180653,
+     "itemName": "Mythic Keystone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=180653"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 250254,
+     "itemName": "Seed of Radiant Hope",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250254?ilvl=321"
+    },
+    {
+     "itemId": 249346,
+     "itemName": "Vaelgor's Final Stare",
+     "count": 1,
+     "itemLevel": 298,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=249346?ilvl=298"
+    },
+    {
+     "itemId": 193763,
+     "itemName": "Fireproof Drape",
+     "count": 1,
+     "itemLevel": 311,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=193763?ilvl=311"
+    },
+    {
+     "itemId": 193759,
+     "itemName": "Egg Tender's Leggings",
+     "count": 1,
+     "itemLevel": 298,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=193759?ilvl=298"
+    },
+    {
+     "itemId": 273000,
+     "itemName": "Corrosive Soul",
+     "count": 8,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=273000"
+    },
+    {
+     "itemId": 270168,
+     "itemName": "Font of Venomous Rage",
+     "count": 1,
+     "itemLevel": 308,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=270168?ilvl=308"
+    },
+    {
+     "itemId": 188152,
+     "itemName": "Gateway Control Shard",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=188152"
+    },
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
+    }
+   ],
    "tierPieceCount": 4,
    "currencies": {
     "crests": [
@@ -6125,7 +7748,7 @@
    "realmId": 6,
    "gender": 0,
    "faction": 0,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -6451,6 +8074,323 @@
      "wowheadUrl": "https://www.wowhead.com/item=245770?bonus=12214:12497:13751:14004:13771:8960:8792:13836&ench=7981&ilvl=331"
     }
    ],
+   "bagItems": [
+    {
+     "itemId": 270169,
+     "itemName": "Hex Lord's Dooming Idol",
+     "count": 1,
+     "itemLevel": 308,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=270169?ilvl=308"
+    },
+    {
+     "itemId": 236770,
+     "itemName": "Sanguithorn",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=236770"
+    },
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
+    },
+    {
+     "itemId": 180653,
+     "itemName": "Mythic Keystone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=180653"
+    },
+    {
+     "itemId": 251784,
+     "itemName": "Sylvan Wakrapuku",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251784?ilvl=256"
+    },
+    {
+     "itemId": 241309,
+     "itemName": "Light's Potential",
+     "count": 190,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=241309"
+    },
+    {
+     "itemId": 272273,
+     "itemName": "Enshrined Ceremonial Scepter",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272273?ilvl=256"
+    },
+    {
+     "itemId": 241309,
+     "itemName": "Light's Potential",
+     "count": 200,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=241309"
+    },
+    {
+     "itemId": 251142,
+     "itemName": "Pendant of Malefic Fury",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251142?ilvl=321"
+    },
+    {
+     "itemId": 188152,
+     "itemName": "Gateway Control Shard",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=188152"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 250224,
+     "itemName": "Mindpiercer's Sigil",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250224?ilvl=321"
+    },
+    {
+     "itemId": 271883,
+     "itemName": "Concentrated Silvermoon Health Potion",
+     "count": 196,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271883"
+    },
+    {
+     "itemId": 260619,
+     "itemName": "Colorful Leaves",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260619"
+    },
+    {
+     "itemId": 271883,
+     "itemName": "Concentrated Silvermoon Health Potion",
+     "count": 200,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271883"
+    },
+    {
+     "itemId": 260659,
+     "itemName": "Stellar Vortex Residue",
+     "count": 2,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260659"
+    },
+    {
+     "itemId": 273781,
+     "itemName": "Strand of Warding Fangs",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=273781?ilvl=321"
+    },
+    {
+     "itemId": 242747,
+     "itemName": "Hearty Royal Roast",
+     "count": 99,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242747"
+    },
+    {
+     "itemId": 156058,
+     "itemName": "Stormtip",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=156058?ilvl=321"
+    },
+    {
+     "itemId": 241321,
+     "itemName": "Flask of Thalassian Resistance",
+     "count": 18,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=241321"
+    },
+    {
+     "itemId": 260638,
+     "itemName": "Fine Void Residue",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260638"
+    },
+    {
+     "itemId": 271562,
+     "itemName": "Primal Leywarden's Manaflux",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=271562?ilvl=321"
+    },
+    {
+     "itemId": 243734,
+     "itemName": "Thalassian Phoenix Oil",
+     "count": 19,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=243734"
+    },
+    {
+     "itemId": 269862,
+     "itemName": "Thalassian Token of Merit",
+     "count": 6,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=269862"
+    },
+    {
+     "itemId": 272150,
+     "itemName": "Ouroboric Signet",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272150?ilvl=256"
+    },
+    {
+     "itemId": 258869,
+     "itemName": "Brittle Pauldrons",
+     "count": 1,
+     "itemLevel": 201,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=258869?ilvl=201"
+    },
+    {
+     "itemId": 251154,
+     "itemName": "Winter's Embrace Bracers",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251154?ilvl=321"
+    },
+    {
+     "itemId": 256986,
+     "itemName": "Circlet of Encroaching Shadow",
+     "count": 1,
+     "itemLevel": 282,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=256986?ilvl=282"
+    },
+    {
+     "itemId": 273000,
+     "itemName": "Corrosive Soul",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=273000"
+    },
+    {
+     "itemId": 251792,
+     "itemName": "Glorious Crusader's Keepsake",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251792?ilvl=321"
+    },
+    {
+     "itemId": 274497,
+     "itemName": "Spirit-Rending Poison",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274497?ilvl=256"
+    },
+    {
+     "itemId": 268242,
+     "itemName": "Errant Scrollsage's Hood",
+     "count": 1,
+     "itemLevel": 318,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=268242?ilvl=318"
+    },
+    {
+     "itemId": 260652,
+     "itemName": "Broken Wildlife Claw",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260652"
+    },
+    {
+     "itemId": 268221,
+     "itemName": "Tidebound Sorcereress's Robes",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=268221?ilvl=321"
+    },
+    {
+     "itemId": 193757,
+     "itemName": "Ruby Whelp Shell",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=193757?ilvl=321"
+    }
+   ],
    "tierPieceCount": 4,
    "currencies": {
     "crests": [
@@ -6709,7 +8649,7 @@
    "realmId": 57,
    "gender": 0,
    "faction": 0,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -7140,6 +9080,278 @@
      "wowheadUrl": "https://www.wowhead.com/item=193534?bonus=8841:8842:8807&ilvl=74"
     }
    ],
+   "bagItems": [
+    {
+     "itemId": 255263,
+     "itemName": "Galactic Aspirant's Silk Robe",
+     "count": 1,
+     "itemLevel": 217,
+     "quality": 3,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=255263?ilvl=217"
+    },
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
+    },
+    {
+     "itemId": 239677,
+     "itemName": "Thalassian Competitor's Cloth Bands",
+     "count": 1,
+     "itemLevel": 236,
+     "quality": 4,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=239677?ilvl=236"
+    },
+    {
+     "itemId": 180653,
+     "itemName": "Mythic Keystone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=180653"
+    },
+    {
+     "itemId": 255399,
+     "itemName": "Galactic Gladiator's Silk Gloves",
+     "count": 1,
+     "itemLevel": 263,
+     "quality": 4,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=255399?ilvl=263"
+    },
+    {
+     "itemId": 251127,
+     "itemName": "Nibbling Armbands",
+     "count": 1,
+     "itemLevel": 308,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251127?ilvl=308"
+    },
+    {
+     "itemId": 255328,
+     "itemName": "Galactic Aspirant's Insignia of Alacrity",
+     "count": 1,
+     "itemLevel": 217,
+     "quality": 3,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=255328?ilvl=217"
+    },
+    {
+     "itemId": 250042,
+     "itemName": "Abyssal Immolator's Smoldering Flames",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250042?ilvl=289"
+    },
+    {
+     "itemId": 188152,
+     "itemName": "Gateway Control Shard",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=188152"
+    },
+    {
+     "itemId": 255327,
+     "itemName": "Galactic Aspirant's Medallion",
+     "count": 1,
+     "itemLevel": 217,
+     "quality": 3,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=255327?ilvl=217"
+    },
+    {
+     "itemId": 255279,
+     "itemName": "Galactic Aspirant's Silk Leggings",
+     "count": 1,
+     "itemLevel": 217,
+     "quality": 3,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=255279?ilvl=217"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 260659,
+     "itemName": "Stellar Vortex Residue",
+     "count": 2,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260659"
+    },
+    {
+     "itemId": 255268,
+     "itemName": "Galactic Aspirant's Silk Treads",
+     "count": 1,
+     "itemLevel": 217,
+     "quality": 3,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=255268?ilvl=217"
+    },
+    {
+     "itemId": 272237,
+     "itemName": "Pyrewalker's Obi",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272237?ilvl=256"
+    },
+    {
+     "itemId": 269862,
+     "itemName": "Thalassian Token of Merit",
+     "count": 6,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=269862"
+    },
+    {
+     "itemId": 240952,
+     "itemName": "Thalassian Competitor's Amulet",
+     "count": 1,
+     "itemLevel": 242,
+     "quality": 4,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=240952?ilvl=242"
+    },
+    {
+     "itemId": 224154,
+     "itemName": "Mushrock",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=224154"
+    },
+    {
+     "itemId": 240951,
+     "itemName": "Thalassian Competitor's Signet",
+     "count": 1,
+     "itemLevel": 239,
+     "quality": 4,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=240951?ilvl=239"
+    },
+    {
+     "itemId": 255607,
+     "itemName": "Galactic Gladiator's Ring",
+     "count": 1,
+     "itemLevel": 263,
+     "quality": 4,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=255607?ilvl=263"
+    },
+    {
+     "itemId": 260638,
+     "itemName": "Fine Void Residue",
+     "count": 2,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260638"
+    },
+    {
+     "itemId": 260677,
+     "itemName": "Void Flakes",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260677"
+    },
+    {
+     "itemId": 272231,
+     "itemName": "Pyrewalker's Doublet",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272231?ilvl=256"
+    },
+    {
+     "itemId": 260652,
+     "itemName": "Broken Wildlife Claw",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260652"
+    },
+    {
+     "itemId": 193748,
+     "itemName": "Kyrakka's Searing Embers",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=193748?ilvl=321"
+    },
+    {
+     "itemId": 249343,
+     "itemName": "Gaze of the Alnseer",
+     "count": 1,
+     "itemLevel": 298,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=249343?ilvl=298"
+    },
+    {
+     "itemId": 272266,
+     "itemName": "Forgotten Eidolon's Dagger",
+     "count": 1,
+     "itemLevel": 207,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272266?ilvl=207"
+    },
+    {
+     "itemId": 260648,
+     "itemName": "Tattered Clothes",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260648"
+    },
+    {
+     "itemId": 272232,
+     "itemName": "Pyrewalker's Buskins",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272232?ilvl=256"
+    },
+    {
+     "itemId": 256984,
+     "itemName": "Deepvine Chestwrap",
+     "count": 1,
+     "itemLevel": 279,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=256984?ilvl=279"
+    }
+   ],
    "tierPieceCount": 5,
    "currencies": {
     "crests": [
@@ -7398,7 +9610,7 @@
    "realmId": 61,
    "gender": 0,
    "faction": 0,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -7832,6 +10044,296 @@
      "wowheadUrl": "https://www.wowhead.com/item=6256?ilvl=1"
     }
    ],
+   "bagItems": [
+    {
+     "itemId": 242275,
+     "itemName": "Royal Roast",
+     "count": 1000,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242275"
+    },
+    {
+     "itemId": 236761,
+     "itemName": "Tranquility Bloom",
+     "count": 2,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=236761"
+    },
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 250063,
+     "itemName": "Voidbreaker's Robe",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250063?ilvl=289"
+    },
+    {
+     "itemId": 250061,
+     "itemName": "Voidbreaker's Gloves",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250061?ilvl=289"
+    },
+    {
+     "itemId": 242643,
+     "itemName": "A Big Ol' Stick of Butter",
+     "count": 118,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242643"
+    },
+    {
+     "itemId": 256988,
+     "itemName": "Lumenbloom Lantern",
+     "count": 1,
+     "itemLevel": 285,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=256988?ilvl=285"
+    },
+    {
+     "itemId": 242643,
+     "itemName": "A Big Ol' Stick of Butter",
+     "count": 1000,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242643"
+    },
+    {
+     "itemId": 269862,
+     "itemName": "Thalassian Token of Merit",
+     "count": 6,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=269862"
+    },
+    {
+     "itemId": 242643,
+     "itemName": "A Big Ol' Stick of Butter",
+     "count": 1000,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242643"
+    },
+    {
+     "itemId": 242275,
+     "itemName": "Royal Roast",
+     "count": 375,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242275"
+    },
+    {
+     "itemId": 272235,
+     "itemName": "Pyrewalker's Treads",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=256"
+    },
+    {
+     "itemId": 242275,
+     "itemName": "Royal Roast",
+     "count": 14,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242275"
+    },
+    {
+     "itemId": 242747,
+     "itemName": "Hearty Royal Roast",
+     "count": 126,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242747"
+    },
+    {
+     "itemId": 242645,
+     "itemName": "Ripened Vegetable Assortment",
+     "count": 121,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242645"
+    },
+    {
+     "itemId": 250059,
+     "itemName": "Voidbreaker's Britches",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250059?ilvl=289"
+    },
+    {
+     "itemId": 242645,
+     "itemName": "Ripened Vegetable Assortment",
+     "count": 1000,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242645"
+    },
+    {
+     "itemId": 272234,
+     "itemName": "Pyrewalker's Miter",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272234?ilvl=256"
+    },
+    {
+     "itemId": 242645,
+     "itemName": "Ripened Vegetable Assortment",
+     "count": 1000,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242645"
+    },
+    {
+     "itemId": 242647,
+     "itemName": "Tavern Fixings",
+     "count": 120,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242647"
+    },
+    {
+     "itemId": 242647,
+     "itemName": "Tavern Fixings",
+     "count": 1000,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242647"
+    },
+    {
+     "itemId": 272232,
+     "itemName": "Pyrewalker's Buskins",
+     "count": 1,
+     "itemLevel": 207,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272232?ilvl=207"
+    },
+    {
+     "itemId": 272235,
+     "itemName": "Pyrewalker's Treads",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272235?ilvl=256"
+    },
+    {
+     "itemId": 242275,
+     "itemName": "Royal Roast",
+     "count": 21,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242275"
+    },
+    {
+     "itemId": 242639,
+     "itemName": "Practically Pork",
+     "count": 8,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=242639"
+    },
+    {
+     "itemId": 158368,
+     "itemName": "Sethraliss' Defiled Relic",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=158368?ilvl=321"
+    },
+    {
+     "itemId": 188152,
+     "itemName": "Gateway Control Shard",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=188152"
+    },
+    {
+     "itemId": 246951,
+     "itemName": "Stormarion Core",
+     "count": 20,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=246951"
+    },
+    {
+     "itemId": 246951,
+     "itemName": "Stormarion Core",
+     "count": 100,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=246951"
+    },
+    {
+     "itemId": 246951,
+     "itemName": "Stormarion Core",
+     "count": 100,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=246951"
+    },
+    {
+     "itemId": 250741,
+     "itemName": "Puzzling Cartel Chip",
+     "count": 3,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bank",
+     "wowheadUrl": "https://www.wowhead.com/item=250741"
+    }
+   ],
    "tierPieceCount": 4,
    "currencies": {
     "crests": [
@@ -8087,7 +10589,7 @@
    "realmId": 11,
    "gender": 0,
    "faction": 1,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -8355,6 +10857,179 @@
      "wowheadUrl": "https://www.wowhead.com/item=251201?bonus=13440:42:12701:13654&ench=7981&ilvl=298"
     }
    ],
+   "bagItems": [
+    {
+     "itemId": 236770,
+     "itemName": "Sanguithorn",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=236770"
+    },
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
+    },
+    {
+     "itemId": 268291,
+     "itemName": "Rotmire's Sporeheart",
+     "count": 1,
+     "itemLevel": 298,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=268291?ilvl=298"
+    },
+    {
+     "itemId": 250041,
+     "itemName": "Abyssal Immolator's Pillars",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250041?ilvl=289"
+    },
+    {
+     "itemId": 180653,
+     "itemName": "Mythic Keystone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=180653"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 7,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 258936,
+     "itemName": "Tarnished Dawnlit Commander's Breastplate",
+     "count": 1,
+     "itemLevel": 260,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=258936?ilvl=260"
+    },
+    {
+     "itemId": 272233,
+     "itemName": "Pyrewalker's Gloves",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272233?ilvl=256"
+    },
+    {
+     "itemId": 268211,
+     "itemName": "Baleful Hexblade",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=268211?ilvl=321"
+    },
+    {
+     "itemId": 272271,
+     "itemName": "Spiritbound Focus",
+     "count": 1,
+     "itemLevel": 207,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272271?ilvl=207"
+    },
+    {
+     "itemId": 269862,
+     "itemName": "Thalassian Token of Merit",
+     "count": 6,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=269862"
+    },
+    {
+     "itemId": 243734,
+     "itemName": "Thalassian Phoenix Oil",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=243734"
+    },
+    {
+     "itemId": 272149,
+     "itemName": "Hex Loop",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272149?ilvl=256"
+    },
+    {
+     "itemId": 188152,
+     "itemName": "Gateway Control Shard",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=188152"
+    },
+    {
+     "itemId": 268297,
+     "itemName": "Rattling Bag o' Gold",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=268297"
+    },
+    {
+     "itemId": 260659,
+     "itemName": "Stellar Vortex Residue",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260659"
+    },
+    {
+     "itemId": 272225,
+     "itemName": "Pyrewalker's Mantle",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272225?ilvl=256"
+    },
+    {
+     "itemId": 259360,
+     "itemName": "Steelbark Cloak",
+     "count": 1,
+     "itemLevel": 282,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=259360?ilvl=282"
+    },
+    {
+     "itemId": 272231,
+     "itemName": "Pyrewalker's Doublet",
+     "count": 1,
+     "itemLevel": 321,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272231?ilvl=321"
+    }
+   ],
    "tierPieceCount": 2,
    "currencies": {
     "crests": [
@@ -8608,7 +11283,7 @@
    "realmId": 11,
    "gender": 0,
    "faction": 1,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -8899,6 +11574,143 @@
      "wowheadUrl": "https://www.wowhead.com/item=193707?bonus=13440:6652:12701:13654&ench=8041&ilvl=298"
     }
    ],
+   "bagItems": [
+    {
+     "itemId": 236761,
+     "itemName": "Tranquility Bloom",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=236761"
+    },
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
+    },
+    {
+     "itemId": 180653,
+     "itemName": "Mythic Keystone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=180653"
+    },
+    {
+     "itemId": 251215,
+     "itemName": "Greaves of the Divine Guile",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251215?ilvl=289"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 7,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 249980,
+     "itemName": "Earthgrips of the Primal Core",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=249980?ilvl=289"
+    },
+    {
+     "itemId": 272254,
+     "itemName": "Galerider's Mesh Wraps",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272254?ilvl=256"
+    },
+    {
+     "itemId": 259356,
+     "itemName": "Bloomweaver's Pierce",
+     "count": 1,
+     "itemLevel": 279,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=259356?ilvl=279"
+    },
+    {
+     "itemId": 244584,
+     "itemName": "Farstrider's Plated Bracers",
+     "count": 1,
+     "itemLevel": 285,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=244584?ilvl=285"
+    },
+    {
+     "itemId": 239656,
+     "itemName": "Adherent's Silken Shroud",
+     "count": 1,
+     "itemLevel": 285,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=239656?ilvl=285"
+    },
+    {
+     "itemId": 269862,
+     "itemName": "Thalassian Token of Merit",
+     "count": 6,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=269862"
+    },
+    {
+     "itemId": 272226,
+     "itemName": "Miststalker's Shroud",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272226?ilvl=256"
+    },
+    {
+     "itemId": 272249,
+     "itemName": "Galerider's Chain Clasps",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272249?ilvl=256"
+    },
+    {
+     "itemId": 272250,
+     "itemName": "Galerider's Gaze",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272250?ilvl=256"
+    },
+    {
+     "itemId": 188152,
+     "itemName": "Gateway Control Shard",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 3,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=188152"
+    }
+   ],
    "tierPieceCount": 2,
    "currencies": {
     "crests": [
@@ -9157,7 +11969,7 @@
    "realmId": 57,
    "gender": 0,
    "faction": 0,
-   "gold": 0,
+   "gold": 10000,
    "equipped": [
     {
      "slot": 1,
@@ -9500,6 +12312,179 @@
      "gems": [],
      "isTierPiece": false,
      "wowheadUrl": "https://www.wowhead.com/item=193487?bonus=8841:8842:8807&ilvl=74"
+    }
+   ],
+   "bagItems": [
+    {
+     "itemId": 180653,
+     "itemName": "Mythic Keystone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=180653"
+    },
+    {
+     "itemId": 236761,
+     "itemName": "Tranquility Bloom",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=236761"
+    },
+    {
+     "itemId": 260659,
+     "itemName": "Stellar Vortex Residue",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260659"
+    },
+    {
+     "itemId": 250034,
+     "itemName": "Devouring Reaver's Essence Grips",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250034?ilvl=289"
+    },
+    {
+     "itemId": 272229,
+     "itemName": "Serpentine Talisman",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272229?ilvl=256"
+    },
+    {
+     "itemId": 260652,
+     "itemName": "Broken Wildlife Claw",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=260652"
+    },
+    {
+     "itemId": 250033,
+     "itemName": "Devouring Reaver's Intake",
+     "count": 1,
+     "itemLevel": 298,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250033?ilvl=298"
+    },
+    {
+     "itemId": 272229,
+     "itemName": "Serpentine Talisman",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272229?ilvl=256"
+    },
+    {
+     "itemId": 272246,
+     "itemName": "Miststalker's Wristbands",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272246?ilvl=256"
+    },
+    {
+     "itemId": 213240,
+     "itemName": "Decorated Truffle",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 0,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=213240"
+    },
+    {
+     "itemId": 264336,
+     "itemName": "Voidlight Brazier",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=264336"
+    },
+    {
+     "itemId": 272240,
+     "itemName": "Miststalker's Striders",
+     "count": 1,
+     "itemLevel": 256,
+     "quality": 2,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=272240?ilvl=256"
+    },
+    {
+     "itemId": 274476,
+     "itemName": "Spark of Tides",
+     "count": 5,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=274476"
+    },
+    {
+     "itemId": 257019,
+     "itemName": "Verdant Tracker's Buckle",
+     "count": 1,
+     "itemLevel": 279,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=257019?ilvl=279"
+    },
+    {
+     "itemId": 279576,
+     "itemName": "Void Vestige",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=279576"
+    },
+    {
+     "itemId": 269862,
+     "itemName": "Thalassian Token of Merit",
+     "count": 6,
+     "itemLevel": 0,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=269862"
+    },
+    {
+     "itemId": 250028,
+     "itemName": "Devouring Reaver's Drape",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=250028?ilvl=289"
+    },
+    {
+     "itemId": 251099,
+     "itemName": "Vest of the Howling Gale",
+     "count": 1,
+     "itemLevel": 289,
+     "quality": 4,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=251099?ilvl=289"
+    },
+    {
+     "itemId": 6948,
+     "itemName": "Hearthstone",
+     "count": 1,
+     "itemLevel": 0,
+     "quality": 1,
+     "location": "Bags",
+     "wowheadUrl": "https://www.wowhead.com/item=6948"
     }
    ],
    "tierPieceCount": 2,
