@@ -476,6 +476,9 @@
     const border = qualityColor(item.quality);
     const countTxt = item.count > 1 ? ` \u00d7${item.count}` : "";
     const ilvlTxt = item.itemLevel > 0 ? item.itemLevel : "\u2014";
+    const rankTxt = item.craftingQuality > 0
+      ? `<div class="item-subline"><span class="item-crafted">Rank ${item.craftingQuality}</span></div>`
+      : "";
     return `<li class="gear-row" style="border-left-color:${border}">
       <div class="gear-row-main">
         <div class="gear-row-top">
@@ -483,6 +486,7 @@
           <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}${countTxt}</span>
           <span class="item-ilvl">${ilvlTxt}</span>
         </div>
+        ${rankTxt}
       </div>
     </li>`;
   }
@@ -518,7 +522,7 @@
       `${classInfo(char).name} \u00b7 ${realmName(char)} \u00b7 level ${char.level} \u00b7 ilvl ${char.itemLevel} \u00b7 tier ${char.tierPieceCount}pc`;
 
     fillList("detail-equipped", char.equipped, renderGearRow, "No equipped gear data.");
-    fillList(
+    renderGroupedItemList(
       "detail-bags", char.bagItems, renderBagItemRow,
       DATA.hasPrivateData ? "Bags are empty." : "Not available -- bag/bank contents require an authenticated session (see README)."
     );
@@ -625,12 +629,18 @@
 
   function renderAllItemsRow(item) {
     const border = qualityColor(item.quality);
+    // No .slot label in this view (unlike bag items), so don't reuse
+    // .item-subline's indent -- there's no slot-label width to align past.
+    const rankTxt = item.craftingQuality > 0
+      ? `<div class="item-subline item-subline-flush"><span class="item-crafted">Rank ${item.craftingQuality}</span></div>`
+      : "";
     return `<li class="gear-row" style="border-left-color:${border}">
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}</span>
           <span class="item-count-breakdown" data-tooltip="${escapeAttr(item.breakdown)}" aria-label="${escapeAttr(item.breakdown)}">\u00d7${fmtNumber(item.count)}</span>
         </div>
+        ${rankTxt}
       </div>
     </li>`;
   }
