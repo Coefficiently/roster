@@ -86,7 +86,7 @@ BONUS_ROLL_IDS = [3418, 3509]                    # Nebulous Voidcore, Tidal Spar
 # Any id not in this map is left untranslated on purpose -- better to
 # show no rank badge than a wrong one. Extend this if new ids show up.
 CRAFTING_QUALITY_ID_TO_RANK = {13: 1, 14: 2}
-CRAFTING_QUALITY_RANK_NAMES = {1: "Silver", 2: "Gold"}
+CRAFTING_QUALITY_RANK_NAMES = {1: "Gold", 2: "Silver"}
 
 MIN_LEVEL = 90
 MIN_ITEM_LEVEL = 290
