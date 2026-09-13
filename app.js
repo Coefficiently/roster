@@ -455,7 +455,7 @@
       ? `<div class="item-subline item-enchant">${item.enchant}</div>`
       : "";
     const gemsLine = (item.gems && item.gems.length > 0)
-      ? item.gems.map((g) => `<div class="item-subline item-gems">\u25c6 ${wowheadLink({ wowheadUrl: g.wowheadUrl, name: g.name }, "gem-link", null, "small")}</div>`).join("")
+      ? `<div class="item-subline item-gems">${item.gems.map((g) => `\u25c6 ${wowheadLink({ wowheadUrl: g.wowheadUrl, name: g.name }, "gem-link", null, "small")}`).join(" &nbsp; ")}</div>`
       : "";
 
     return `<li class="gear-row" style="border-left-color:${border}">

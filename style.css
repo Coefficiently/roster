@@ -454,6 +454,7 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-size: 0.78rem;
   color: var(--ink-dim);
   margin-top: 0.2rem;
+  margin-left: 5.5rem; /* aligns under the item icon/name, not the slot label -- matches .slot's width */
 }
 .item-enchant { color: #9fd67a; }
 .item-gems { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; }
