@@ -505,6 +505,18 @@
     el.innerHTML = items.map(renderFn).join("");
   }
 
+  // Only one of these three panels should be open at a time -- opening any
+  // one closes the other two.
+  const EXCLUSIVE_PANEL_IDS = ["detail-panel", "warband-panel", "allitems-panel"];
+  function closeOtherPanels(exceptId) {
+    for (const id of EXCLUSIVE_PANEL_IDS) {
+      if (id !== exceptId) {
+        const el = document.getElementById(id);
+        if (el) el.hidden = true;
+      }
+    }
+  }
+
   function openDetail(charId) {
     const char = DATA.characters.find((c) => c.id === charId);
     if (!char) return;
@@ -520,6 +532,7 @@
       DATA.hasPrivateData ? "Bags are empty." : "Not available -- bag/bank contents require an authenticated session (see README)."
     );
 
+    closeOtherPanels("detail-panel");
     detailPanel.hidden = false;
     if (typeof detailPanel.scrollIntoView === "function") {
       detailPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -562,6 +575,7 @@
 
     btn.addEventListener("click", () => {
       renderWarbandList(DATA.warbandItems);
+      closeOtherPanels("warband-panel");
       panel.hidden = false;
       if (typeof panel.scrollIntoView === "function") {
         panel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -671,6 +685,7 @@
     btn.addEventListener("click", () => {
       const items = buildAllItemsAggregate();
       renderGroupedItemList("allitems-list", items, renderAllItemsRow, "No items found.");
+      closeOtherPanels("allitems-panel");
       panel.hidden = false;
       if (typeof panel.scrollIntoView === "function") {
         panel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -827,12 +842,10 @@
       console.error(err);
       return false;
     }
-    // Close the detail panel rather than let it keep showing a character's
-    // now-possibly-stale gear -- the table underneath it is about to be
-    // fully rebuilt with fresh data, and re-opening is one click away.
-    if (!detailPanel.hidden) {
-      detailPanel.hidden = true;
-    }
+    // Close any open panel rather than let it keep showing now-possibly-
+    // stale data -- the table underneath is about to be fully rebuilt with
+    // fresh data, and re-opening any of these is one click away.
+    closeOtherPanels(null);
     renderTopStats();
     render();
     return true;
