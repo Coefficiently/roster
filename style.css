@@ -416,6 +416,7 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   position: relative;
+  border-bottom: 1px dotted var(--ink-dim); /* hints there's a hover tooltip here (source breakdown), separate from the item name's own Wowhead tooltip */
 }
 
 .item-tier-badge {
