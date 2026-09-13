@@ -38,12 +38,18 @@ body.is-locked > *:not(#lock-screen) { display: none; }
 .lock-screen {
   position: fixed;
   inset: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
   background: var(--bg);
   z-index: 100;
 }
+/* Explicitly tie the flex layout to the ABSENCE of [hidden] rather than
+   relying on [hidden]'s cascade priority alone -- a plain unconditional
+   `display: flex` here could otherwise win against [hidden] in some
+   browsers, making the lock screen visible (with its form unwired, since
+   JS hasn't run yet) before any click handler is attached -- exactly the
+   "Unlock does a real page reload" bug this caused. */
+.lock-screen:not([hidden]) { display: flex; }
 .lock-form {
   display: flex;
   flex-direction: column;
