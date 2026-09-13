@@ -389,25 +389,6 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   background: var(--panel-2);
   border-radius: 0 4px 4px 0;
 }
-/* Wowhead's widget renders the actual icon as a background-image inside
-   <ins> once power.js processes it (see refreshWowheadLinks() in app.js).
-   These are the pre-load / fallback dimensions so layout doesn't jump and
-   a not-yet-loaded icon still reads as an item slot, not a glitch. */
-.wh-icon-link {
-  flex-shrink: 0;
-  display: inline-block;
-  line-height: 0;
-}
-ins.iconlarge, ins.iconmedium, ins.iconsmall {
-  display: inline-block;
-  vertical-align: middle;
-  border-radius: 3px;
-  border: 1px solid var(--line);
-  background-color: var(--bg);
-}
-ins.iconlarge { width: 36px; height: 36px; }
-ins.iconmedium { width: 28px; height: 28px; }
-ins.iconsmall { width: 16px; height: 16px; margin-right: 0.2rem; }
 
 .wh-item-link {
   color: inherit;

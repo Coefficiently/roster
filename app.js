@@ -411,34 +411,15 @@
 
   // ---------------- Detail panel (gear / currencies / bags) ----------------
 
-  // Wowhead's tooltip widget (power.js, loaded in index.html) shows the
-  // full authoritative tooltip -- icon included -- when hovering any of
-  // these links. We tried also auto-injecting a standalone icon via <ins>
-  // per Wowhead's "iconizelinks" feature, but that rendered blank for most
-  // items and overlapped adjacent text for gems, so we dropped it: the
-  // hover tooltip is the one mechanism that's actually confirmed working.
-  // Item icons come from wowthing's own image CDN (confirmed against their
-  // frontend source, WowthingImage.svelte: src="https://img.wowthing.org/
-  // {size}/{name}.webp"), keyed directly by item id -- no separate icon
-  // name/lookup needed. Rank icons (crafting quality tiers, 1-5) are a
-  // similar fixed asset: https://img.wowthing.org/misc/crafting-{n}.png
-  // (from CraftedQualityIcon.svelte). If an item has no cached icon,
-  // wowthing's CDN itself 404s -- onerror hides the broken-image box
-  // rather than showing a browser placeholder icon.
-  // Wowhead's tooltip widget (power.js) can auto-inject the real item icon
-  // into an <ins class="iconlarge|iconmedium|iconsmall"> placed inside a
-  // Wowhead item link, when iconizelinks:true is set (index.html). This was
-  // tried once before and looked broken (blank icons, no obvious cause) --
-  // but the real issue was almost certainly that power.js scans the page
-  // ONCE on load, while this site's content renders later, asynchronously,
-  // after data.json is fetched (and decrypted). Newly-added <ins> elements
-  // never got picked up. refreshWowheadLinks() below explicitly re-triggers
-  // that scan after every render; call it anywhere new wowhead links are
-  // added to the DOM.
-  function wowheadIconLink(wowheadUrl, sizeClass) {
-    return `<a href="${wowheadUrl}" class="wh-item-link wh-icon-link" target="_blank" rel="noopener"><ins class="${sizeClass}"></ins></a>`;
-  }
-
+  // Wowhead's tooltip widget (power.js, iconizelinks:true in index.html)
+  // auto-injects a small icon directly into any wowhead item link's own
+  // text -- confirmed working. A separate attempt at a larger, standalone
+  // icon-only link (its own <a><ins class="iconlarge"></ins></a>, with no
+  // text) did NOT get picked up by the same auto-injection and rendered as
+  // an empty box, so that approach was dropped -- the auto-icon on the
+  // text link itself is the one confirmed mechanism. refreshWowheadLinks()
+  // re-triggers the widget's scan after every dynamic render, since it
+  // only scans automatically once on initial page load.
   function refreshWowheadLinks() {
     if (window.$WowheadPower && typeof window.$WowheadPower.refreshLinks === "function") {
       window.$WowheadPower.refreshLinks();
@@ -477,7 +458,6 @@
       : "";
 
     return `<li class="gear-row" style="border-left-color:${border}">
-      ${wowheadIconLink(item.wowheadUrl, "iconlarge")}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="slot">${slotTxt}</span>
@@ -496,7 +476,6 @@
     const countTxt = item.count > 1 ? ` \u00d7${item.count}` : "";
     const ilvlTxt = item.itemLevel > 0 ? item.itemLevel : "\u2014";
     return `<li class="gear-row" style="border-left-color:${border}">
-      ${wowheadIconLink(item.wowheadUrl, "iconlarge")}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="slot">${item.location || "Bags"}</span>
@@ -646,7 +625,6 @@
   function renderAllItemsRow(item) {
     const border = qualityColor(item.quality);
     return `<li class="gear-row" style="border-left-color:${border}">
-      ${wowheadIconLink(item.wowheadUrl, "iconlarge")}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}</span>
