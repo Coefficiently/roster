@@ -394,12 +394,15 @@ def main():
 
     item_names = {}
     item_categories = {}
+    item_subclasses = {}
     if needed_item_ids:
         # rawItems is delta-encoded: running item id = sum of arr[0] so far,
         # and the item's name is names_array[arr[1]] (arr[1] is a *name index*,
         # not the item id). arr[4] indexes into classIdSubclassIdInventoryTypes
         # to get [classId, subclassId, inventoryType] -- classId is WoW's
-        # broad item category (Weapon, Armor, Consumable, Trade Goods, etc).
+        # broad item category (Weapon, Armor, Consumable, Trade Goods, etc);
+        # subclassId distinguishes finer types within a class (e.g. within
+        # Consumable: Potion, Flask, Food & Drink, Item Enhancement, etc).
         running_id = 0
         remaining = set(needed_item_ids)
         for arr in item_data.get("rawItems", []):
@@ -411,6 +414,7 @@ def main():
                 class_idx = arr[4] if len(arr) > 4 else None
                 if class_idx is not None and 0 <= class_idx < len(class_lookup):
                     item_categories[running_id] = class_lookup[class_idx][0]
+                    item_subclasses[running_id] = class_lookup[class_idx][1]
                 remaining.discard(running_id)
                 if not remaining:
                     break
@@ -425,8 +429,30 @@ def main():
         18: "WoW Token", 19: "Profession",
     }
 
+    # Within Consumable (classId 0), only these subclasses are actual combat
+    # consumables (health pots, flasks, food, vantus runes) -- confirmed
+    # against real item data, not guessed.
+    COMBAT_CONSUMABLE_SUBCLASSES = {1, 3, 5, 9}  # Potion, Flask, Food, Vantus Rune
+    # Auto-Hammer sits in the noisy generic subclass (0) rather than one of
+    # the above, so it needs a specific name match instead.
+    COMBAT_CONSUMABLE_NAMES = {"Auto-Hammer"}
+    # Subclass 8 is Blizzard's generic "Other" within Consumable -- weapon
+    # oils/augment runes live there, but so do unrelated things like Battle
+    # Pet Bandage and cosmetic event tokens (confirmed against real data).
+    # Narrow it to just the enhancement-style items by name.
+    ITEM_ENHANCEMENT_KEYWORDS = ("augment rune", "sharpening stone", "weightstone", "varnish", "lacquer", " oil", "weapon oil")
+
     def item_category_name(item_id):
-        return ITEM_CATEGORY_NAMES.get(item_categories.get(item_id), "Miscellaneous")
+        class_id = item_categories.get(item_id)
+        if class_id == 0:  # Consumable
+            subclass_id = item_subclasses.get(item_id)
+            name = item_names.get(item_id, "")
+            if subclass_id in COMBAT_CONSUMABLE_SUBCLASSES or name in COMBAT_CONSUMABLE_NAMES:
+                return "Combat Consumable"
+            if subclass_id == 8 and any(kw in name.lower() for kw in ITEM_ENHANCEMENT_KEYWORDS):
+                return "Combat Consumable"
+            return "Other Consumable"
+        return ITEM_CATEGORY_NAMES.get(class_id, "Miscellaneous")
 
     # --- Gear upgrade tracks (Explorer..Myth) decoded from bonus ids -----
     # itemBonusListGroups[groupId][sharedStringId] = [bonusId rank1, rank2, ...]

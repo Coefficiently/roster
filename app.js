@@ -520,7 +520,7 @@
     "Weapon": "Gear",
     "Armor": "Gear",
     "Gem": "Gear",
-    "Consumable": "Combat Consumables",
+    "Combat Consumable": "Combat Consumables",
     "Miscellaneous": "Account Bound Currencies",
     "Quest Item": "Quest Items",
   };
