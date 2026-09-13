@@ -406,6 +406,7 @@
     });
 
     renderPaginationControls(allChars.length, totalPages);
+    refreshWowheadLinks();
   }
 
   // ---------------- Detail panel (gear / currencies / bags) ----------------
@@ -424,14 +425,24 @@
   // (from CraftedQualityIcon.svelte). If an item has no cached icon,
   // wowthing's CDN itself 404s -- onerror hides the broken-image box
   // rather than showing a browser placeholder icon.
-  function itemIconImg(itemId, size, craftingQuality) {
-    const rankIcon = craftingQuality > 0
-      ? `<img class="item-rank-icon" src="https://img.wowthing.org/misc/crafting-${craftingQuality}.png" alt="Rank ${craftingQuality}" loading="lazy" />`
-      : "";
-    return `<span class="item-icon-wrap" style="width:${size}px;height:${size}px">
-      <img class="item-icon" src="https://img.wowthing.org/${size}/item/${itemId}.webp" alt="" loading="lazy" onerror="this.style.visibility='hidden'" />
-      ${rankIcon}
-    </span>`;
+  // Wowhead's tooltip widget (power.js) can auto-inject the real item icon
+  // into an <ins class="iconlarge|iconmedium|iconsmall"> placed inside a
+  // Wowhead item link, when iconizelinks:true is set (index.html). This was
+  // tried once before and looked broken (blank icons, no obvious cause) --
+  // but the real issue was almost certainly that power.js scans the page
+  // ONCE on load, while this site's content renders later, asynchronously,
+  // after data.json is fetched (and decrypted). Newly-added <ins> elements
+  // never got picked up. refreshWowheadLinks() below explicitly re-triggers
+  // that scan after every render; call it anywhere new wowhead links are
+  // added to the DOM.
+  function wowheadIconLink(wowheadUrl, sizeClass) {
+    return `<a href="${wowheadUrl}" class="wh-item-link wh-icon-link" target="_blank" rel="noopener"><ins class="${sizeClass}"></ins></a>`;
+  }
+
+  function refreshWowheadLinks() {
+    if (window.$WowheadPower && typeof window.$WowheadPower.refreshLinks === "function") {
+      window.$WowheadPower.refreshLinks();
+    }
   }
 
   function wowheadLink(item, extraCls, extraStyle) {
@@ -466,7 +477,7 @@
       : "";
 
     return `<li class="gear-row" style="border-left-color:${border}">
-      ${itemIconImg(item.itemId, 36, 0)}
+      ${wowheadIconLink(item.wowheadUrl, "iconlarge")}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="slot">${slotTxt}</span>
@@ -485,7 +496,7 @@
     const countTxt = item.count > 1 ? ` \u00d7${item.count}` : "";
     const ilvlTxt = item.itemLevel > 0 ? item.itemLevel : "\u2014";
     return `<li class="gear-row" style="border-left-color:${border}">
-      ${itemIconImg(item.itemId, 36, item.craftingQuality || 0)}
+      ${wowheadIconLink(item.wowheadUrl, "iconlarge")}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="slot">${item.location || "Bags"}</span>
@@ -531,6 +542,7 @@
       "detail-bags", char.bagItems, renderBagItemRow,
       DATA.hasPrivateData ? "Bags are empty." : "Not available -- bag/bank contents require an authenticated session (see README)."
     );
+    refreshWowheadLinks();
 
     closeOtherPanels("detail-panel");
     detailPanel.hidden = false;
@@ -634,7 +646,7 @@
   function renderAllItemsRow(item) {
     const border = qualityColor(item.quality);
     return `<li class="gear-row" style="border-left-color:${border}">
-      ${itemIconImg(item.itemId, 36, item.craftingQuality || 0)}
+      ${wowheadIconLink(item.wowheadUrl, "iconlarge")}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}</span>
@@ -674,6 +686,7 @@
       html += bucketItems.map(rowRenderFn).join("");
     }
     listEl.innerHTML = html;
+    refreshWowheadLinks();
   }
 
   function wireAllItemsPanel() {
