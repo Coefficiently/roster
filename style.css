@@ -99,6 +99,12 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   align-items: flex-end;
   justify-content: space-between;
 }
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
 
 .brand h1 {
   font-family: var(--sans);
