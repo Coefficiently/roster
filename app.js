@@ -461,7 +461,7 @@
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="slot">${slotTxt}</span>
-          <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link iconlarge")}${tierTxt}</span>
+          <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}${tierTxt}</span>
           <span class="item-ilvl"${ilvlTooltip}>${ilvlTxt}</span>
         </div>
         <div class="gear-row-meta">${upgradeTxt}${craftedTxt}</div>
@@ -479,7 +479,7 @@
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="slot">${item.location || "Bags"}</span>
-          <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link iconlarge")}${countTxt}</span>
+          <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}${countTxt}</span>
           <span class="item-ilvl">${ilvlTxt}</span>
         </div>
       </div>
@@ -627,7 +627,7 @@
     return `<li class="gear-row" style="border-left-color:${border}">
       <div class="gear-row-main">
         <div class="gear-row-top">
-          <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link iconlarge")}</span>
+          <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}</span>
           <span class="item-count-breakdown" data-tooltip="${escapeAttr(item.breakdown)}" aria-label="${escapeAttr(item.breakdown)}">\u00d7${fmtNumber(item.count)}</span>
         </div>
       </div>
