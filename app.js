@@ -426,10 +426,11 @@
     }
   }
 
-  function wowheadLink(item, extraCls, extraStyle) {
+  function wowheadLink(item, extraCls, extraStyle, iconSize) {
     const cls = extraCls || "";
     const styleAttr = extraStyle ? ` style="${extraStyle}"` : "";
-    return `<a href="${item.wowheadUrl}" class="wh-item-link ${cls}"${styleAttr} target="_blank" rel="noopener">${item.name}</a>`;
+    const iconSizeAttr = iconSize ? ` data-wh-icon-size="${iconSize}"` : "";
+    return `<a href="${item.wowheadUrl}" class="wh-item-link ${cls}"${styleAttr}${iconSizeAttr} target="_blank" rel="noopener">${item.name}</a>`;
   }
 
   function renderGearRow(item) {
@@ -454,7 +455,7 @@
       ? `<div class="item-subline item-enchant">${item.enchant}</div>`
       : "";
     const gemsLine = (item.gems && item.gems.length > 0)
-      ? `<div class="item-subline item-gems">${item.gems.map((g) => `\u25c6 ${wowheadLink({ wowheadUrl: g.wowheadUrl, name: g.name }, "gem-link")}`).join(" &nbsp; ")}</div>`
+      ? `<div class="item-subline item-gems">${item.gems.map((g) => `\u25c6 ${wowheadLink({ wowheadUrl: g.wowheadUrl, name: g.name }, "gem-link", null, "small")}`).join(" &nbsp; ")}</div>`
       : "";
 
     return `<li class="gear-row" style="border-left-color:${border}">
