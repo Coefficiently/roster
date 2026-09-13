@@ -635,11 +635,21 @@
     const rankTxt = item.craftingQuality > 0
       ? `<div class="item-subline item-subline-flush"><span class="item-crafted">Rank ${item.craftingQuality}</span></div>`
       : "";
+    // Gear is effectively always count=1 per copy (you don't stack
+    // weapons/armor), so "x1" everywhere is noise -- item level is the
+    // actually useful number there. Stackable categories (consumables,
+    // currencies, etc) still show the total count, which is the useful
+    // number for those. The hover breakdown (which sources it's coming
+    // from) stays attached either way.
+    const isGear = warbandBucket(item.category) === "Gear";
+    const mainNumber = isGear
+      ? (item.itemLevel > 0 ? item.itemLevel : "\u2014")
+      : `\u00d7${fmtNumber(item.count)}`;
     return `<li class="gear-row" style="border-left-color:${border}">
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}</span>
-          <span class="item-count-breakdown" data-tooltip="${escapeAttr(item.breakdown)}" aria-label="${escapeAttr(item.breakdown)}">\u00d7${fmtNumber(item.count)}</span>
+          <span class="item-count-breakdown" data-tooltip="${escapeAttr(item.breakdown)}" aria-label="${escapeAttr(item.breakdown)}">${mainNumber}</span>
         </div>
         ${rankTxt}
       </div>
