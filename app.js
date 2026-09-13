@@ -416,6 +416,24 @@
   // per Wowhead's "iconizelinks" feature, but that rendered blank for most
   // items and overlapped adjacent text for gems, so we dropped it: the
   // hover tooltip is the one mechanism that's actually confirmed working.
+  // Item icons come from wowthing's own image CDN (confirmed against their
+  // frontend source, WowthingImage.svelte: src="https://img.wowthing.org/
+  // {size}/{name}.webp"), keyed directly by item id -- no separate icon
+  // name/lookup needed. Rank icons (crafting quality tiers, 1-5) are a
+  // similar fixed asset: https://img.wowthing.org/misc/crafting-{n}.png
+  // (from CraftedQualityIcon.svelte). If an item has no cached icon,
+  // wowthing's CDN itself 404s -- onerror hides the broken-image box
+  // rather than showing a browser placeholder icon.
+  function itemIconImg(itemId, size, craftingQuality) {
+    const rankIcon = craftingQuality > 0
+      ? `<img class="item-rank-icon" src="https://img.wowthing.org/misc/crafting-${craftingQuality}.png" alt="Rank ${craftingQuality}" loading="lazy" />`
+      : "";
+    return `<span class="item-icon-wrap" style="width:${size}px;height:${size}px">
+      <img class="item-icon" src="https://img.wowthing.org/${size}/item/${itemId}.webp" alt="" loading="lazy" onerror="this.style.visibility='hidden'" />
+      ${rankIcon}
+    </span>`;
+  }
+
   function wowheadLink(item, extraCls, extraStyle) {
     const cls = extraCls || "";
     const styleAttr = extraStyle ? ` style="${extraStyle}"` : "";
@@ -448,6 +466,7 @@
       : "";
 
     return `<li class="gear-row" style="border-left-color:${border}">
+      ${itemIconImg(item.itemId, 36, 0)}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="slot">${slotTxt}</span>
@@ -466,6 +485,7 @@
     const countTxt = item.count > 1 ? ` \u00d7${item.count}` : "";
     const ilvlTxt = item.itemLevel > 0 ? item.itemLevel : "\u2014";
     return `<li class="gear-row" style="border-left-color:${border}">
+      ${itemIconImg(item.itemId, 36, item.craftingQuality || 0)}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="slot">${item.location || "Bags"}</span>
@@ -568,6 +588,7 @@
           quality: item.quality,
           itemLevel: item.itemLevel,
           category: item.category,
+          craftingQuality: item.craftingQuality || 0,
           wowheadUrl: item.wowheadUrl,
           totalCount: 0,
           bySource: new Map(),
@@ -599,6 +620,7 @@
   function renderAllItemsRow(item) {
     const border = qualityColor(item.quality);
     return `<li class="gear-row" style="border-left-color:${border}">
+      ${itemIconImg(item.itemId, 36, item.craftingQuality || 0)}
       <div class="gear-row-main">
         <div class="gear-row-top">
           <span class="item-name">${wowheadLink({ wowheadUrl: item.wowheadUrl, name: item.itemName }, "item-name-link")}</span>

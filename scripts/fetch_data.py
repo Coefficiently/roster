@@ -511,6 +511,20 @@ def main():
     # --- Current tier set item ids, per class -----------------------------
     item_set_by_id = {s[0]: s[2] for s in item_data.get("rawItemSets", [])}
 
+    # Static crafting-quality tier per item id (1-5, "Rank" icons) --
+    # separate from the per-instance craftedQuality already tracked for
+    # equipped gear (which reflects who actually crafted that specific
+    # item). This is the item DEFINITION's quality, used for e.g.
+    # consumables where a specific recipe always produces a fixed rank.
+    item_crafting_quality = {}
+    for quality_str, ids in item_data.get("craftingQualities", {}).items():
+        try:
+            quality = int(quality_str)
+        except ValueError:
+            continue
+        for iid in ids:
+            item_crafting_quality[iid] = quality
+
     warband_items_out = []
     for item in raw_warband_items:
         location, bag_id, slot, item_id, count = item[0], item[1], item[2], item[3], item[4]
@@ -523,6 +537,7 @@ def main():
             "itemLevel": item_level,
             "quality": quality,
             "category": item_category_name(item_id),
+            "craftingQuality": item_crafting_quality.get(item_id, 0),
             "wowheadUrl": f"https://www.wowhead.com/item={item_id}" + (f"?ilvl={item_level}" if item_level else ""),
         })
     warband_items_out = merge_item_stacks(warband_items_out)
@@ -660,6 +675,7 @@ def main():
                 "quality": quality,
                 "location": {1: "Bags", 2: "Bank", 3: "Reagent Bank", 5: "Warband Bank"}.get(location, "Bags"),
                 "category": item_category_name(item_id),
+                "craftingQuality": item_crafting_quality.get(item_id, 0),
                 "wowheadUrl": wowhead_url(item_id, item_level=item_level or None),
             })
         bag_items_out = merge_item_stacks(bag_items_out)
