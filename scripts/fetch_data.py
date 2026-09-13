@@ -78,6 +78,16 @@ CATALYST_IDS = [3465]                            # Venomblight Manaflux
 # 3513 tracked a consistently different (wrong) number for every character.
 BONUS_ROLL_IDS = [3418, 3509]                    # Nebulous Voidcore, Tidal Spark Dust
 
+# Blizzard's CraftingQuality field on an item is an internal id, NOT the
+# display rank number -- resolving it needs a lookup table (id -> rank)
+# that isn't exposed in wowthing's public data at all. Confirmed
+# empirically against real items and a user-verified in-game report for
+# this account/season: raw id 13 = Rank 1 (Silver), 14 = Rank 2 (Gold).
+# Any id not in this map is left untranslated on purpose -- better to
+# show no rank badge than a wrong one. Extend this if new ids show up.
+CRAFTING_QUALITY_ID_TO_RANK = {13: 1, 14: 2}
+CRAFTING_QUALITY_RANK_NAMES = {1: "Silver", 2: "Gold"}
+
 MIN_LEVEL = 90
 MIN_ITEM_LEVEL = 290
 
@@ -519,11 +529,14 @@ def main():
     item_crafting_quality = {}
     for quality_str, ids in item_data.get("craftingQualities", {}).items():
         try:
-            quality = int(quality_str)
+            raw_id = int(quality_str)
         except ValueError:
             continue
+        rank = CRAFTING_QUALITY_ID_TO_RANK.get(raw_id)
+        if rank is None:
+            continue  # unmapped id -- skip rather than show a wrong number
         for iid in ids:
-            item_crafting_quality[iid] = quality
+            item_crafting_quality[iid] = rank
 
     warband_items_out = []
     for item in raw_warband_items:
@@ -538,6 +551,7 @@ def main():
             "quality": quality,
             "category": item_category_name(item_id),
             "craftingQuality": item_crafting_quality.get(item_id, 0),
+            "craftingQualityName": CRAFTING_QUALITY_RANK_NAMES.get(item_crafting_quality.get(item_id), ""),
             "wowheadUrl": f"https://www.wowhead.com/item={item_id}" + (f"?ilvl={item_level}" if item_level else ""),
         })
     warband_items_out = merge_item_stacks(warband_items_out)
@@ -676,6 +690,7 @@ def main():
                 "location": {1: "Bags", 2: "Bank", 3: "Reagent Bank", 5: "Warband Bank"}.get(location, "Bags"),
                 "category": item_category_name(item_id),
                 "craftingQuality": item_crafting_quality.get(item_id, 0),
+                "craftingQualityName": CRAFTING_QUALITY_RANK_NAMES.get(item_crafting_quality.get(item_id), ""),
                 "wowheadUrl": wowhead_url(item_id, item_level=item_level or None),
             })
         bag_items_out = merge_item_stacks(bag_items_out)

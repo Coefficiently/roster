@@ -477,7 +477,7 @@
     const countTxt = item.count > 1 ? ` \u00d7${item.count}` : "";
     const ilvlTxt = item.itemLevel > 0 ? item.itemLevel : "\u2014";
     const rankTxt = item.craftingQuality > 0
-      ? `<div class="item-subline"><span class="item-crafted">Rank ${item.craftingQuality}</span></div>`
+      ? `<div class="item-subline"><span class="item-crafted">Rank ${item.craftingQuality}${item.craftingQualityName ? ` (${item.craftingQualityName})` : ""}</span></div>`
       : "";
     return `<li class="gear-row" style="border-left-color:${border}">
       <div class="gear-row-main">
@@ -599,6 +599,7 @@
           itemLevel: item.itemLevel,
           category: item.category,
           craftingQuality: item.craftingQuality || 0,
+          craftingQualityName: item.craftingQualityName || "",
           wowheadUrl: item.wowheadUrl,
           totalCount: 0,
           bySource: new Map(),
@@ -632,7 +633,7 @@
     // No .slot label in this view (unlike bag items), so don't reuse
     // .item-subline's indent -- there's no slot-label width to align past.
     const rankTxt = item.craftingQuality > 0
-      ? `<div class="item-subline item-subline-flush"><span class="item-crafted">Rank ${item.craftingQuality}</span></div>`
+      ? `<div class="item-subline item-subline-flush"><span class="item-crafted">Rank ${item.craftingQuality}${item.craftingQualityName ? ` (${item.craftingQualityName})` : ""}</span></div>`
       : "";
     return `<li class="gear-row" style="border-left-color:${border}">
       <div class="gear-row-main">
