@@ -92,14 +92,28 @@
   // spaces. The title line sometimes has a trailing " Saved" with no
   // separator -- that's redundant with the detail line's own field and is
   // stripped.
+  // Uses "Raid #<id>" as the entry boundary rather than assuming a fixed
+  // number of lines per entry -- a raw clipboard paste from the real page
+  // breaks lines differently (and into more pieces, sometimes with icon
+  // glyphs on their own line) than manually-typed/reformatted text does.
+  // Each entry's lines (after the title line) are joined into one string
+  // and fields are pulled out by content, not position, so it doesn't
+  // matter how the source broke them up.
   function parseSignupText(text) {
-    const lines = text.split("\n").map((l) => l.trim()).filter((l) => l.length > 0);
+    const normalized = text.replace(/\r\n/g, "\n");
+    const rawBlocks = normalized.split(/(?=Raid #\d+)/).map((b) => b.trim()).filter((b) => b.length > 0);
     const entries = [];
     const errors = [];
-    for (let i = 0; i < lines.length - 1; i += 2) {
-      const titleLine = lines[i];
-      const detailLine = lines[i + 1];
 
+    for (const block of rawBlocks) {
+      // Text before the first "Raid #..." match (e.g. a page header like
+      // "Your Active Raid Signups") ends up as its own leading block that
+      // doesn't itself start with "Raid #" -- skip it silently rather than
+      // reporting a parse error, since it's expected boilerplate.
+      if (!/^Raid #\d+/.test(block)) continue;
+
+      const lines = block.split("\n").map((l) => l.trim()).filter((l) => l.length > 0);
+      const titleLine = lines[0];
       const titleMatch = titleLine.match(/^Raid #(\d+)\s*[—-]\s*(\S+)\s+(.+)$/);
       if (!titleMatch) {
         errors.push(`Couldn't parse title line: "${titleLine}"`);
@@ -108,14 +122,24 @@
       const [, raidId, sellerFromTitle, titleRest] = titleMatch;
       const title = titleRest.replace(/\s+Saved$/, "").trim();
 
-      const detailMatch = detailLine.match(
-        /^(\w+, \w+ \d{1,2}, \d{4} at \d{1,2}:\d{2}\s*[AP]M)\s+(\w+)\s*\u2022\s*RL:\s*(\S+)\s+([\w'-]+)\s*\u2014\s*(\w+)\s*\|\s*(\w+)\s*\u2022\s*(Saved|Unsaved)(?:\s*(\d+)ilvl)?/
-      );
-      if (!detailMatch) {
-        errors.push(`Couldn't parse detail line for raid #${raidId}: "${detailLine}"`);
+      const rest = lines.slice(1)
+        .map((l) => l.replace(/^[^\w]+/u, "").trim()) // strip any leading icon/emoji glyphs
+        .filter((l) => l.length > 0)
+        .join(" ");
+
+      const dateMatch = rest.match(/(\w+, \w+ \d{1,2}, \d{4} at \d{1,2}:\d{2}\s*[AP]M)/);
+      const diffMatch = rest.match(/\b(Heroic|Mythic|Normal|LFR)\b/);
+      const rlMatch = rest.match(/RL:\s*(\S+)/);
+      const charMatch = rest.match(/([a-z0-9']+-[a-z0-9']+)\s*[\u2014-]\s*(Tank|Healer|Dps|DPS)/i);
+      const savedMatch = rest.match(/\b(Saved|Unsaved)\b/);
+      const ilvlMatch = rest.match(/(\d+)\s*ilvl/i);
+
+      if (!dateMatch || !diffMatch || !rlMatch || !charMatch || !savedMatch) {
+        errors.push(`Couldn't parse detail fields for raid #${raidId} from: "${rest}"`);
         continue;
       }
-      const [, dateTimeStr, difficulty, rl, charRealm, role, , savedStatus, ilvl] = detailMatch;
+
+      const dateTimeStr = dateMatch[1];
       const dt = new Date(dateTimeStr.replace(" at ", " "));
 
       entries.push({
@@ -124,12 +148,12 @@
         title,
         dateTimeStr,
         dateTimeISO: isNaN(dt.getTime()) ? null : dt.toISOString(),
-        difficulty,
-        rl,
-        charRealm,
-        role,
-        saved: savedStatus === "Saved",
-        ilvl: ilvl ? parseInt(ilvl, 10) : null,
+        difficulty: diffMatch[1],
+        rl: rlMatch[1],
+        charRealm: charMatch[1],
+        role: charMatch[2],
+        saved: savedMatch[1] === "Saved",
+        ilvl: ilvlMatch ? parseInt(ilvlMatch[1], 10) : null,
       });
     }
     return { entries, errors };
