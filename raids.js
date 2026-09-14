@@ -520,12 +520,14 @@
           ? `<div class="raids-entry-conflict-msg">\u26a0 ${entryConflicts.map(escapeHtml).join("; ")}</div>`
           : "";
         const isRostered = !!entry.rosteredCharRealm;
+        const characters = entry.characters || [];
+        const hasMultipleCandidates = characters.length > 1;
 
         // One line per candidate character this signup was made with --
         // usually just one, but a signup can list more than one (applying
         // with either character, whichever gets picked). The rostered one
         // (if any) is bolded so it's clear which one actually got in.
-        const characterLines = (entry.characters || []).map((c) => {
+        const characterLines = characters.map((c) => {
           const isThisRostered = entry.rosteredCharRealm === c.charRealm;
           const savedBadgeClass = c.saved ? "raids-badge-saved" : "raids-badge-unsaved";
           return `
@@ -536,12 +538,17 @@
             </div>`;
         }).join("");
 
-        const rosterOptions = [`<option value="">Not rostered</option>`]
-          .concat((entry.characters || []).map((c) => {
-            const selected = entry.rosteredCharRealm === c.charRealm ? " selected" : "";
-            return `<option value="${escapeHtml(c.charRealm)}"${selected}>${escapeHtml(characterName(c.charRealm))}</option>`;
-          }))
-          .join("");
+        // The character picker only matters -- and only appears -- when
+        // there's more than one candidate AND Rostered is checked. With a
+        // single candidate, checking the box is enough on its own (there's
+        // nothing to choose between).
+        const charOptions = characters.map((c) => {
+          const selected = entry.rosteredCharRealm === c.charRealm ? " selected" : "";
+          return `<option value="${escapeHtml(c.charRealm)}"${selected}>${escapeHtml(characterName(c.charRealm))}</option>`;
+        }).join("");
+        const charPicker = hasMultipleCandidates
+          ? `<select class="raids-rostered-char-select" data-raid-id="${escapeHtml(entry.raidId)}"${isRostered ? "" : " hidden"}>${charOptions}</select>`
+          : "";
 
         html += `
           <div class="raids-entry${isRostered ? " raids-entry-rostered" : ""}${conflictClass}">
@@ -556,10 +563,11 @@
               ${conflictBlock}
             </div>
             <div class="raids-entry-actions">
-              <label class="raids-rostered-picker">
-                Rostered:
-                <select data-raid-id="${escapeHtml(entry.raidId)}">${rosterOptions}</select>
+              <label class="raids-rostered-toggle">
+                <input type="checkbox" class="raids-rostered-checkbox" data-raid-id="${escapeHtml(entry.raidId)}" ${isRostered ? "checked" : ""} />
+                Rostered
               </label>
+              ${charPicker}
               <button class="raids-delete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Delete</button>
             </div>
           </div>`;
@@ -567,17 +575,37 @@
     }
     container.innerHTML = html;
 
-    container.querySelectorAll("select[data-raid-id]").forEach((sel) => {
+    container.querySelectorAll(".raids-rostered-checkbox").forEach((cb) => {
+      cb.addEventListener("change", () => {
+        const entries = loadEntries();
+        const id = cb.dataset.raidId;
+        const entry = entries[id];
+        if (!entry) return;
+        if (!cb.checked) {
+          entry.rosteredCharRealm = null;
+        } else if (entry.characters && entry.characters.length === 1) {
+          entry.rosteredCharRealm = entry.characters[0].charRealm;
+        } else {
+          // Multiple candidates: default to whichever the (now-visible)
+          // picker currently shows -- its own change handler covers the
+          // user picking a different one afterward.
+          const picker = cb.closest(".raids-entry").querySelector(".raids-rostered-char-select");
+          entry.rosteredCharRealm = (picker && picker.value) || (entry.characters[0] && entry.characters[0].charRealm) || null;
+        }
+        saveEntries(entries);
+        render();
+      });
+    });
+
+    container.querySelectorAll(".raids-rostered-char-select").forEach((sel) => {
       sel.addEventListener("change", () => {
         const entries = loadEntries();
         const id = sel.dataset.raidId;
-        if (entries[id]) {
-          entries[id].rosteredCharRealm = sel.value || null;
-          saveEntries(entries);
-          render(); // full re-render: which character line is bolded, the
-                     // entry's rostered styling, and conflict messages can
-                     // all change as a result of this pick
-        }
+        const entry = entries[id];
+        if (!entry) return;
+        entry.rosteredCharRealm = sel.value || null;
+        saveEntries(entries);
+        render();
       });
     });
 

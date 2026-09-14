@@ -643,15 +643,22 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   align-items: flex-end;
   gap: 0.5rem;
 }
-.raids-rostered-picker {
+.raids-rostered-toggle {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   color: var(--ink-dim);
   font-size: 0.85rem;
+  cursor: pointer;
   white-space: nowrap;
 }
-.raids-rostered-picker select {
+.raids-rostered-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+.raids-rostered-char-select {
   background: var(--panel);
   border: 1px solid var(--line);
   color: var(--ink);
