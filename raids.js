@@ -9,6 +9,40 @@
   // (by test-decrypting data.json), not to actually use the roster data.
   const PASSPHRASE_STORAGE_KEY = "roster_passphrase";
 
+  // Same mapping as app.js, duplicated here since there's no module system
+  // on this site to share it from.
+  const CLASS_COLORS = {
+    warrior: "#C79C6E", paladin: "#F58CBA", hunter: "#ABD473", rogue: "#FFF569",
+    priest: "#FFFFFF", "death-knight": "#C41F3B", shaman: "#0070DE", mage: "#69CCF0",
+    warlock: "#9482C9", monk: "#00FF96", druid: "#FF7D0A", "demon-hunter": "#A330C9",
+    evoker: "#33937F",
+  };
+
+  // Maps a signup's charRealm text (e.g. "ctadruid-tichondrius") to
+  // { displayName, classColor } by matching it against the roster data's
+  // characters -- realm slugs there (e.g. "tichondrius") line up exactly
+  // with what appears in the signup text. Populated once at startup from
+  // whatever roster data ensureUnlocked() already fetched/decrypted; if
+  // that's unavailable for any reason, lookups simply miss and the raw
+  // charRealm text is shown as a fallback (see renderCalendar).
+  let CHARACTER_LOOKUP = {};
+
+  function buildCharacterLookup(rosterData) {
+    const lookup = {};
+    if (!rosterData || !rosterData.characters) return lookup;
+    for (const char of rosterData.characters) {
+      const realm = rosterData.realms && rosterData.realms[char.realmId];
+      const cls = rosterData.classes && rosterData.classes[char.classId];
+      if (!realm || !realm.slug || !char.name) continue;
+      const key = `${char.name.toLowerCase()}-${realm.slug.toLowerCase()}`;
+      lookup[key] = {
+        displayName: char.name,
+        classColor: (cls && CLASS_COLORS[cls.slug]) || null,
+      };
+    }
+    return lookup;
+  }
+
   function base64ToBuffer(b64) {
     return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
   }
@@ -65,21 +99,20 @@
       const res = await fetch(`data.json?t=${Date.now()}`, { cache: "no-store" });
       rawData = await res.json();
     } catch (err) {
-      return; // can't reach data.json -- proceed unlocked rather than block the page entirely
+      return null; // can't reach data.json -- proceed unlocked rather than block the page entirely
     }
-    if (!rawData || !rawData.encrypted) return; // site isn't encrypted, nothing to gate
+    if (!rawData || !rawData.encrypted) return rawData; // not encrypted -- this IS the roster data already
 
     let saved = null;
     try { saved = localStorage.getItem(PASSPHRASE_STORAGE_KEY); } catch (err) { /* fine */ }
     if (saved) {
       try {
-        await decryptEnvelope(rawData, saved);
-        return; // cached passphrase is valid, proceed unlocked
+        return await decryptEnvelope(rawData, saved); // cached passphrase valid
       } catch (err) {
         try { localStorage.removeItem(PASSPHRASE_STORAGE_KEY); } catch (e2) { /* fine */ }
       }
     }
-    await promptForPassphrase(rawData);
+    return await promptForPassphrase(rawData);
   }
 
   // ---------------- Signup text parser ----------------
@@ -314,8 +347,8 @@
         if (bMs === null) continue;
         const gapMinutes = Math.abs(aMs - bMs) / 60000;
         if (gapMinutes <= MIN_GAP_MINUTES) {
-          addConflict(a, `Starts only ${Math.round(gapMinutes)} min from Raid #${b.raidId} (${b.charRealm})`);
-          addConflict(b, `Starts only ${Math.round(gapMinutes)} min from Raid #${a.raidId} (${a.charRealm})`);
+          addConflict(a, `Starts only ${Math.round(gapMinutes)} min from Raid #${b.raidId} (${characterName(b.charRealm)})`);
+          addConflict(b, `Starts only ${Math.round(gapMinutes)} min from Raid #${a.raidId} (${characterName(a.charRealm)})`);
         }
       }
     }
@@ -350,6 +383,25 @@
     return String(str)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
+  }
+
+  // Just the display name (no color, no HTML) -- used in plain-text
+  // contexts like conflict messages. Shares the same lookup/fallback logic
+  // as characterDisplay.
+  function characterName(charRealm) {
+    const match = CHARACTER_LOOKUP[(charRealm || "").toLowerCase()];
+    return match ? match.displayName : charRealm;
+  }
+
+  // Shows just the character name (no realm), colored by class when the
+  // character matches one on the roster. Falls back to the raw
+  // "name-realm" text, uncolored, if there's no match (e.g. roster data
+  // wasn't available, or it's a character not tracked on the roster).
+  function characterDisplay(charRealm) {
+    const match = CHARACTER_LOOKUP[(charRealm || "").toLowerCase()];
+    if (!match) return escapeHtml(charRealm);
+    const style = match.classColor ? ` style="color:${match.classColor}"` : "";
+    return `<span${style}>${escapeHtml(match.displayName)}</span>`;
   }
 
   function renderSummary(entries, conflicts) {
@@ -427,7 +479,7 @@
                 <span class="raids-badge ${savedBadgeClass}">${entry.saved ? "Saved" : "Unsaved"}</span>
               </div>
               <div class="raids-entry-meta">
-                Raid #${escapeHtml(entry.raidId)} \u00b7 RL: ${escapeHtml(entry.rl)} \u00b7 ${escapeHtml(entry.charRealm)} \u2014 ${escapeHtml(entry.role)}${noteText}
+                Raid #${escapeHtml(entry.raidId)} \u00b7 RL: ${escapeHtml(entry.rl)} \u00b7 ${characterDisplay(entry.charRealm)} \u2014 ${escapeHtml(entry.role)}${noteText}
               </div>
               ${conflictBlock}
             </div>
@@ -516,7 +568,8 @@
   }
 
   async function init() {
-    await ensureUnlocked();
+    const rosterData = await ensureUnlocked();
+    CHARACTER_LOOKUP = buildCharacterLookup(rosterData);
     wireAddForm();
     render();
   }
