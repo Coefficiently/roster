@@ -421,6 +421,7 @@
             <div class="raids-entry-time">${escapeHtml(timeText)}</div>
             <div class="raids-entry-main">
               <div class="raids-entry-top">
+                <span class="raids-rostered-badge">\u2713 Rostered</span>
                 <span class="raids-entry-title">${escapeHtml(entry.title)}</span>
                 <span class="raids-badge">${escapeHtml(entry.difficulty)}</span>
                 <span class="raids-badge ${savedBadgeClass}">${entry.saved ? "Saved" : "Unsaved"}</span>
