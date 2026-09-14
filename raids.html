@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Raid Sales Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=BUILD_VERSION" />
+</head>
+<body>
+
+<div id="lock-screen" class="lock-screen" hidden>
+  <form id="lock-form" class="lock-form">
+    <h1 class="lock-title">Raid Sales Calendar</h1>
+    <p class="lock-sub">This data is encrypted. Enter the passphrase to view it.</p>
+    <input id="lock-input" type="password" autocomplete="current-password" placeholder="Passphrase" />
+    <button type="submit" class="page-btn lock-submit">Unlock</button>
+    <p id="lock-error" class="lock-error" hidden>Incorrect passphrase. Try again.</p>
+  </form>
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <h1>Raid Sales Calendar</h1>
+    </div>
+    <div class="topbar-actions">
+      <a href="index.html?v=BUILD_VERSION" class="page-btn raids-nav-link">&larr; Roster</a>
+    </div>
+  </div>
+</header>
+
+<main class="page raids-page">
+
+  <section class="raids-summary">
+    <span id="raids-summary-text">No signups added yet.</span>
+  </section>
+
+  <section class="raids-add-block">
+    <button id="raids-add-toggle" class="page-btn" type="button">+ Add signups</button>
+    <div id="raids-add-form" class="raids-add-form" hidden>
+      <p class="raids-add-hint">Paste the raw signup listing text below (two lines per raid: the "Raid #..." title line, then the date/detail line). Existing raids are matched by Raid # and updated in place -- your Rostered toggles are kept.</p>
+      <textarea id="raids-input" class="raids-textarea" rows="10" placeholder="Raid #219628 — Syneria The Venomous Abyss 9/9H
+Monday, September 14, 2026 at 9:30 PM Heroic • RL: Syneria   ctadruid-tichondrius — Dps | Heroic •  Saved 　 328ilvl"></textarea>
+      <div class="raids-add-actions">
+        <button id="raids-parse-btn" class="page-btn" type="button">Add signups</button>
+        <span id="raids-parse-result" class="raids-parse-result"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="raids-calendar" class="raids-calendar"></section>
+
+</main>
+
+<footer class="page-footer">
+  <p class="footer-note">Signup data lives only in this browser's local storage -- it's never sent anywhere or committed to the repo. Clearing browser data clears it.</p>
+</footer>
+
+<script src="raids.js?v=BUILD_VERSION"></script>
+</body>
+</html>

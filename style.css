@@ -498,3 +498,123 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-size: 0.8rem;
 }
 .page-footer p { margin: 0.25rem 0; }
+
+/* ---------- Raid sales calendar page ---------- */
+
+.raids-nav-link { text-decoration: none; }
+
+.raids-summary {
+  margin-bottom: 1rem;
+  color: var(--ink-dim);
+  font-size: 0.9rem;
+}
+
+.raids-add-block { margin-bottom: 1.5rem; }
+.raids-add-form {
+  margin-top: 0.75rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1rem;
+}
+.raids-add-hint {
+  margin: 0 0 0.75rem;
+  color: var(--ink-dim);
+  font-size: 0.82rem;
+}
+.raids-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 0.6rem 0.75rem;
+  border-radius: 4px;
+  font-family: ui-monospace, "SF Mono", Consolas, monospace;
+  font-size: 0.8rem;
+  resize: vertical;
+}
+.raids-add-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.raids-parse-result { color: var(--ink-dim); font-size: 0.85rem; }
+.raids-parse-error { color: #ff6b5c; }
+
+.raids-day-header {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--gold-2);
+  padding: 1rem 0 0.5rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0.6rem;
+}
+.raids-day-header:first-child { padding-top: 0; }
+
+.raids-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--panel-2);
+  border-left: 3px solid var(--line);
+  border-radius: 0 4px 4px 0;
+  margin-bottom: 0.5rem;
+}
+.raids-entry-rostered { border-left-color: var(--gold); }
+
+.raids-entry-time {
+  flex-shrink: 0;
+  width: 5rem;
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  padding-top: 0.15rem;
+}
+
+.raids-entry-main { flex: 1; min-width: 0; }
+.raids-entry-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.raids-entry-title { font-weight: 600; }
+
+.raids-badge {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border-radius: 3px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink-dim);
+  font-size: 0.72rem;
+}
+.raids-badge-saved { color: #6ab04c; border-color: #6ab04c; }
+.raids-badge-unsaved { color: #ff6b5c; border-color: #ff6b5c; }
+
+.raids-entry-meta {
+  margin-top: 0.3rem;
+  color: var(--ink-dim);
+  font-size: 0.78rem;
+}
+
+.raids-rostered-toggle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ink-dim);
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.raids-rostered-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
