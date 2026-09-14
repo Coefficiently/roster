@@ -268,6 +268,18 @@
       .trim();
   }
 
+  // Numeric ms value for an entry's start time, via Date.UTC() with
+  // explicit numeric components (same technique as computeWeekIndex) --
+  // pure arithmetic on the parsed numbers, no timezone/Date-string-parsing
+  // involved, so this stays consistent across any viewer's browser.
+  function entryTimestampMs(entry) {
+    if (!entry.sortKey) return null;
+    const [year, month, day, hour, minute] = entry.sortKey.split("-").map(Number);
+    return Date.UTC(year, month - 1, day, hour, minute);
+  }
+
+  const MIN_GAP_MINUTES = 90;
+
   // Returns a Map<raidId, string[]> of conflict messages (entries with no
   // conflicts simply aren't in the map).
   function detectConflicts(entries) {
@@ -286,6 +298,27 @@
       if (!conflicts.has(entry.raidId)) conflicts.set(entry.raidId, []);
       conflicts.get(entry.raidId).push(message);
     };
+
+    // Start-time proximity check: across ALL signups regardless of
+    // character, raid, or difficulty -- this isn't about a lockout, it's
+    // about whether the same person can realistically be in two raids that
+    // close together. O(n^2) pairwise comparison, but n here is a
+    // personal signup list (tens, not thousands), so this is negligible.
+    for (let i = 0; i < list.length; i++) {
+      const a = list[i];
+      const aMs = entryTimestampMs(a);
+      if (aMs === null) continue;
+      for (let j = i + 1; j < list.length; j++) {
+        const b = list[j];
+        const bMs = entryTimestampMs(b);
+        if (bMs === null) continue;
+        const gapMinutes = Math.abs(aMs - bMs) / 60000;
+        if (gapMinutes <= MIN_GAP_MINUTES) {
+          addConflict(a, `Starts only ${Math.round(gapMinutes)} min from Raid #${b.raidId} (${b.charRealm})`);
+          addConflict(b, `Starts only ${Math.round(gapMinutes)} min from Raid #${a.raidId} (${a.charRealm})`);
+        }
+      }
+    }
 
     for (const groupEntries of groups.values()) {
       const unsaved = groupEntries.filter((e) => !e.saved);
