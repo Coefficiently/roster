@@ -132,12 +132,18 @@
       const rlMatch = rest.match(/RL:\s*(\S+)/);
       const charMatch = rest.match(/([a-z0-9']+-[a-z0-9']+)\s*[\u2014-]\s*(Tank|Healer|Dps|DPS)/i);
       const savedMatch = rest.match(/\b(Saved|Unsaved)\b/);
-      const ilvlMatch = rest.match(/(\d+)\s*ilvl/i);
 
       if (!dateMatch || !diffMatch || !rlMatch || !charMatch || !savedMatch) {
         errors.push(`Couldn't parse detail fields for raid #${raidId} from: "${rest}"`);
         continue;
       }
+
+      // Whatever free-text the seller put in the signup's Notes field
+      // trails after the Saved/Unsaved status -- not always "###ilvl",
+      // could be anything, so this is captured as-is rather than matched
+      // against a specific pattern.
+      const afterSaved = rest.slice(savedMatch.index + savedMatch[0].length).trim();
+      const note = afterSaved.length > 0 ? afterSaved : null;
 
       const dateTimeStr = dateMatch[1];
       const dt = new Date(dateTimeStr.replace(" at ", " "));
@@ -153,7 +159,7 @@
         charRealm: charMatch[1],
         role: charMatch[2],
         saved: savedMatch[1] === "Saved",
-        ilvl: ilvlMatch ? parseInt(ilvlMatch[1], 10) : null,
+        note,
       });
     }
     return { entries, errors };
@@ -259,7 +265,7 @@
       for (const entry of dayEntries) {
         const timeText = formatTime(entry.dateTimeISO, "");
         const savedBadgeClass = entry.saved ? "raids-badge-saved" : "raids-badge-unsaved";
-        const ilvlText = entry.ilvl ? `${entry.ilvl}ilvl` : "";
+        const noteText = entry.note ? ` \u2014 ${escapeHtml(entry.note)}` : "";
         html += `
           <div class="raids-entry${entry.rostered ? " raids-entry-rostered" : ""}">
             <div class="raids-entry-time">${escapeHtml(timeText)}</div>
@@ -268,10 +274,9 @@
                 <span class="raids-entry-title">${escapeHtml(entry.title)}</span>
                 <span class="raids-badge">${escapeHtml(entry.difficulty)}</span>
                 <span class="raids-badge ${savedBadgeClass}">${entry.saved ? "Saved" : "Unsaved"}</span>
-                ${ilvlText ? `<span class="raids-badge">${escapeHtml(ilvlText)}</span>` : ""}
               </div>
               <div class="raids-entry-meta">
-                Raid #${escapeHtml(entry.raidId)} \u00b7 RL: ${escapeHtml(entry.rl)} \u00b7 ${escapeHtml(entry.charRealm)} \u2014 ${escapeHtml(entry.role)}
+                Raid #${escapeHtml(entry.raidId)} \u00b7 RL: ${escapeHtml(entry.rl)} \u00b7 ${escapeHtml(entry.charRealm)} \u2014 ${escapeHtml(entry.role)}${noteText}
               </div>
             </div>
             <label class="raids-rostered-toggle">
