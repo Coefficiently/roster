@@ -183,20 +183,36 @@
       const dateMatch = rest.match(/(\w+), (\w+) (\d{1,2}), (\d{4}) at (\d{1,2}):(\d{2})\s*([AP]M)/);
       const diffMatch = rest.match(/\b(Heroic|Mythic|Normal|LFR)\b/);
       const rlMatch = rest.match(/RL:\s*(\S+)/);
-      const charMatch = rest.match(/([a-z0-9']+-[a-z0-9']+)\s*[\u2014-]\s*(Tank|Healer|Dps|DPS)/i);
-      const savedMatch = rest.match(/\b(Saved|Unsaved)\b/);
 
-      if (!dateMatch || !diffMatch || !rlMatch || !charMatch || !savedMatch) {
+      // A single raid signup can list MORE THAN ONE character -- applying
+      // with either one, whichever ends up picked. Each looks like
+      // "<char-realm> — <Role> | <Difficulty> • [icon] <Saved|Unsaved>",
+      // repeated once per candidate character, so this matches all of them
+      // rather than just the first.
+      const CHAR_LINE_REGEX = /([a-z0-9']+-[a-z0-9']+)\s*[\u2014-]\s*(Tank|Healer|Dps|DPS)\s*\|\s*(\w+)\s*\u2022\s*[^\w]*(Saved|Unsaved)/gi;
+      const characters = [];
+      let charMatch;
+      let lastCharEnd = 0;
+      while ((charMatch = CHAR_LINE_REGEX.exec(rest)) !== null) {
+        characters.push({
+          charRealm: charMatch[1],
+          role: charMatch[2],
+          saved: charMatch[4] === "Saved",
+        });
+        lastCharEnd = CHAR_LINE_REGEX.lastIndex;
+      }
+
+      if (!dateMatch || !diffMatch || !rlMatch || characters.length === 0) {
         errors.push(`Couldn't parse detail fields for raid #${raidId} from: "${rest}"`);
         continue;
       }
 
       // Whatever free-text the seller put in the signup's Notes field
-      // trails after the Saved/Unsaved status -- not always "###ilvl",
-      // could be anything, so this is captured as-is rather than matched
-      // against a specific pattern.
-      const afterSaved = rest.slice(savedMatch.index + savedMatch[0].length).trim();
-      const note = afterSaved.length > 0 ? afterSaved : null;
+      // trails after the LAST character's Saved/Unsaved status -- not
+      // always "###ilvl", could be anything, so this is captured as-is
+      // rather than matched against a specific pattern.
+      const afterLastChar = rest.slice(lastCharEnd).trim();
+      const note = afterLastChar.length > 0 ? afterLastChar : null;
 
       const [, weekday, monthName, dayStr, yearStr, hourStr, minuteStr, ampm] = dateMatch;
       const monthNum = MONTH_NUMBERS[monthName.toLowerCase()];
@@ -223,9 +239,7 @@
         sortKey: monthNum ? `${yearStr}-${monthNum}-${day}-${hour}-${minute}` : null,
         difficulty: diffMatch[1],
         rl: rlMatch[1],
-        charRealm: charMatch[1],
-        role: charMatch[2],
-        saved: savedMatch[1] === "Saved",
+        characters,
         note,
       });
     }
@@ -235,10 +249,30 @@
   // ---------------- Storage ----------------
   const STORAGE_KEY = "raid_sales_entries";
 
+  // Migrates entries saved before multi-character signups were supported
+  // (single top-level charRealm/role/saved + boolean rostered) into the
+  // current shape (characters: [...] + rosteredCharRealm), so existing
+  // saved data and rostered picks aren't lost by this update.
+  function migrateEntry(entry) {
+    if (entry.characters) return entry; // already current shape
+    const { charRealm, role, saved, rostered, ...rest } = entry;
+    return {
+      ...rest,
+      characters: charRealm ? [{ charRealm, role, saved }] : [],
+      rosteredCharRealm: rostered && charRealm ? charRealm : null,
+    };
+  }
+
   function loadEntries() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      const migrated = {};
+      for (const [id, entry] of Object.entries(parsed)) {
+        migrated[id] = migrateEntry(entry);
+      }
+      return migrated;
     } catch (err) {
       return {};
     }
@@ -255,9 +289,14 @@
   function mergeParsedEntries(existing, parsed) {
     for (const entry of parsed) {
       const prior = existing[entry.raidId];
+      // Keep a prior rostered pick only if that character is still among
+      // this entry's candidates (a re-paste could in principle change who
+      // applied) -- otherwise treat it as not-yet-rostered again.
+      const priorPick = prior ? prior.rosteredCharRealm : null;
+      const stillValid = priorPick && entry.characters.some((c) => c.charRealm === priorPick);
       existing[entry.raidId] = {
         ...entry,
-        rostered: prior ? prior.rostered : false,
+        rosteredCharRealm: stillValid ? priorPick : null,
       };
     }
     return existing;
@@ -316,20 +355,32 @@
   // Returns a Map<raidId, string[]> of conflict messages (entries with no
   // conflicts simply aren't in the map).
   function detectConflicts(entries) {
-    const list = Object.values(entries).filter((e) => e.sortKey);
-    const groups = new Map();
+    const list = Object.values(entries).filter((e) => e.sortKey && e.characters && e.characters.length > 0);
+
+    // Expand each entry into one "candidate" per character it lists (a
+    // signup can name more than one candidate character) -- the lockout
+    // checks below are inherently per-character, since lockout state
+    // belongs to a character, not to a raid signup.
+    const candidates = [];
     for (const entry of list) {
       const weekIndex = computeWeekIndex(entry);
       if (weekIndex === null) continue;
-      const key = `${entry.charRealm}|${normalizeRaidName(entry.title)}|${entry.difficulty}|${weekIndex}`;
+      for (const char of entry.characters) {
+        candidates.push({ entry, charRealm: char.charRealm, saved: char.saved, weekIndex });
+      }
+    }
+
+    const groups = new Map();
+    for (const c of candidates) {
+      const key = `${c.charRealm}|${normalizeRaidName(c.entry.title)}|${c.entry.difficulty}|${c.weekIndex}`;
       if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(entry);
+      groups.get(key).push(c);
     }
 
     const conflicts = new Map();
-    const addConflict = (entry, message) => {
-      if (!conflicts.has(entry.raidId)) conflicts.set(entry.raidId, []);
-      conflicts.get(entry.raidId).push(message);
+    const addConflict = (raidId, message) => {
+      if (!conflicts.has(raidId)) conflicts.set(raidId, []);
+      if (!conflicts.get(raidId).includes(message)) conflicts.get(raidId).push(message);
     };
 
     // Start-time proximity check: across ALL signups regardless of
@@ -347,30 +398,31 @@
         if (bMs === null) continue;
         const gapMinutes = Math.abs(aMs - bMs) / 60000;
         if (gapMinutes <= MIN_GAP_MINUTES) {
-          addConflict(a, `Starts only ${Math.round(gapMinutes)} min from Raid #${b.raidId} (${characterName(b.charRealm)})`);
-          addConflict(b, `Starts only ${Math.round(gapMinutes)} min from Raid #${a.raidId} (${characterName(a.charRealm)})`);
+          addConflict(a.raidId, `Starts only ${Math.round(gapMinutes)} min from Raid #${b.raidId}`);
+          addConflict(b.raidId, `Starts only ${Math.round(gapMinutes)} min from Raid #${a.raidId}`);
         }
       }
     }
 
-    for (const groupEntries of groups.values()) {
-      const unsaved = groupEntries.filter((e) => !e.saved);
-      const saved = groupEntries.filter((e) => e.saved);
+    for (const groupCandidates of groups.values()) {
+      const charName = characterName(groupCandidates[0].charRealm);
+      const unsaved = groupCandidates.filter((c) => !c.saved);
+      const saved = groupCandidates.filter((c) => c.saved);
 
       if (unsaved.length > 1) {
-        for (const e of unsaved) {
-          addConflict(e, `${unsaved.length} Unsaved runs this week for this character/raid/difficulty (only 1 is possible)`);
+        for (const c of unsaved) {
+          addConflict(c.entry.raidId, `${charName}: ${unsaved.length} Unsaved runs this week for this raid/difficulty (only 1 is possible)`);
         }
       }
 
       if (unsaved.length === 1) {
-        const unsavedEntry = unsaved[0];
-        const earlierOrSameSaved = saved.filter((e) => e.sortKey <= unsavedEntry.sortKey);
-        for (const e of earlierOrSameSaved) {
-          addConflict(e, `Scheduled as Saved before the Unsaved run (Raid #${unsavedEntry.raidId}) for this character/raid/difficulty this week`);
+        const unsavedCandidate = unsaved[0];
+        const earlierOrSameSaved = saved.filter((c) => c.entry.sortKey <= unsavedCandidate.entry.sortKey);
+        for (const c of earlierOrSameSaved) {
+          addConflict(c.entry.raidId, `${charName}: Scheduled as Saved before the Unsaved run (Raid #${unsavedCandidate.entry.raidId}) for this raid/difficulty this week`);
         }
         if (earlierOrSameSaved.length > 0) {
-          addConflict(unsavedEntry, `This Unsaved run is scheduled after ${earlierOrSameSaved.length} Saved run(s) for this character/raid/difficulty this week`);
+          addConflict(unsavedCandidate.entry.raidId, `${charName}: This Unsaved run is scheduled after ${earlierOrSameSaved.length} Saved run(s) for this raid/difficulty this week`);
         }
       }
     }
@@ -411,7 +463,7 @@
       el.textContent = "No signups added yet.";
       return;
     }
-    const rostered = list.filter((e) => e.rostered).length;
+    const rostered = list.filter((e) => e.rosteredCharRealm).length;
     const conflictCount = conflicts ? conflicts.size : 0;
     let text = `${list.length} signup${list.length === 1 ? "" : "s"} \u2014 ${rostered} rostered, ${list.length - rostered} not yet`;
     if (conflictCount > 0) {
@@ -461,47 +513,70 @@
       html += `<div class="raids-day-header">${escapeHtml(headerText)}</div>`;
       for (const entry of dayEntries) {
         const timeText = entry.timeStr ? `${entry.timeStr} CT` : "";
-        const savedBadgeClass = entry.saved ? "raids-badge-saved" : "raids-badge-unsaved";
         const noteText = entry.note ? ` \u2014 ${escapeHtml(entry.note)}` : "";
         const entryConflicts = conflicts.get(entry.raidId);
         const conflictClass = entryConflicts ? " raids-entry-conflict" : "";
         const conflictBlock = entryConflicts
           ? `<div class="raids-entry-conflict-msg">\u26a0 ${entryConflicts.map(escapeHtml).join("; ")}</div>`
           : "";
+        const isRostered = !!entry.rosteredCharRealm;
+
+        // One line per candidate character this signup was made with --
+        // usually just one, but a signup can list more than one (applying
+        // with either character, whichever gets picked). The rostered one
+        // (if any) is bolded so it's clear which one actually got in.
+        const characterLines = (entry.characters || []).map((c) => {
+          const isThisRostered = entry.rosteredCharRealm === c.charRealm;
+          const savedBadgeClass = c.saved ? "raids-badge-saved" : "raids-badge-unsaved";
+          return `
+            <div class="raids-char-line${isThisRostered ? " raids-char-line-rostered" : ""}">
+              ${characterDisplay(c.charRealm)} \u2014 ${escapeHtml(c.role)}
+              <span class="raids-badge ${savedBadgeClass}">${c.saved ? "Saved" : "Unsaved"}</span>
+              ${isThisRostered ? '<span class="raids-rostered-badge">\u2713 Rostered</span>' : ""}
+            </div>`;
+        }).join("");
+
+        const rosterOptions = [`<option value="">Not rostered</option>`]
+          .concat((entry.characters || []).map((c) => {
+            const selected = entry.rosteredCharRealm === c.charRealm ? " selected" : "";
+            return `<option value="${escapeHtml(c.charRealm)}"${selected}>${escapeHtml(characterName(c.charRealm))}</option>`;
+          }))
+          .join("");
+
         html += `
-          <div class="raids-entry${entry.rostered ? " raids-entry-rostered" : ""}${conflictClass}">
+          <div class="raids-entry${isRostered ? " raids-entry-rostered" : ""}${conflictClass}">
             <div class="raids-entry-time">${escapeHtml(timeText)}</div>
             <div class="raids-entry-main">
               <div class="raids-entry-top">
-                <span class="raids-rostered-badge">\u2713 Rostered</span>
                 <span class="raids-entry-title">${escapeHtml(entry.title)}</span>
                 <span class="raids-badge">${escapeHtml(entry.difficulty)}</span>
-                <span class="raids-badge ${savedBadgeClass}">${entry.saved ? "Saved" : "Unsaved"}</span>
               </div>
-              <div class="raids-entry-meta">
-                Raid #${escapeHtml(entry.raidId)} \u00b7 RL: ${escapeHtml(entry.rl)} \u00b7 ${characterDisplay(entry.charRealm)} \u2014 ${escapeHtml(entry.role)}${noteText}
-              </div>
+              <div class="raids-entry-meta">Raid #${escapeHtml(entry.raidId)} \u00b7 RL: ${escapeHtml(entry.rl)}${noteText}</div>
+              <div class="raids-entry-characters">${characterLines}</div>
               ${conflictBlock}
             </div>
-            <label class="raids-rostered-toggle">
-              <input type="checkbox" data-raid-id="${escapeHtml(entry.raidId)}" ${entry.rostered ? "checked" : ""} />
-              Rostered
-            </label>
-            <button class="raids-delete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Delete</button>
+            <div class="raids-entry-actions">
+              <label class="raids-rostered-picker">
+                Rostered:
+                <select data-raid-id="${escapeHtml(entry.raidId)}">${rosterOptions}</select>
+              </label>
+              <button class="raids-delete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Delete</button>
+            </div>
           </div>`;
       }
     }
     container.innerHTML = html;
 
-    container.querySelectorAll('input[type="checkbox"][data-raid-id]').forEach((cb) => {
-      cb.addEventListener("change", () => {
+    container.querySelectorAll("select[data-raid-id]").forEach((sel) => {
+      sel.addEventListener("change", () => {
         const entries = loadEntries();
-        const id = cb.dataset.raidId;
+        const id = sel.dataset.raidId;
         if (entries[id]) {
-          entries[id].rostered = cb.checked;
+          entries[id].rosteredCharRealm = sel.value || null;
           saveEntries(entries);
-          renderSummary(entries, detectConflicts(entries));
-          cb.closest(".raids-entry").classList.toggle("raids-entry-rostered", cb.checked);
+          render(); // full re-render: which character line is bolded, the
+                     // entry's rostered styling, and conflict messages can
+                     // all change as a result of this pick
         }
       });
     });

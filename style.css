@@ -569,7 +569,7 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   background: linear-gradient(to right, rgba(201, 154, 68, 0.22), rgba(201, 154, 68, 0.07) 40%, var(--panel-2) 80%);
 }
 .raids-rostered-badge {
-  display: none;
+  display: inline-flex;
   align-items: center;
   gap: 0.3rem;
   padding: 0.1rem 0.55rem;
@@ -581,7 +581,6 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
-.raids-entry-rostered .raids-rostered-badge { display: inline-flex; }
 .raids-entry-conflict { border-left-color: #ff6b5c; background: #2a1815; }
 .raids-entry-conflict-msg {
   margin-top: 0.4rem;
@@ -627,20 +626,39 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-size: 0.78rem;
 }
 
-.raids-rostered-toggle {
+.raids-entry-characters { margin-top: 0.4rem; }
+.raids-char-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.15rem 0;
+  font-size: 0.85rem;
+}
+.raids-char-line-rostered { font-weight: 700; }
+
+.raids-entry-actions {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.raids-rostered-picker {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   color: var(--ink-dim);
   font-size: 0.85rem;
-  cursor: pointer;
   white-space: nowrap;
 }
-.raids-rostered-toggle input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--gold);
+.raids-rostered-picker select {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 0.82rem;
   cursor: pointer;
 }
 
