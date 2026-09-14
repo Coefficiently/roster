@@ -181,6 +181,10 @@
         monthName,
         day: dayStr,
         year: yearStr,
+        // Times in the source signup text are always Central Time -- this
+        // is stored as plain text and displayed with a "CT" label at
+        // render time (see renderCalendar), never converted to/from any
+        // other timezone.
         timeStr: `${hourStr}:${minuteStr} ${ampm.toUpperCase()}`,
         dateKey: monthNum ? `${yearStr}-${monthNum}-${day}` : null,
         sortKey: monthNum ? `${yearStr}-${monthNum}-${day}-${hour}-${minute}` : null,
@@ -283,7 +287,7 @@
 
       html += `<div class="raids-day-header">${escapeHtml(headerText)}</div>`;
       for (const entry of dayEntries) {
-        const timeText = entry.timeStr || "";
+        const timeText = entry.timeStr ? `${entry.timeStr} CT` : "";
         const savedBadgeClass = entry.saved ? "raids-badge-saved" : "raids-badge-unsaved";
         const noteText = entry.note ? ` \u2014 ${escapeHtml(entry.note)}` : "";
         html += `

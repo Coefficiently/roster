@@ -568,7 +568,7 @@ body.is-locked > *:not(#lock-screen) { display: none; }
 
 .raids-entry-time {
   flex-shrink: 0;
-  width: 5rem;
+  width: 6rem;
   color: var(--ink-dim);
   font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
