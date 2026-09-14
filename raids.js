@@ -180,7 +180,7 @@
       // any UTC round-trip, so the weekday/date/time shown always matches
       // the source text exactly, and sorting is a plain string comparison
       // on zero-padded values -- no timezone involved at any point.
-      const dateMatch = rest.match(/(\w+), (\w+) (\d{1,2}), (\d{4}) at (\d{1,2}):(\d{2})\s*([AP]M)/);
+      const dateMatch = rest.match(/(\w+), (\w+) (\d{1,2}), (\d{4})\s*(?:at\s+)?(\d{1,2}):(\d{2})\s*([AP]M)/);
       const diffMatch = rest.match(/\b(Heroic|Mythic|Normal|LFR)\b/);
       const rlMatch = rest.match(/RL:\s*(\S+)/);
 
