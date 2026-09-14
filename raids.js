@@ -383,6 +383,20 @@
       if (!conflicts.get(raidId).includes(message)) conflicts.get(raidId).push(message);
     };
 
+    // Mythic has no ID-extension mechanic the way Heroic/Normal do -- once
+    // a character gets their own Mythic kill that week they're locked to
+    // it, full stop, so there's no such thing as a legitimate "Saved"
+    // Mythic sale. A Mythic entry marked Saved in the data is always a
+    // mistake (typo, mislabeled signup, etc.), not a valid state.
+    for (const entry of list) {
+      if (entry.difficulty !== "Mythic") continue;
+      for (const char of entry.characters) {
+        if (char.saved) {
+          addConflict(entry.raidId, `${characterName(char.charRealm)}: Mythic can't be a Saved run -- Mythic has no ID-extension, so this is likely a mistake`);
+        }
+      }
+    }
+
     // Start-time proximity check: across ALL signups regardless of
     // character, raid, or difficulty -- this isn't about a lockout, it's
     // about whether the same person can realistically be in two raids that
