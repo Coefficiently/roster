@@ -565,6 +565,14 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   margin-bottom: 0.5rem;
 }
 .raids-entry-rostered { border-left-color: var(--gold); }
+.raids-entry-conflict { border-left-color: #ff6b5c; background: #2a1815; }
+.raids-entry-conflict-msg {
+  margin-top: 0.4rem;
+  color: #ff8a7a;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.raids-summary-has-conflicts { color: #ff8a7a; }
 
 .raids-entry-time {
   flex-shrink: 0;

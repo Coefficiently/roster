@@ -230,6 +230,88 @@
     return existing;
   }
 
+  // ---------------- Conflict detection ----------------
+  // Rules (as described): a character can only be genuinely "Unsaved" to a
+  // given raid+difficulty once per reset week; if they're doing both an
+  // Unsaved run and Saved runs for that raid+difficulty that week, the
+  // Unsaved one must happen first (you get your own clear, then sell saves
+  // afterward -- a Saved run before the Unsaved one, or two Unsaved runs
+  // the same week, both indicate a scheduling mistake).
+
+  // Sept 1, 2026 10:00 is a real Tuesday reset moment, used purely as an
+  // arbitrary fixed reference point for bucketing weeks -- any Tuesday
+  // 10am works equally well here, this one isn't special otherwise.
+  const REF_RESET_UTC_MS = Date.UTC(2026, 8, 1, 10, 0);
+  const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+  // Computed via Date.UTC() with explicit numeric components (not by
+  // parsing a string with new Date()), which does NOT consult the
+  // browser's local timezone at all -- it just does calendar arithmetic on
+  // the numbers given. That keeps this consistent with the rest of the
+  // date handling here: entries are treated as plain Central-time
+  // calendar values, never converted through any actual timezone.
+  function computeWeekIndex(entry) {
+    if (!entry.sortKey) return null;
+    const [year, month, day, hour, minute] = entry.sortKey.split("-").map(Number);
+    const ms = Date.UTC(year, month - 1, day, hour, minute);
+    return Math.floor((ms - REF_RESET_UTC_MS) / WEEK_MS);
+  }
+
+  // Reduces "The Venomous Abyss 9/9H + Group 2 Ula'tek" and
+  // "The Venomous Abyss 9/9N" down to the same "The Venomous Abyss" key --
+  // the lockout is per raid zone, not per specific sell package/progress
+  // count, and difficulty is already tracked separately.
+  function normalizeRaidName(title) {
+    return title
+      .replace(/\s*\+\s*Group\s*\d+.*/i, "")
+      .replace(/\s*\d+\/\d+[A-Za-z]+\s*$/, "")
+      .trim();
+  }
+
+  // Returns a Map<raidId, string[]> of conflict messages (entries with no
+  // conflicts simply aren't in the map).
+  function detectConflicts(entries) {
+    const list = Object.values(entries).filter((e) => e.sortKey);
+    const groups = new Map();
+    for (const entry of list) {
+      const weekIndex = computeWeekIndex(entry);
+      if (weekIndex === null) continue;
+      const key = `${entry.charRealm}|${normalizeRaidName(entry.title)}|${entry.difficulty}|${weekIndex}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(entry);
+    }
+
+    const conflicts = new Map();
+    const addConflict = (entry, message) => {
+      if (!conflicts.has(entry.raidId)) conflicts.set(entry.raidId, []);
+      conflicts.get(entry.raidId).push(message);
+    };
+
+    for (const groupEntries of groups.values()) {
+      const unsaved = groupEntries.filter((e) => !e.saved);
+      const saved = groupEntries.filter((e) => e.saved);
+
+      if (unsaved.length > 1) {
+        for (const e of unsaved) {
+          addConflict(e, `${unsaved.length} Unsaved runs this week for this character/raid/difficulty (only 1 is possible)`);
+        }
+      }
+
+      if (unsaved.length === 1) {
+        const unsavedEntry = unsaved[0];
+        const earlierOrSameSaved = saved.filter((e) => e.sortKey <= unsavedEntry.sortKey);
+        for (const e of earlierOrSameSaved) {
+          addConflict(e, `Scheduled as Saved before the Unsaved run (Raid #${unsavedEntry.raidId}) for this character/raid/difficulty this week`);
+        }
+        if (earlierOrSameSaved.length > 0) {
+          addConflict(unsavedEntry, `This Unsaved run is scheduled after ${earlierOrSameSaved.length} Saved run(s) for this character/raid/difficulty this week`);
+        }
+      }
+    }
+
+    return conflicts;
+  }
+
   // ---------------- Rendering ----------------
   function escapeHtml(str) {
     return String(str)
@@ -237,7 +319,7 @@
       .replace(/"/g, "&quot;");
   }
 
-  function renderSummary(entries) {
+  function renderSummary(entries, conflicts) {
     const list = Object.values(entries);
     const el = document.getElementById("raids-summary-text");
     if (list.length === 0) {
@@ -245,10 +327,16 @@
       return;
     }
     const rostered = list.filter((e) => e.rostered).length;
-    el.textContent = `${list.length} signup${list.length === 1 ? "" : "s"} \u2014 ${rostered} rostered, ${list.length - rostered} not yet`;
+    const conflictCount = conflicts ? conflicts.size : 0;
+    let text = `${list.length} signup${list.length === 1 ? "" : "s"} \u2014 ${rostered} rostered, ${list.length - rostered} not yet`;
+    if (conflictCount > 0) {
+      text += ` \u2014 \u26a0 ${conflictCount} with conflicts`;
+    }
+    el.textContent = text;
+    el.classList.toggle("raids-summary-has-conflicts", conflictCount > 0);
   }
 
-  function renderCalendar(entries) {
+  function renderCalendar(entries, conflicts) {
     const container = document.getElementById("raids-calendar");
     const list = Object.values(entries);
     if (list.length === 0) {
@@ -290,8 +378,13 @@
         const timeText = entry.timeStr ? `${entry.timeStr} CT` : "";
         const savedBadgeClass = entry.saved ? "raids-badge-saved" : "raids-badge-unsaved";
         const noteText = entry.note ? ` \u2014 ${escapeHtml(entry.note)}` : "";
+        const entryConflicts = conflicts.get(entry.raidId);
+        const conflictClass = entryConflicts ? " raids-entry-conflict" : "";
+        const conflictBlock = entryConflicts
+          ? `<div class="raids-entry-conflict-msg">\u26a0 ${entryConflicts.map(escapeHtml).join("; ")}</div>`
+          : "";
         html += `
-          <div class="raids-entry${entry.rostered ? " raids-entry-rostered" : ""}">
+          <div class="raids-entry${entry.rostered ? " raids-entry-rostered" : ""}${conflictClass}">
             <div class="raids-entry-time">${escapeHtml(timeText)}</div>
             <div class="raids-entry-main">
               <div class="raids-entry-top">
@@ -302,6 +395,7 @@
               <div class="raids-entry-meta">
                 Raid #${escapeHtml(entry.raidId)} \u00b7 RL: ${escapeHtml(entry.rl)} \u00b7 ${escapeHtml(entry.charRealm)} \u2014 ${escapeHtml(entry.role)}${noteText}
               </div>
+              ${conflictBlock}
             </div>
             <label class="raids-rostered-toggle">
               <input type="checkbox" data-raid-id="${escapeHtml(entry.raidId)}" ${entry.rostered ? "checked" : ""} />
@@ -319,7 +413,7 @@
         if (entries[id]) {
           entries[id].rostered = cb.checked;
           saveEntries(entries);
-          renderSummary(entries);
+          renderSummary(entries, detectConflicts(entries));
           cb.closest(".raids-entry").classList.toggle("raids-entry-rostered", cb.checked);
         }
       });
@@ -328,8 +422,9 @@
 
   function render() {
     const entries = loadEntries();
-    renderSummary(entries);
-    renderCalendar(entries);
+    const conflicts = detectConflicts(entries);
+    renderCalendar(entries, conflicts);
+    renderSummary(entries, conflicts);
   }
 
   // ---------------- Wiring ----------------
