@@ -92,6 +92,13 @@
   // spaces. The title line sometimes has a trailing " Saved" with no
   // separator -- that's redundant with the detail line's own field and is
   // stripped.
+  // Month name -> zero-padded number, for building a sortable key directly
+  // from the parsed text (see note below on why we avoid new Date() here).
+  const MONTH_NUMBERS = {
+    january: "01", february: "02", march: "03", april: "04", may: "05", june: "06",
+    july: "07", august: "08", september: "09", october: "10", november: "11", december: "12",
+  };
+
   // Uses "Raid #<id>" as the entry boundary rather than assuming a fixed
   // number of lines per entry -- a raw clipboard paste from the real page
   // breaks lines differently (and into more pieces, sometimes with icon
@@ -127,7 +134,20 @@
         .filter((l) => l.length > 0)
         .join(" ");
 
-      const dateMatch = rest.match(/(\w+, \w+ \d{1,2}, \d{4} at \d{1,2}:\d{2}\s*[AP]M)/);
+      // Captured as individual components (weekday, month name, day, year,
+      // hour, minute, am/pm) rather than one date string handed to
+      // new Date(). new Date() on a string with no explicit timezone gets
+      // interpreted as the BROWSER'S local time, then a later
+      // .toISOString() converts it to UTC -- for a late-night entry (e.g.
+      // 11:30 PM) in any timezone behind UTC, that conversion can roll the
+      // date to the next day, which then shifts by a further, different
+      // amount when formatted back for display. That mismatch is exactly
+      // what caused a Thursday entry to visually group under a Wednesday
+      // header. Working entirely from the parsed components below avoids
+      // any UTC round-trip, so the weekday/date/time shown always matches
+      // the source text exactly, and sorting is a plain string comparison
+      // on zero-padded values -- no timezone involved at any point.
+      const dateMatch = rest.match(/(\w+), (\w+) (\d{1,2}), (\d{4}) at (\d{1,2}):(\d{2})\s*([AP]M)/);
       const diffMatch = rest.match(/\b(Heroic|Mythic|Normal|LFR)\b/);
       const rlMatch = rest.match(/RL:\s*(\S+)/);
       const charMatch = rest.match(/([a-z0-9']+-[a-z0-9']+)\s*[\u2014-]\s*(Tank|Healer|Dps|DPS)/i);
@@ -145,15 +165,25 @@
       const afterSaved = rest.slice(savedMatch.index + savedMatch[0].length).trim();
       const note = afterSaved.length > 0 ? afterSaved : null;
 
-      const dateTimeStr = dateMatch[1];
-      const dt = new Date(dateTimeStr.replace(" at ", " "));
+      const [, weekday, monthName, dayStr, yearStr, hourStr, minuteStr, ampm] = dateMatch;
+      const monthNum = MONTH_NUMBERS[monthName.toLowerCase()];
+      let hour24 = parseInt(hourStr, 10) % 12;
+      if (ampm.toUpperCase() === "PM") hour24 += 12;
+      const day = dayStr.padStart(2, "0");
+      const hour = String(hour24).padStart(2, "0");
+      const minute = minuteStr.padStart(2, "0");
 
       entries.push({
         raidId,
         seller: sellerFromTitle,
         title,
-        dateTimeStr,
-        dateTimeISO: isNaN(dt.getTime()) ? null : dt.toISOString(),
+        weekday,
+        monthName,
+        day: dayStr,
+        year: yearStr,
+        timeStr: `${hourStr}:${minuteStr} ${ampm.toUpperCase()}`,
+        dateKey: monthNum ? `${yearStr}-${monthNum}-${day}` : null,
+        sortKey: monthNum ? `${yearStr}-${monthNum}-${day}-${hour}-${minute}` : null,
         difficulty: diffMatch[1],
         rl: rlMatch[1],
         charRealm: charMatch[1],
@@ -203,18 +233,6 @@
       .replace(/"/g, "&quot;");
   }
 
-  function formatDayHeader(dateTimeISO, fallback) {
-    if (!dateTimeISO) return fallback;
-    const d = new Date(dateTimeISO);
-    return d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
-  }
-
-  function formatTime(dateTimeISO, fallback) {
-    if (!dateTimeISO) return fallback;
-    const d = new Date(dateTimeISO);
-    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-  }
-
   function renderSummary(entries) {
     const list = Object.values(entries);
     const el = document.getElementById("raids-summary-text");
@@ -234,12 +252,13 @@
       return;
     }
 
-    // Group by day (using the fallback raw date string as the group key
-    // when a date failed to parse, so unparseable dates still get their
-    // own bucket rather than silently merging).
+    // Grouped and sorted using the naive dateKey/sortKey built directly
+    // from the parsed text components (see parseSignupText) -- no Date
+    // object or UTC conversion involved, so this can't drift from what
+    // the source text actually said.
     const groups = new Map();
     for (const entry of list) {
-      const key = entry.dateTimeISO ? entry.dateTimeISO.slice(0, 10) : `unparsed:${entry.dateTimeStr}`;
+      const key = entry.dateKey || `unparsed:${entry.weekday || ""} ${entry.monthName || ""} ${entry.day || ""}`;
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(entry);
     }
@@ -254,16 +273,17 @@
     let html = "";
     for (const key of sortedKeys) {
       const dayEntries = groups.get(key).slice().sort((a, b) => {
-        if (a.dateTimeISO && b.dateTimeISO) return a.dateTimeISO.localeCompare(b.dateTimeISO);
+        if (a.sortKey && b.sortKey) return a.sortKey.localeCompare(b.sortKey);
         return 0;
       });
-      const headerText = dayEntries[0].dateTimeISO
-        ? formatDayHeader(dayEntries[0].dateTimeISO, dayEntries[0].dateTimeStr)
-        : dayEntries[0].dateTimeStr + " (date couldn't be parsed)";
+      const first = dayEntries[0];
+      const headerText = first.dateKey
+        ? `${first.weekday}, ${first.monthName} ${first.day}, ${first.year}`
+        : `${first.weekday || "?"}, ${first.monthName || "?"} ${first.day || "?"} (date couldn't be parsed)`;
 
       html += `<div class="raids-day-header">${escapeHtml(headerText)}</div>`;
       for (const entry of dayEntries) {
-        const timeText = formatTime(entry.dateTimeISO, "");
+        const timeText = entry.timeStr || "";
         const savedBadgeClass = entry.saved ? "raids-badge-saved" : "raids-badge-unsaved";
         const noteText = entry.note ? ` \u2014 ${escapeHtml(entry.note)}` : "";
         html += `
