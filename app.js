@@ -681,7 +681,14 @@
 
     let html = "";
     for (const bucket of orderedBuckets) {
-      const bucketItems = groups.get(bucket).slice().sort((a, b) => a.itemName.localeCompare(b.itemName));
+      // Gear is sorted by item level (highest first) since that's what
+      // actually matters when deciding what to keep/use; everything else
+      // (consumables, currencies, etc) is sorted by quantity (highest
+      // first), since stack size is the more useful signal there.
+      const bucketItems = groups.get(bucket).slice().sort((a, b) => {
+        if (bucket === "Gear") return (b.itemLevel || 0) - (a.itemLevel || 0);
+        return (b.count || 0) - (a.count || 0);
+      });
       html += `<li class="warband-category-header">${bucket} <span class="warband-category-count">(${bucketItems.length})</span></li>`;
       html += bucketItems.map(rowRenderFn).join("");
     }
