@@ -524,7 +524,7 @@
     fillList("detail-equipped", char.equipped, renderGearRow, "No equipped gear data.");
     renderGroupedItemList(
       "detail-bags", char.bagItems, renderBagItemRow,
-      DATA.hasPrivateData ? "Bags are empty." : "Not available -- bag/bank contents require an authenticated session (see README)."
+      DATA.hasPrivateData ? "Bags are empty." : "Not available right now -- the private-data session cookie is outdated and needs refreshing (see README)."
     );
     refreshWowheadLinks();
 
@@ -560,7 +560,10 @@
   }
 
   function renderWarbandList(items) {
-    renderGroupedItemList("warband-list", items, renderBagItemRow, "Warband bank is empty.");
+    const emptyText = DATA.hasPrivateData
+      ? "Warband bank is empty."
+      : "Not available right now -- the private-data session cookie is outdated and needs refreshing (see README).";
+    renderGroupedItemList("warband-list", items, renderBagItemRow, emptyText);
   }
 
   function wireWarbandPanel() {
@@ -704,7 +707,10 @@
 
     btn.addEventListener("click", () => {
       const items = buildAllItemsAggregate();
-      renderGroupedItemList("allitems-list", items, renderAllItemsRow, "No items found.");
+      const emptyText = DATA.hasPrivateData
+        ? "No items found."
+        : "Not available right now -- the private-data session cookie is outdated and needs refreshing (see README).";
+      renderGroupedItemList("allitems-list", items, renderAllItemsRow, emptyText);
       closeOtherPanels("allitems-panel");
       panel.hidden = false;
       if (typeof panel.scrollIntoView === "function") {
@@ -751,9 +757,11 @@
     const days = Math.floor(diffMs / 86400000);
     const hours = Math.floor((diffMs % 86400000) / 3600000);
     const minutes = Math.floor((diffMs % 3600000) / 60000);
+    const seconds = Math.floor((diffMs % 60000) / 1000);
     const parts = [];
     if (days > 0) parts.push(`${days}d`);
-    parts.push(`${hours}h`, `${minutes}m`);
+    if (days > 0 || hours > 0) parts.push(`${hours}h`);
+    parts.push(`${minutes}m`, `${seconds}s`);
     el.textContent = `Vault/raid saves reset in ${parts.join(" ")} (Tue 10am Central)`;
   }
 
@@ -763,10 +771,16 @@
       "Last updated " + generated.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
     renderResetCountdown();
 
-    const warbandBtn = document.getElementById("warband-btn");
-    if (warbandBtn) warbandBtn.hidden = !DATA.hasPrivateData;
-    const allItemsBtn = document.getElementById("allitems-btn");
-    if (allItemsBtn) allItemsBtn.hidden = !DATA.hasPrivateData;
+    // Always visible now (rather than hidden entirely when private data
+    // isn't currently available) -- a hidden button when the wowthing
+    // cookie expires looks like the feature disappeared; a visible button
+    // with an "outdated" badge makes clear it's a temporary data issue,
+    // not a missing feature, and still lets the person open the panel to
+    // see the explanatory empty-state message.
+    const warbandBadge = document.getElementById("warband-outdated-badge");
+    if (warbandBadge) warbandBadge.hidden = DATA.hasPrivateData;
+    const allItemsBadge = document.getElementById("allitems-outdated-badge");
+    if (allItemsBadge) allItemsBadge.hidden = DATA.hasPrivateData;
   }
 
   // ---------------- Encrypted data.json support ----------------
@@ -889,7 +903,7 @@
     wireWarbandPanel();
     wireAllItemsPanel();
     await loadAndRender();
-    setInterval(renderResetCountdown, 60000);
+    setInterval(renderResetCountdown, 1000);
   }
 
   init();
