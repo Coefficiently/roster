@@ -643,3 +643,24 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   accent-color: var(--gold);
   cursor: pointer;
 }
+
+.raids-delete-btn {
+  flex-shrink: 0;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink-dim);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.raids-delete-btn:hover { border-color: #ff6b5c; color: #ff8a7a; }
+.raids-delete-btn-confirm {
+  background: #ff6b5c;
+  border-color: #ff6b5c;
+  color: #1a0805;
+  font-weight: 700;
+}
+.raids-delete-btn-confirm:hover { background: #ff8a7a; color: #1a0805; }

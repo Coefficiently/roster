@@ -435,6 +435,7 @@
               <input type="checkbox" data-raid-id="${escapeHtml(entry.raidId)}" ${entry.rostered ? "checked" : ""} />
               Rostered
             </label>
+            <button class="raids-delete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Delete</button>
           </div>`;
       }
     }
@@ -449,6 +450,28 @@
           saveEntries(entries);
           renderSummary(entries, detectConflicts(entries));
           cb.closest(".raids-entry").classList.toggle("raids-entry-rostered", cb.checked);
+        }
+      });
+    });
+
+    const DELETE_CONFIRM_TIMEOUT_MS = 4000;
+    container.querySelectorAll(".raids-delete-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.confirming === "true") {
+          clearTimeout(btn._revertTimer);
+          const entries = loadEntries();
+          delete entries[btn.dataset.raidId];
+          saveEntries(entries);
+          render();
+        } else {
+          btn.dataset.confirming = "true";
+          btn.textContent = "Confirm delete?";
+          btn.classList.add("raids-delete-btn-confirm");
+          btn._revertTimer = setTimeout(() => {
+            btn.dataset.confirming = "false";
+            btn.textContent = "Delete";
+            btn.classList.remove("raids-delete-btn-confirm");
+          }, DELETE_CONFIRM_TIMEOUT_MS);
         }
       });
     });
