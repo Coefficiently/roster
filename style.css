@@ -12,6 +12,8 @@
 
   --boss-dead: #6ab04c;
   --boss-unknown: #35311f;
+  --red: #ff6b5c;
+  --red-light: #ff8a7a;
 
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -80,7 +82,7 @@ body.is-locked > *:not(#lock-screen) { display: none; }
 }
 #lock-input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
 .lock-submit { align-self: stretch; text-align: center; }
-.lock-error { color: #ff6b5c; font-size: 0.85rem; text-align: center; margin: 0; }
+.lock-error { color: var(--red); font-size: 0.85rem; text-align: center; margin: 0; }
 
 /* ---------- Topbar ---------- */
 
@@ -541,7 +543,7 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   gap: 1rem;
 }
 .raids-parse-result { color: var(--ink-dim); font-size: 0.85rem; }
-.raids-parse-error { color: #ff6b5c; }
+.raids-parse-error { color: var(--red); }
 
 .raids-day-header {
   font-family: var(--sans);
@@ -581,14 +583,14 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
-.raids-entry-conflict { border-left-color: #ff6b5c; background: #2a1815; }
+.raids-entry-conflict { border-left-color: var(--red); background: #2a1815; }
 .raids-entry-conflict-msg {
   margin-top: 0.4rem;
-  color: #ff8a7a;
+  color: var(--red-light);
   font-size: 0.78rem;
   font-weight: 600;
 }
-.raids-summary-has-conflicts { color: #ff8a7a; }
+.raids-summary-has-conflicts { color: var(--red-light); }
 
 .raids-entry-time {
   flex-shrink: 0;
@@ -617,8 +619,8 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   color: var(--ink-dim);
   font-size: 0.72rem;
 }
-.raids-badge-saved { color: #6ab04c; border-color: #6ab04c; }
-.raids-badge-unsaved { color: #ff6b5c; border-color: #ff6b5c; }
+.raids-badge-saved { color: var(--boss-dead); border-color: var(--boss-dead); }
+.raids-badge-unsaved { color: var(--red); border-color: var(--red); }
 
 .raids-entry-meta {
   margin-top: 0.3rem;
@@ -681,11 +683,11 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   cursor: pointer;
   white-space: nowrap;
 }
-.raids-delete-btn:hover { border-color: #ff6b5c; color: #ff8a7a; }
+.raids-delete-btn:hover { border-color: var(--red); color: var(--red-light); }
 .raids-delete-btn-confirm {
-  background: #ff6b5c;
-  border-color: #ff6b5c;
+  background: var(--red);
+  border-color: var(--red);
   color: #1a0805;
   font-weight: 700;
 }
-.raids-delete-btn-confirm:hover { background: #ff8a7a; color: #1a0805; }
+.raids-delete-btn-confirm:hover { background: var(--red-light); color: #1a0805; }

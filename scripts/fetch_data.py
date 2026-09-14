@@ -288,7 +288,8 @@ def main():
         sys.exit(1)
 
     print("Fetching user data...")
-    if SESSION_COOKIE and "private" not in paths["data-user"]:
+    is_private = SESSION_COOKIE and "private" in paths["data-user"]
+    if SESSION_COOKIE and not is_private:
         print(
             "WARNING: WOWTHING_SESSION_COOKIE is set but the served data path "
             f"({paths['data-user']}) doesn't look private -- the cookie may have "
@@ -917,7 +918,7 @@ def main():
         "minItemLevel": MIN_ITEM_LEVEL,
         "warbandGold": user_data.get("warbankGold", 0),
         "warbandItems": warband_items_out,
-        "hasPrivateData": bool(SESSION_COOKIE),
+        "hasPrivateData": is_private,
         "classes": classes,
         "races": races,
         "realms": realms,
