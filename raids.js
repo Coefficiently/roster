@@ -47,6 +47,10 @@
     return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
   }
 
+  function bufferToBase64(buf) {
+    return btoa(String.fromCharCode(...new Uint8Array(buf)));
+  }
+
   async function decryptEnvelope(envelope, passphrase) {
     const salt = base64ToBuffer(envelope.salt);
     const iv = base64ToBuffer(envelope.iv);
@@ -60,6 +64,34 @@
     );
     const plaintextBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
     return JSON.parse(new TextDecoder().decode(plaintextBuf));
+  }
+
+  // The encrypt-side counterpart to decryptEnvelope -- same format/
+  // algorithm/iteration count as the Python-side encryption used for
+  // data.json (AES-256-GCM, PBKDF2-SHA256, 250k iterations), so it's
+  // consistent even though this is a separate encryption context (the
+  // raid data never touches data.json itself).
+  const SYNC_PBKDF2_ITERATIONS = 250000;
+
+  async function encryptForSync(passphrase, data) {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const passKey = await crypto.subtle.importKey(
+      "raw", new TextEncoder().encode(passphrase), "PBKDF2", false, ["deriveKey"]
+    );
+    const key = await crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt, iterations: SYNC_PBKDF2_ITERATIONS, hash: "SHA-256" },
+      passKey, { name: "AES-GCM", length: 256 }, false, ["encrypt"]
+    );
+    const plaintextBuf = new TextEncoder().encode(JSON.stringify(data));
+    const ciphertextBuf = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plaintextBuf);
+    return {
+      encrypted: true,
+      salt: bufferToBase64(salt),
+      iv: bufferToBase64(iv),
+      ciphertext: bufferToBase64(ciphertextBuf),
+      iterations: SYNC_PBKDF2_ITERATIONS,
+    };
   }
 
   function promptForPassphrase(envelope) {
@@ -278,11 +310,131 @@
     }
   }
 
-  function saveEntries(entries) {
+  // Local-only write, no remote sync -- used when writing data that just
+  // came FROM the remote (see syncFromRemote), so that doesn't immediately
+  // trigger a redundant push right back to the same bin.
+  function saveEntriesLocal(entries) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     } catch (err) {
       // storage unavailable/full -- nothing we can do client-side about this
+    }
+  }
+
+  // Normal write path: saves locally (so the UI/offline case always works
+  // immediately) and fires off a remote push in the background. The push
+  // is fire-and-forget -- callers don't wait on it, since local storage is
+  // the source of truth for the current tab and network issues shouldn't
+  // block the UI.
+  function saveEntries(entries) {
+    saveEntriesLocal(entries);
+    pushRemoteEntries(entries).catch(() => { /* see pushRemoteEntries for handling */ });
+  }
+
+  // ---------------- Cross-device sync (JSONBin) ----------------
+  // The signup data is encrypted client-side with the same passphrase
+  // used to unlock the roster page (see encryptForSync/decryptEnvelope)
+  // before it's ever sent to JSONBin, so the remote bin only ever holds
+  // an opaque encrypted blob -- anyone who found the API key embedded in
+  // this public JS file could read/write the blob, but not its contents
+  // without the passphrase. This is the same privacy model as data.json.
+  //
+  // JSONBIN_BIN_ID starts empty and gets created automatically on the
+  // first successful push from any browser. Claude has no way to create
+  // the bin itself (no network access to jsonbin.io from its sandbox), so
+  // the created bin's id is surfaced in a one-time on-page notice for the
+  // user to report back, at which point it gets hardcoded here so every
+  // device/browser shares the same bin from then on.
+  const JSONBIN_ACCESS_KEY = "$2a$10$8xzRy4CIE0RmppjXg5MKV.9GN.GfKkXqcCgpgWHavTTEC.7jnb/ku";
+  const JSONBIN_BIN_ID = ""; // TODO: fill in once known (see notice on first sync)
+  const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b";
+
+  function getSavedPassphrase() {
+    try {
+      return localStorage.getItem(PASSPHRASE_STORAGE_KEY);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  // Shown once, on-page, when a bin gets auto-created -- this id needs to
+  // be reported back and hardcoded into JSONBIN_BIN_ID so all
+  // devices/browsers share the same bin afterward. Not using alert()
+  // since that's a blocking, dismiss-and-forget pattern; this stays
+  // visible until the page is reloaded (by which point, once the id is
+  // hardcoded, it won't show again).
+  function showBinCreatedNotice(binId) {
+    if (document.getElementById("raids-sync-notice")) return; // already shown
+    const el = document.createElement("div");
+    el.id = "raids-sync-notice";
+    el.className = "raids-sync-notice";
+    el.textContent = `Cross-device sync set up for the first time -- send this bin ID to Claude so it can be saved: ${binId}`;
+    const main = document.querySelector("main.page");
+    if (main) main.insertBefore(el, main.firstChild);
+  }
+
+  async function pushRemoteEntries(entries) {
+    const passphrase = getSavedPassphrase();
+    if (!passphrase) return; // not unlocked yet, nothing to sync with
+    let envelope;
+    try {
+      envelope = await encryptForSync(passphrase, entries);
+    } catch (err) {
+      return; // encryption failed, skip this push
+    }
+    try {
+      if (!JSONBIN_BIN_ID) {
+        const res = await fetch(JSONBIN_BASE_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-Access-Key": JSONBIN_ACCESS_KEY },
+          body: JSON.stringify(envelope),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const newBinId = data && data.metadata && data.metadata.id;
+        if (newBinId) showBinCreatedNotice(newBinId);
+        return;
+      }
+      await fetch(`${JSONBIN_BASE_URL}/${JSONBIN_BIN_ID}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "X-Access-Key": JSONBIN_ACCESS_KEY },
+        body: JSON.stringify(envelope),
+      });
+    } catch (err) {
+      // network failure -- local save already happened; the next save
+      // (or the next page load's sync) will try again
+    }
+  }
+
+  // Called once at startup (see init) to pull in whatever the latest
+  // synced state is before the first render. Last-write-wins: if the
+  // remote fetch succeeds, it replaces local storage outright. This has
+  // one known edge case -- reloading the page in the same second as a
+  // save, before that save's push has finished propagating, could
+  // momentarily show the pre-save state until the next successful sync.
+  // Given single-user, mostly-one-device-at-a-time usage, this is an
+  // acceptable tradeoff for the simplicity of not needing real
+  // conflict resolution.
+  async function syncFromRemote() {
+    if (!JSONBIN_BIN_ID) return;
+    const passphrase = getSavedPassphrase();
+    if (!passphrase) return;
+    try {
+      const res = await fetch(`${JSONBIN_BASE_URL}/${JSONBIN_BIN_ID}`, {
+        headers: { "X-Access-Key": JSONBIN_ACCESS_KEY },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      const envelope = data && data.record;
+      if (!envelope || !envelope.encrypted) return;
+      const remoteEntries = await decryptEnvelope(envelope, passphrase);
+      const migrated = {};
+      for (const [id, entry] of Object.entries(remoteEntries)) {
+        migrated[id] = migrateEntry(entry);
+      }
+      saveEntriesLocal(pruneExpiredEntries(migrated));
+    } catch (err) {
+      // network/decrypt failure -- fall back to whatever's already local
     }
   }
 
@@ -747,6 +899,7 @@
   async function init() {
     const rosterData = await ensureUnlocked();
     CHARACTER_LOOKUP = buildCharacterLookup(rosterData);
+    await syncFromRemote();
     wireAddForm();
     render();
   }

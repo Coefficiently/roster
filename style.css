@@ -529,6 +529,17 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-size: 0.9rem;
 }
 
+.raids-sync-notice {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(201, 154, 68, 0.15);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  color: var(--gold-2);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .raids-add-block { margin-bottom: 1.5rem; }
 .raids-add-form {
   margin-top: 0.75rem;
