@@ -272,7 +272,7 @@
       for (const [id, entry] of Object.entries(parsed)) {
         migrated[id] = migrateEntry(entry);
       }
-      return migrated;
+      return pruneExpiredEntries(migrated);
     } catch (err) {
       return {};
     }
@@ -348,6 +348,50 @@
     if (!entry.sortKey) return null;
     const [year, month, day, hour, minute] = entry.sortKey.split("-").map(Number);
     return Date.UTC(year, month - 1, day, hour, minute);
+  }
+
+  // The "now" equivalent of entryTimestampMs(): the current moment,
+  // expressed as the same kind of naive Date.UTC() value built from
+  // Central Time's wall-clock Y/M/D/H/M -- NOT a real UTC timestamp,
+  // since entry timestamps aren't real UTC either (see entryTimestampMs).
+  // Comparing actual UTC epoch time against entry timestamps directly
+  // would be off by Central's offset from UTC (5 or 6 hours depending on
+  // DST); this keeps both sides of the comparison in the same units.
+  // Uses the same offset-conversion technique as the roster page's weekly
+  // reset countdown, which has been verified correct across DST
+  // transitions.
+  function nowAsCentralNaiveMs() {
+    const now = new Date();
+    const utcStr = now.toLocaleString("en-US", { timeZone: "UTC" });
+    const centralStr = now.toLocaleString("en-US", { timeZone: "America/Chicago" });
+    const offsetMin = (new Date(centralStr) - new Date(utcStr)) / 60000;
+    const centralNow = new Date(now.getTime() + offsetMin * 60000);
+    return Date.UTC(
+      centralNow.getUTCFullYear(), centralNow.getUTCMonth(), centralNow.getUTCDate(),
+      centralNow.getUTCHours(), centralNow.getUTCMinutes(), centralNow.getUTCSeconds()
+    );
+  }
+
+  const EXPIRE_AFTER_MS = 4 * 60 * 60 * 1000; // 4 hours past start time
+
+  // Drops any signup more than 4 hours past its start time -- by then the
+  // raid is long over and it's just clutter. Persists the pruned list
+  // immediately so this doesn't re-check the same already-expired entries
+  // on every subsequent load.
+  function pruneExpiredEntries(entries) {
+    const nowMs = nowAsCentralNaiveMs();
+    let changed = false;
+    const kept = {};
+    for (const [id, entry] of Object.entries(entries)) {
+      const entryMs = entryTimestampMs(entry);
+      if (entryMs !== null && nowMs - entryMs > EXPIRE_AFTER_MS) {
+        changed = true;
+        continue;
+      }
+      kept[id] = entry;
+    }
+    if (changed) saveEntries(kept);
+    return kept;
   }
 
   const MIN_GAP_MINUTES = 90;
