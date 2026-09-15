@@ -119,7 +119,7 @@ CURRENT_EXPANSION_INDEX = 11
 # level. Update this set each season.
 CURRENT_SEASON_BONUS_GROUPS = {613, 614, 615, 616, 617, 618}
 
-RAID_DIFFICULTY_SHORT = {17: "LFR", 14: "N", 15: "HC", 16: "M", 233: "N", 234: "HC", 235: "M"}
+RAID_DIFFICULTY_SHORT = {17: "LFR", 14: "N", 15: "H", 16: "M", 233: "N", 234: "H", 235: "M"}
 RAID_DIFFICULTY_ORDER = [17, 14, 15, 16, 233, 234, 235]
 
 # Some raids only have as many difficulty rows as wowthing has actually seen a
