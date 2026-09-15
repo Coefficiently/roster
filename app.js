@@ -264,11 +264,13 @@
     return String(str).replace(/[&<>"']/g, (ch) => div[ch]);
   }
 
-  function rowRaidDifficulty(raidName, difficultyLabel, bosses, chars) {
+  // Looks the grid row up by difficulty id (not label) -- see the raid_grids
+  // comment in fetch_data.py; two difficulties can share a label.
+  function rowRaidDifficulty(raidName, difficultyId, difficultyLabel, bosses, chars) {
     return `<tr>
       <td class="row-label row-label-sub">${difficultyLabel}</td>
       ${chars.map((c) => {
-        const row = (c.raidGrids[raidName] || {})[difficultyLabel];
+        const row = (c.raidGrids[raidName] || {})[String(difficultyId)];
         if (!row) return `<td>\u2014</td>`;
         const squares = row
           .map((dead, i) => {
@@ -387,7 +389,7 @@
     for (const raid of DATA.raids || []) {
       rows += rowRaidSectionHeader(raid.name, chars);
       for (const diff of raid.difficulties) {
-        rows += rowRaidDifficulty(raid.name, diff.label, raid.bosses, chars);
+        rows += rowRaidDifficulty(raid.name, diff.id, diff.label, raid.bosses, chars);
       }
     }
 

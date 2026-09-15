@@ -119,19 +119,28 @@ CURRENT_EXPANSION_INDEX = 11
 # level. Update this set each season.
 CURRENT_SEASON_BONUS_GROUPS = {613, 614, 615, 616, 617, 618}
 
-RAID_DIFFICULTY_SHORT = {17: "LFR", 14: "N", 15: "H", 16: "M", 233: "N", 234: "H", 235: "M"}
-RAID_DIFFICULTY_ORDER = [17, 14, 15, 16, 233, 234, 235]
+RAID_DIFFICULTY_SHORT = {17: "LFR", 14: "N", 15: "H", 16: "M", 233: "M"}
+RAID_DIFFICULTY_ORDER = [17, 14, 15, 16, 233]
 
 # Some raids only have as many difficulty rows as wowthing has actually seen a
 # character enter (a lockout only exists once someone's killed something on
 # that difficulty). For small/new raids where nobody in the account has
 # touched every tier yet, hand-pin the full known difficulty list here so all
-# rows show up (as dashes) even before anyone's attempted them. Difficulty
-# ids for untried tiers are a best guess (sequential from the observed one);
-# if wrong, the real id will just show up as an extra row once someone runs
-# it, self-correcting.
+# rows show up (as dashes) even before anyone's attempted them. If a guessed
+# id turns out wrong, the real one just shows up as an extra row once
+# someone runs it, self-correcting -- but a wrong guess that happens to share
+# a LABEL with a real id is worse than an extra row (see raid_grids, which
+# is keyed by id for exactly this reason).
+#
+# The Tidebound Grotto (single boss, Nymrissa Wavecaller) does NOT use a
+# 233/234/235 set as originally guessed -- that guess mislabeled the real
+# Mythic kills as Normal and invented a second "H" row. Confirmed against
+# real kills: 15 is Heroic (standard raid id) and 233 is Mythic. 14 is the
+# standard Normal raid id and is an UNVERIFIED best guess (nobody has run
+# it on Normal yet); if Normal turns out to use a different id it'll appear
+# as its own row and 14 can be dropped.
 RAID_DIFFICULTY_FORCE = {
-    "The Tidebound Grotto": [233, 234, 235],  # Normal, Heroic, Mythic
+    "The Tidebound Grotto": [14, 15, 233],  # Normal (unverified), Heroic, Mythic
 }
 
 SLOT_NAMES = {
@@ -803,7 +812,12 @@ def main():
                     row = [dead_by_name.get(boss_name) for boss_name in raid["bosses"]]
                 else:
                     row = [None] * len(raid["bosses"])
-                grid[diff["label"]] = row
+                # Keyed by difficulty id (as a string, since it's a JSON key),
+                # NOT by label -- two difficulties sharing a label (e.g. a
+                # mis-pinned id in RAID_DIFFICULTY_FORCE colliding with a real
+                # one) would otherwise overwrite each other and silently drop
+                # real kill data.
+                grid[str(diff["id"])] = row
             raid_grids[raid["name"]] = grid
 
         # --- Primary professions (current-expansion skill level) --------
