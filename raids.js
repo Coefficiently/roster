@@ -339,14 +339,14 @@
   // this public JS file could read/write the blob, but not its contents
   // without the passphrase. This is the same privacy model as data.json.
   //
-  // JSONBIN_BIN_ID starts empty and gets created automatically on the
-  // first successful push from any browser. Claude has no way to create
-  // the bin itself (no network access to jsonbin.io from its sandbox), so
-  // the created bin's id is surfaced in a one-time on-page notice for the
-  // user to report back, at which point it gets hardcoded here so every
-  // device/browser shares the same bin from then on.
+  // JSONBIN_BIN_ID is the one shared bin every device/browser syncs with.
+  // It was auto-created by the first real push (the code below still
+  // handles an empty id by creating a bin and surfacing its id in an
+  // on-page notice, which is how this one was obtained) -- if the bin is
+  // ever deleted or a fresh one is wanted, clear this to "" and reload
+  // once to re-run that setup.
   const JSONBIN_ACCESS_KEY = "$2a$10$8xzRy4CIE0RmppjXg5MKV.9GN.GfKkXqcCgpgWHavTTEC.7jnb/ku";
-  const JSONBIN_BIN_ID = ""; // TODO: fill in once known (see notice on first sync)
+  const JSONBIN_BIN_ID = "6aa91b57ffd5d1605309391a";
   const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b";
 
   function getSavedPassphrase() {
