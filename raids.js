@@ -581,11 +581,16 @@
         const characters = entry.characters || [];
         const hasMultipleCandidates = characters.length > 1;
 
-        // One line per candidate character this signup was made with --
-        // usually just one, but a signup can list more than one (applying
-        // with either character, whichever gets picked). The rostered one
-        // (if any) is bolded so it's clear which one actually got in.
-        const characterLines = characters.map((c) => {
+        // Once a character has actually been picked as rostered, only
+        // that one is shown -- the other candidate(s) aren't relevant
+        // anymore. Before a pick is made (or for single-candidate
+        // signups, which have nothing to pick between), all candidates
+        // show.
+        const displayCharacters = isRostered
+          ? characters.filter((c) => c.charRealm === entry.rosteredCharRealm)
+          : characters;
+
+        const characterLines = displayCharacters.map((c) => {
           const isThisRostered = entry.rosteredCharRealm === c.charRealm;
           const savedBadgeClass = c.saved ? "raids-badge-saved" : "raids-badge-unsaved";
           return `
@@ -596,16 +601,22 @@
             </div>`;
         }).join("");
 
-        // The character picker only matters -- and only appears -- when
-        // there's more than one candidate AND Rostered is checked. With a
-        // single candidate, checking the box is enough on its own (there's
-        // nothing to choose between).
+        // The picker exists only to make the pick -- once Rostered is
+        // checked AND a specific character has been chosen, there's
+        // nothing left to choose, so it goes away along with the other
+        // candidates. It only ever appears for multi-candidate signups
+        // that haven't been decided yet; checking the box alone doesn't
+        // commit to a choice (see the checkbox handler below), so the
+        // picker starts on an explicit "choose one" placeholder rather
+        // than defaulting to the first candidate.
         const charOptions = characters.map((c) => {
-          const selected = entry.rosteredCharRealm === c.charRealm ? " selected" : "";
-          return `<option value="${escapeHtml(c.charRealm)}"${selected}>${escapeHtml(characterName(c.charRealm))}</option>`;
+          return `<option value="${escapeHtml(c.charRealm)}">${escapeHtml(characterName(c.charRealm))}</option>`;
         }).join("");
-        const charPicker = hasMultipleCandidates
-          ? `<select class="raids-rostered-char-select" data-raid-id="${escapeHtml(entry.raidId)}"${isRostered ? "" : " hidden"}>${charOptions}</select>`
+        const charPicker = (hasMultipleCandidates && !isRostered)
+          ? `<select class="raids-rostered-char-select" data-raid-id="${escapeHtml(entry.raidId)}" hidden>
+               <option value="" selected disabled>Choose character\u2026</option>
+               ${charOptions}
+             </select>`
           : "";
 
         html += `
@@ -641,17 +652,22 @@
         if (!entry) return;
         if (!cb.checked) {
           entry.rosteredCharRealm = null;
+          saveEntries(entries);
+          render();
         } else if (entry.characters && entry.characters.length === 1) {
           entry.rosteredCharRealm = entry.characters[0].charRealm;
+          saveEntries(entries);
+          render();
         } else {
-          // Multiple candidates: default to whichever the (now-visible)
-          // picker currently shows -- its own change handler covers the
-          // user picking a different one afterward.
+          // Multiple candidates: checking the box alone doesn't commit to
+          // a choice -- just reveal the (still-undecided) picker so the
+          // user can pick one. Nothing is saved until they actually do
+          // (see the picker's own handler below), so this is a purely
+          // visual, unsaved state; reloading before picking loses it,
+          // which is fine since no decision was actually made.
           const picker = cb.closest(".raids-entry").querySelector(".raids-rostered-char-select");
-          entry.rosteredCharRealm = (picker && picker.value) || (entry.characters[0] && entry.characters[0].charRealm) || null;
+          if (picker) picker.hidden = false;
         }
-        saveEntries(entries);
-        render();
       });
     });
 
