@@ -550,13 +550,14 @@
 
   // Returns a Map<raidId, string[]> of conflict messages (entries with no
   // conflicts simply aren't in the map).
-  function detectConflicts(entries) {
+  // Groups every character-candidate across all entries by (character,
+  // raid, difficulty, week) -- the natural unit for lockout-related
+  // reasoning, since that's exactly the scope a real WoW lockout covers.
+  // Shared by detectConflicts (which checks for problems within each
+  // group) and computeUnsavedNeeded (which checks for a specific kind of
+  // gap: no Unsaved candidate at all yet, in the CURRENT week only).
+  function buildLockoutGroups(entries) {
     const list = Object.values(entries).filter((e) => e.sortKey && e.characters && e.characters.length > 0);
-
-    // Expand each entry into one "candidate" per character it lists (a
-    // signup can name more than one candidate character) -- the lockout
-    // checks below are inherently per-character, since lockout state
-    // belongs to a character, not to a raid signup.
     const candidates = [];
     for (const entry of list) {
       const weekIndex = computeWeekIndex(entry);
@@ -565,13 +566,64 @@
         candidates.push({ entry, charRealm: char.charRealm, saved: char.saved, weekIndex });
       }
     }
-
     const groups = new Map();
     for (const c of candidates) {
       const key = `${c.charRealm}|${normalizeRaidName(c.entry.title)}|${c.entry.difficulty}|${c.weekIndex}`;
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(c);
     }
+    return groups;
+  }
+
+  // For the CURRENT reset week only: which (character, raid, difficulty)
+  // groups have at least one Saved sale scheduled but no Unsaved run at
+  // all yet. This is a proactive heads-up -- distinct from
+  // detectConflicts's "Saved scheduled before Unsaved" check, which only
+  // fires once there's an actual ordering problem. This fires earlier:
+  // before anything's gone wrong, as a reminder to still get that
+  // character's own kill in this week for whatever's already been sold.
+  // Groups with only Unsaved (or no signups at all) aren't flagged --
+  // nothing at risk there yet.
+  function computeUnsavedNeeded(entries) {
+    const currentWeekIndex = computeWeekIndex({ sortKey: nowAsSortKey() });
+    const groups = buildLockoutGroups(entries);
+    const needed = [];
+    for (const groupCandidates of groups.values()) {
+      const first = groupCandidates[0];
+      if (first.weekIndex !== currentWeekIndex) continue;
+      const hasUnsaved = groupCandidates.some((c) => !c.saved);
+      const hasSaved = groupCandidates.some((c) => c.saved);
+      if (hasSaved && !hasUnsaved) {
+        needed.push({
+          charRealm: first.charRealm,
+          raidName: normalizeRaidName(first.entry.title),
+          difficulty: first.entry.difficulty,
+          savedCount: groupCandidates.filter((c) => c.saved).length,
+        });
+      }
+    }
+    // Stable, readable order: by character name, then raid, then difficulty.
+    needed.sort((a, b) =>
+      characterName(a.charRealm).localeCompare(characterName(b.charRealm)) ||
+      a.raidName.localeCompare(b.raidName) ||
+      a.difficulty.localeCompare(b.difficulty)
+    );
+    return needed;
+  }
+
+  // sortKey-shaped string for right now, so it can be fed through the same
+  // computeWeekIndex() used for entries -- keeps "which week is now in"
+  // computed exactly the same way as "which week is this entry in".
+  function nowAsSortKey() {
+    const ms = nowAsCentralNaiveMs();
+    const d = new Date(ms);
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}-${pad(d.getUTCHours())}-${pad(d.getUTCMinutes())}`;
+  }
+
+  function detectConflicts(entries) {
+    const groups = buildLockoutGroups(entries);
+    const list = Object.values(entries).filter((e) => e.sortKey && e.characters && e.characters.length > 0);
 
     const conflicts = new Map();
     const addConflict = (raidId, message) => {
@@ -858,9 +910,28 @@
     });
   }
 
+  function renderUnsavedNeeded(entries) {
+    const section = document.getElementById("raids-unsaved-dashboard");
+    const list = document.getElementById("raids-unsaved-list");
+    if (!section || !list) return;
+    const needed = computeUnsavedNeeded(entries);
+    if (needed.length === 0) {
+      section.hidden = true;
+      list.innerHTML = "";
+      return;
+    }
+    section.hidden = false;
+    list.innerHTML = needed.map((n) => `
+      <li class="raids-unsaved-item">
+        ${characterDisplay(n.charRealm)} \u2014 ${escapeHtml(n.raidName)} (${escapeHtml(n.difficulty)})
+        <span class="raids-unsaved-detail">${n.savedCount} Saved sale${n.savedCount === 1 ? "" : "s"} scheduled, no Unsaved run yet</span>
+      </li>`).join("");
+  }
+
   function render() {
     const entries = loadEntries();
     const conflicts = detectConflicts(entries);
+    renderUnsavedNeeded(entries);
     renderCalendar(entries, conflicts);
     renderSummary(entries, conflicts);
   }
