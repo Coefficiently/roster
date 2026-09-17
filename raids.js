@@ -584,6 +584,10 @@
       year: entry.year,
       timeStr: entry.timeStr,
       sortKey: entry.sortKey,
+      // Manually entered by the user afterward -- the payment/commit
+      // confirmation bot uses its own unrelated ID scheme, different from
+      // this raid's signup id, so there's nothing to auto-fill this from.
+      paymentId: null,
     };
   }
 
@@ -1019,8 +1023,27 @@
           <div class="raids-entry-meta">
             Raid #${escapeHtml(h.raidId)} \u00b7 RL: ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u2014 ${escapeHtml(h.role || "")} \u00b7 ${escapeHtml(dateText)} ${escapeHtml(timeText)}
           </div>
+          <label class="raids-history-payment">
+            Payment ID:
+            <input type="text" class="raids-payment-id-input" data-raid-id="${escapeHtml(h.raidId)}" value="${escapeHtml(h.paymentId || "")}" placeholder="e.g. 61678" />
+          </label>
         </li>`;
     }).join("");
+
+    list.querySelectorAll(".raids-payment-id-input").forEach((input) => {
+      input.addEventListener("change", () => {
+        const history = loadHistory();
+        const record = history.find((h) => h.raidId === input.dataset.raidId);
+        if (!record) return;
+        record.paymentId = input.value.trim() || null;
+        saveHistoryLocal(history);
+        // History-only change -- entries themselves are unchanged, but
+        // saveEntries() is still the correct way to sync it: it bundles
+        // in whatever loadHistory() currently returns (see
+        // pushRemoteEntries), so this pushes the updated payment id too.
+        saveEntries(loadEntries());
+      });
+    });
   }
 
   function renderUnsavedNeeded(entries) {

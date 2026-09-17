@@ -587,6 +587,24 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   border-top: 1px solid var(--line);
 }
 .raids-history-item:first-child { border-top: none; }
+.raids-history-payment {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  color: var(--ink-dim);
+  font-size: 0.78rem;
+}
+.raids-history-payment input {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  width: 8rem;
+}
 
 .raids-add-block { margin-bottom: 1.5rem; }
 .raids-add-form {
