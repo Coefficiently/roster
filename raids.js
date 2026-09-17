@@ -27,6 +27,17 @@
   // charRealm text is shown as a fallback (see renderCalendar).
   let CHARACTER_LOOKUP = {};
 
+  // False until the first sync-from-remote attempt of this page load has
+  // completed (successfully or not). Guards against a real bug: the page
+  // renders immediately with whatever's cached in local storage from a
+  // possibly-stale previous session, before the sync has pulled the
+  // latest shared state -- if that stale local data happens to contain
+  // an expired entry, pruning it would otherwise push right away and can
+  // overwrite whatever another device more recently synced, since it's
+  // pushing a state that was never reconciled with the remote one. See
+  // pruneExpiredEntries.
+  let initialSyncDone = false;
+
   function buildCharacterLookup(rosterData) {
     const lookup = {};
     if (!rosterData || !rosterData.characters) return lookup;
@@ -602,14 +613,16 @@
   // immediately so this doesn't re-check the same already-expired entries
   // on every subsequent load.
   //
-  // skipRemotePush is used when this runs right after syncFromRemote()
-  // pulls fresh data -- pushing straight back out would be a GET
-  // immediately followed by a redundant PUT. The pruned state still saves
-  // locally either way, so the UI is correct immediately; it reaches the
-  // remote bin the next time the user does something that triggers a
-  // genuine save. There's no correctness cost to that delay, since every
-  // device prunes the same expired entries independently based on its own
-  // clock regardless of what the remote bin currently holds.
+  // The remote push is skipped (local save still happens either way) in
+  // two cases: skipRemotePush is passed explicitly when this runs right
+  // after syncFromRemote() pulls fresh data, where pushing straight back
+  // out would be a redundant GET-then-PUT; and, more importantly,
+  // whenever initialSyncDone is still false, meaning this page load
+  // hasn't yet reconciled with the remote bin at all -- pushing in that
+  // window would risk overwriting a genuinely newer remote state with
+  // this browser's own stale, pre-sync local cache. Either way, it
+  // reaches the remote bin the next time the user does something that
+  // triggers a genuine save after the initial sync has completed.
   function pruneExpiredEntries(entries, { skipRemotePush = false } = {}) {
     const nowMs = nowAsCentralNaiveMs();
     let entriesChanged = false;
@@ -637,7 +650,7 @@
     }
     if (historyChanged) saveHistoryLocal(history);
     if (entriesChanged || historyChanged) {
-      if (skipRemotePush) {
+      if (skipRemotePush || !initialSyncDone) {
         saveEntriesLocal(kept);
       } else {
         saveEntries(kept);
@@ -1331,6 +1344,7 @@
 
     if (!syncPromise) syncPromise = syncFromRemote();
     await syncPromise;
+    initialSyncDone = true;
     render(); // picks up anything that changed remotely since the first render
   }
 
