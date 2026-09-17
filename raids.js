@@ -801,6 +801,32 @@
       .replace(/"/g, "&quot;");
   }
 
+  const CONFIRM_ACTION_TIMEOUT_MS = 4000;
+
+  // Wires a two-click "are you sure" pattern onto a button: the first
+  // click shows confirmLabel for a few seconds (auto-reverting to
+  // normalLabel if it isn't clicked again), and the second click runs
+  // onConfirm. Shared by every delete/mark-complete style action on this
+  // page that shouldn't fire on a single accidental click.
+  function wireConfirmButton(btn, normalLabel, confirmLabel, onConfirm) {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.confirming === "true") {
+        clearTimeout(btn._revertTimer);
+        btn.dataset.confirming = "false";
+        onConfirm();
+      } else {
+        btn.dataset.confirming = "true";
+        btn.textContent = confirmLabel;
+        btn.classList.add("raids-delete-btn-confirm");
+        btn._revertTimer = setTimeout(() => {
+          btn.dataset.confirming = "false";
+          btn.textContent = normalLabel;
+          btn.classList.remove("raids-delete-btn-confirm");
+        }, CONFIRM_ACTION_TIMEOUT_MS);
+      }
+    });
+  }
+
   // Just the display name (no color, no HTML) -- used in plain-text
   // contexts like conflict messages. Shares the same lookup/fallback logic
   // as characterDisplay.
@@ -990,59 +1016,33 @@
       });
     });
 
-    const COMPLETE_CONFIRM_TIMEOUT_MS = 4000;
     container.querySelectorAll(".raids-complete-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        if (btn.dataset.confirming === "true") {
-          clearTimeout(btn._revertTimer);
-          const entries = loadEntries();
-          const id = btn.dataset.raidId;
-          const entry = entries[id];
-          if (!entry) return;
-          const history = loadHistory();
-          if (!history.some((h) => h.raidId === entry.raidId)) {
-            history.push(buildHistoryRecord(entry));
-            saveHistoryLocal(history);
-          }
-          lastUndoableAction = { type: "markComplete", entryId: id, entry, raidId: entry.raidId };
-          delete entries[id];
-          saveEntries(entries);
-          showHistoryUndoRow();
-          const historyPanel = document.getElementById("raids-history-panel");
-          if (historyPanel) historyPanel.hidden = false; // so the undo option is actually visible
-          render();
-        } else {
-          btn.dataset.confirming = "true";
-          btn.textContent = "Confirm?";
-          btn.classList.add("raids-delete-btn-confirm");
-          btn._revertTimer = setTimeout(() => {
-            btn.dataset.confirming = "false";
-            btn.textContent = "Mark Complete";
-            btn.classList.remove("raids-delete-btn-confirm");
-          }, COMPLETE_CONFIRM_TIMEOUT_MS);
+      wireConfirmButton(btn, "Mark Complete", "Confirm?", () => {
+        const entries = loadEntries();
+        const id = btn.dataset.raidId;
+        const entry = entries[id];
+        if (!entry) return;
+        const history = loadHistory();
+        if (!history.some((h) => h.raidId === entry.raidId)) {
+          history.push(buildHistoryRecord(entry));
+          saveHistoryLocal(history);
         }
+        lastUndoableAction = { type: "markComplete", entryId: id, entry, raidId: entry.raidId };
+        delete entries[id];
+        saveEntries(entries);
+        showHistoryUndoRow();
+        const historyPanel = document.getElementById("raids-history-panel");
+        if (historyPanel) historyPanel.hidden = false; // so the undo option is actually visible
+        render();
       });
     });
 
-    const DELETE_CONFIRM_TIMEOUT_MS = 4000;
     container.querySelectorAll(".raids-delete-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        if (btn.dataset.confirming === "true") {
-          clearTimeout(btn._revertTimer);
-          const entries = loadEntries();
-          delete entries[btn.dataset.raidId];
-          saveEntries(entries);
-          render();
-        } else {
-          btn.dataset.confirming = "true";
-          btn.textContent = "Confirm delete?";
-          btn.classList.add("raids-delete-btn-confirm");
-          btn._revertTimer = setTimeout(() => {
-            btn.dataset.confirming = "false";
-            btn.textContent = "Delete";
-            btn.classList.remove("raids-delete-btn-confirm");
-          }, DELETE_CONFIRM_TIMEOUT_MS);
-        }
+      wireConfirmButton(btn, "Delete", "Confirm delete?", () => {
+        const entries = loadEntries();
+        delete entries[btn.dataset.raidId];
+        saveEntries(entries);
+        render();
       });
     });
   }
@@ -1108,32 +1108,19 @@
       });
     });
 
-    const HIST_DELETE_CONFIRM_TIMEOUT_MS = 4000;
     list.querySelectorAll(".raids-hist-delete-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        if (btn.dataset.confirming === "true") {
-          clearTimeout(btn._revertTimer);
-          const li = btn.closest(".raids-history-item");
-          const raidId = li.dataset.origRaidId;
-          const history = loadHistory();
-          const idx = history.findIndex((h) => h.raidId === raidId);
-          if (idx === -1) return;
-          lastUndoableAction = { type: "delete", record: history[idx] };
-          history.splice(idx, 1);
-          saveHistoryLocal(history);
-          saveEntries(loadEntries());
-          showHistoryUndoRow();
-          renderHistory();
-        } else {
-          btn.dataset.confirming = "true";
-          btn.textContent = "Confirm?";
-          btn.classList.add("raids-delete-btn-confirm");
-          btn._revertTimer = setTimeout(() => {
-            btn.dataset.confirming = "false";
-            btn.textContent = "Delete";
-            btn.classList.remove("raids-delete-btn-confirm");
-          }, HIST_DELETE_CONFIRM_TIMEOUT_MS);
-        }
+      wireConfirmButton(btn, "Delete", "Confirm?", () => {
+        const li = btn.closest(".raids-history-item");
+        const raidId = li.dataset.origRaidId;
+        const history = loadHistory();
+        const idx = history.findIndex((h) => h.raidId === raidId);
+        if (idx === -1) return;
+        lastUndoableAction = { type: "delete", record: history[idx] };
+        history.splice(idx, 1);
+        saveHistoryLocal(history);
+        saveEntries(loadEntries());
+        showHistoryUndoRow();
+        renderHistory();
       });
     });
 
