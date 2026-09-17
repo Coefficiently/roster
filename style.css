@@ -541,6 +541,9 @@ body.is-locked > *:not(#lock-screen) { display: none; }
 }
 
 .raids-unsaved-dashboard {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
   margin-bottom: 1.25rem;
   padding: 0.85rem 1.1rem;
   background: rgba(255, 107, 92, 0.1);
