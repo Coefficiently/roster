@@ -467,7 +467,7 @@
         migrated[id] = migrateEntry(entry);
       }
       saveHistoryLocal(remoteHistory || []);
-      saveEntriesLocal(pruneExpiredEntries(migrated));
+      saveEntriesLocal(pruneExpiredEntries(migrated, { skipRemotePush: true }));
     } catch (err) {
       // network/decrypt failure -- fall back to whatever's already local
     }
@@ -601,7 +601,16 @@
   // raid is long over and it's just clutter. Persists the pruned list
   // immediately so this doesn't re-check the same already-expired entries
   // on every subsequent load.
-  function pruneExpiredEntries(entries) {
+  //
+  // skipRemotePush is used when this runs right after syncFromRemote()
+  // pulls fresh data -- pushing straight back out would be a GET
+  // immediately followed by a redundant PUT. The pruned state still saves
+  // locally either way, so the UI is correct immediately; it reaches the
+  // remote bin the next time the user does something that triggers a
+  // genuine save. There's no correctness cost to that delay, since every
+  // device prunes the same expired entries independently based on its own
+  // clock regardless of what the remote bin currently holds.
+  function pruneExpiredEntries(entries, { skipRemotePush = false } = {}) {
     const nowMs = nowAsCentralNaiveMs();
     let entriesChanged = false;
     let historyChanged = false;
@@ -627,7 +636,13 @@
       kept[id] = entry;
     }
     if (historyChanged) saveHistoryLocal(history);
-    if (entriesChanged || historyChanged) saveEntries(kept);
+    if (entriesChanged || historyChanged) {
+      if (skipRemotePush) {
+        saveEntriesLocal(kept);
+      } else {
+        saveEntries(kept);
+      }
+    }
     return kept;
   }
 
@@ -671,14 +686,20 @@
   // line, not two.
   function computeUnsavedNeeded(entries) {
     const currentWeekIndex = computeWeekIndex({ sortKey: nowAsSortKey() });
+    const nowMs = nowAsCentralNaiveMs();
     const groups = buildLockoutGroups(entries);
     const seen = new Set();
     const needed = [];
     for (const groupCandidates of groups.values()) {
       const first = groupCandidates[0];
       if (first.weekIndex !== currentWeekIndex) continue;
-      const hasUnsaved = groupCandidates.some((c) => !c.saved);
-      if (!hasUnsaved) continue;
+      // Only an Unsaved run that hasn't happened yet still needs
+      // protecting -- one already in the past has presumably either
+      // already happened (nothing left to protect) or is still sitting
+      // as an active signup regardless of what this dashboard says, so
+      // there's no value in continuing to warn about it here.
+      const hasUpcomingUnsaved = groupCandidates.some((c) => !c.saved && entryTimestampMs(c.entry) > nowMs);
+      if (!hasUpcomingUnsaved) continue;
       const key = `${first.charRealm}|${first.entry.difficulty}`;
       if (seen.has(key)) continue;
       seen.add(key);
