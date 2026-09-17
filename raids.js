@@ -568,6 +568,10 @@
   // Turns an expiring entry into a history record -- only the rostered
   // character's info matters here (the other candidate(s), if any, never
   // actually got played and aren't part of the sales record).
+  function fmtNumber(n) {
+    return (n || 0).toLocaleString("en-US");
+  }
+
   function buildHistoryRecord(entry) {
     const rosteredChar = (entry.characters || []).find((c) => c.charRealm === entry.rosteredCharRealm);
     return {
@@ -588,6 +592,9 @@
       // confirmation bot uses its own unrelated ID scheme, different from
       // this raid's signup id, so there's nothing to auto-fill this from.
       paymentId: null,
+      // Gold cut from the payment confirmation -- also nothing to
+      // auto-fill from, entered by hand alongside the payment id.
+      cut: null,
     };
   }
 
@@ -1007,28 +1014,34 @@
     // Most recent first -- the natural order for a sales log.
     const sorted = history.slice().sort((a, b) => (b.sortKey || "").localeCompare(a.sortKey || ""));
     list.innerHTML = sorted.map((h) => {
-      const dateText = h.weekday && h.monthName ? `${h.weekday}, ${h.monthName} ${h.day}, ${h.year}` : "";
-      const timeText = h.timeStr ? `${h.timeStr} CT` : "";
-      const savedBadgeClass = h.saved ? "raids-badge-saved" : "raids-badge-unsaved";
-      const savedBadge = h.saved !== null && h.saved !== undefined
-        ? `<span class="raids-badge ${savedBadgeClass}">${h.saved ? "Saved" : "Unsaved"}</span>`
-        : "";
+      // sortKey is "YYYY-MM-DD-HH-MM" -- reformat straight from it to
+      // MM/DD/YY HH:MM rather than re-deriving from the separate
+      // weekday/monthName/timeStr fields.
+      let dateText = "";
+      if (h.sortKey) {
+        const [year, month, day, hour, minute] = h.sortKey.split("-");
+        dateText = `${month}/${day}/${year.slice(2)} ${hour}:${minute}`;
+      }
       return `
         <li class="raids-history-item">
-          <div class="raids-entry-top">
-            <span class="raids-entry-title">${escapeHtml(h.title)}</span>
-            <span class="raids-badge">${escapeHtml(h.difficulty)}</span>
-            ${savedBadge}
-          </div>
-          <div class="raids-entry-meta">
-            Raid #${escapeHtml(h.raidId)} \u00b7 RL: ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u2014 ${escapeHtml(h.role || "")} \u00b7 ${escapeHtml(dateText)} ${escapeHtml(timeText)}
-          </div>
-          <label class="raids-history-payment">
-            Payment ID:
-            <input type="text" class="raids-payment-id-input" data-raid-id="${escapeHtml(h.raidId)}" value="${escapeHtml(h.paymentId || "")}" placeholder="e.g. 61678" />
-          </label>
+          #${escapeHtml(h.raidId)} \u00b7 ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u00b7 ${escapeHtml(dateText)} \u00b7
+          <input type="text" class="raids-payment-id-input" data-raid-id="${escapeHtml(h.raidId)}" value="${escapeHtml(h.paymentId || "")}" placeholder="payment id" /> \u00b7
+          <input type="text" class="raids-cut-input" data-raid-id="${escapeHtml(h.raidId)}" value="${h.cut ? escapeHtml(fmtNumber(h.cut)) : ""}" placeholder="cut" />
         </li>`;
     }).join("");
+
+    list.querySelectorAll(".raids-cut-input").forEach((input) => {
+      input.addEventListener("change", () => {
+        const history = loadHistory();
+        const record = history.find((h) => h.raidId === input.dataset.raidId);
+        if (!record) return;
+        const digitsOnly = input.value.replace(/[^\d]/g, "");
+        record.cut = digitsOnly ? parseInt(digitsOnly, 10) : null;
+        saveHistoryLocal(history);
+        saveEntries(loadEntries());
+        renderHistory(); // re-render so the input reflects the formatted value
+      });
+    });
 
     list.querySelectorAll(".raids-payment-id-input").forEach((input) => {
       input.addEventListener("change", () => {
