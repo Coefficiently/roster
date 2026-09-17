@@ -990,20 +990,37 @@
       });
     });
 
+    const COMPLETE_CONFIRM_TIMEOUT_MS = 4000;
     container.querySelectorAll(".raids-complete-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const entries = loadEntries();
-        const id = btn.dataset.raidId;
-        const entry = entries[id];
-        if (!entry) return;
-        const history = loadHistory();
-        if (!history.some((h) => h.raidId === entry.raidId)) {
-          history.push(buildHistoryRecord(entry));
-          saveHistoryLocal(history);
+        if (btn.dataset.confirming === "true") {
+          clearTimeout(btn._revertTimer);
+          const entries = loadEntries();
+          const id = btn.dataset.raidId;
+          const entry = entries[id];
+          if (!entry) return;
+          const history = loadHistory();
+          if (!history.some((h) => h.raidId === entry.raidId)) {
+            history.push(buildHistoryRecord(entry));
+            saveHistoryLocal(history);
+          }
+          lastUndoableAction = { type: "markComplete", entryId: id, entry, raidId: entry.raidId };
+          delete entries[id];
+          saveEntries(entries);
+          showHistoryUndoRow();
+          const historyPanel = document.getElementById("raids-history-panel");
+          if (historyPanel) historyPanel.hidden = false; // so the undo option is actually visible
+          render();
+        } else {
+          btn.dataset.confirming = "true";
+          btn.textContent = "Confirm?";
+          btn.classList.add("raids-delete-btn-confirm");
+          btn._revertTimer = setTimeout(() => {
+            btn.dataset.confirming = "false";
+            btn.textContent = "Mark Complete";
+            btn.classList.remove("raids-delete-btn-confirm");
+          }, COMPLETE_CONFIRM_TIMEOUT_MS);
         }
-        delete entries[id];
-        saveEntries(entries);
-        render();
       });
     });
 
@@ -1101,12 +1118,11 @@
           const history = loadHistory();
           const idx = history.findIndex((h) => h.raidId === raidId);
           if (idx === -1) return;
-          lastDeletedHistoryRecord = history[idx];
+          lastUndoableAction = { type: "delete", record: history[idx] };
           history.splice(idx, 1);
           saveHistoryLocal(history);
           saveEntries(loadEntries());
-          const undoRow = document.getElementById("raids-history-undo-row");
-          if (undoRow) undoRow.hidden = false;
+          showHistoryUndoRow();
           renderHistory();
         } else {
           btn.dataset.confirming = "true";
@@ -1186,10 +1202,23 @@
   }
 
   // ---------------- Wiring ----------------
-  // The most recently deleted history record, kept in memory (not
-  // persisted) so the Undo button can restore it. Overwritten by the next
-  // delete, cleared once undone -- a single-level undo, not a full stack.
-  let lastDeletedHistoryRecord = null;
+  // The most recently undoable action -- either deleting a history entry
+  // ({ type: "delete", record }) or marking a signup complete
+  // ({ type: "markComplete", entryId, entry, raidId }). A single slot,
+  // not a stack, so only the very last action can be undone; taking
+  // another undoable action overwrites this. Kept in memory only, not
+  // persisted -- a page reload loses the ability to undo.
+  let lastUndoableAction = null;
+
+  function showHistoryUndoRow() {
+    const row = document.getElementById("raids-history-undo-row");
+    if (row) row.hidden = false;
+  }
+
+  function hideHistoryUndoRow() {
+    const row = document.getElementById("raids-history-undo-row");
+    if (row) row.hidden = true;
+  }
 
   function addEmptyHistoryEntry() {
     const history = loadHistory();
@@ -1233,15 +1262,25 @@
     const undoBtn = document.getElementById("raids-history-undo-btn");
     if (undoBtn) {
       undoBtn.addEventListener("click", () => {
-        if (!lastDeletedHistoryRecord) return;
-        const history = loadHistory();
-        history.push(lastDeletedHistoryRecord);
-        lastDeletedHistoryRecord = null;
-        saveHistoryLocal(history);
-        saveEntries(loadEntries());
-        const undoRow = document.getElementById("raids-history-undo-row");
-        if (undoRow) undoRow.hidden = true;
-        renderHistory();
+        if (!lastUndoableAction) return;
+        if (lastUndoableAction.type === "delete") {
+          const history = loadHistory();
+          history.push(lastUndoableAction.record);
+          saveHistoryLocal(history);
+          saveEntries(loadEntries());
+        } else if (lastUndoableAction.type === "markComplete") {
+          // Remove the history record that mark-complete just created,
+          // and restore the original full entry (characters, note,
+          // everything) back into active entries under its original id.
+          const history = loadHistory().filter((h) => h.raidId !== lastUndoableAction.raidId);
+          saveHistoryLocal(history);
+          const entries = loadEntries();
+          entries[lastUndoableAction.entryId] = lastUndoableAction.entry;
+          saveEntries(entries);
+        }
+        lastUndoableAction = null;
+        hideHistoryUndoRow();
+        render(); // full re-render -- markComplete's undo affects the calendar, not just history
       });
     }
   }
