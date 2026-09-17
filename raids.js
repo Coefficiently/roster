@@ -1003,6 +1003,12 @@
     });
   }
 
+  // Which history records currently have their edit form open, keyed by
+  // the record's raid id at the time editing started. Module-level (not
+  // reset by re-renders) so an in-progress edit survives renderHistory()
+  // being called again for unrelated reasons (e.g. adding a new signup).
+  const historyEditingIds = new Set();
+
   function renderHistory() {
     const list = document.getElementById("raids-history-list");
     if (!list) return;
@@ -1014,47 +1020,81 @@
     // Most recent first -- the natural order for a sales log.
     const sorted = history.slice().sort((a, b) => (b.sortKey || "").localeCompare(a.sortKey || ""));
     list.innerHTML = sorted.map((h) => {
-      // sortKey is "YYYY-MM-DD-HH-MM" -- reformat straight from it to
-      // MM/DD/YY HH:MM rather than re-deriving from the separate
-      // weekday/monthName/timeStr fields.
+      // sortKey is "YYYY-MM-DD-HH-MM". Reformatted for display as
+      // MM/DD/YY HH:MM; reformatted for the edit form's datetime-local
+      // input (which needs "YYYY-MM-DDTHH:MM") separately below.
       let dateText = "";
+      let datetimeLocalValue = "";
       if (h.sortKey) {
         const [year, month, day, hour, minute] = h.sortKey.split("-");
         dateText = `${month}/${day}/${year.slice(2)} ${hour}:${minute}`;
+        datetimeLocalValue = `${year}-${month}-${day}T${hour}:${minute}`;
       }
+
+      if (historyEditingIds.has(h.raidId)) {
+        return `
+          <li class="raids-history-item raids-history-item-editing" data-orig-raid-id="${escapeHtml(h.raidId)}">
+            <input type="text" class="raids-hist-edit-raidid" value="${escapeHtml(h.raidId)}" placeholder="raid id" />
+            <input type="text" class="raids-hist-edit-rl" value="${escapeHtml(h.rl || "")}" placeholder="RL" />
+            <input type="text" class="raids-hist-edit-char" value="${escapeHtml(h.charRealm || "")}" placeholder="char-realm" />
+            <input type="datetime-local" class="raids-hist-edit-date" value="${datetimeLocalValue}" />
+            <input type="text" class="raids-hist-edit-payment" value="${escapeHtml(h.paymentId || "")}" placeholder="payment id" />
+            <input type="text" class="raids-hist-edit-cut" value="${h.cut ? fmtNumber(h.cut) : ""}" placeholder="cut" />
+            <button class="page-btn raids-hist-save-btn" type="button">Save</button>
+          </li>`;
+      }
+
+      const paymentDisplay = h.paymentId ? escapeHtml(h.paymentId) : "N/A";
+      const cutDisplay = h.cut ? escapeHtml(fmtNumber(h.cut)) : "N/A";
       return `
-        <li class="raids-history-item">
-          #${escapeHtml(h.raidId)} \u00b7 ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u00b7 ${escapeHtml(dateText)} \u00b7
-          <input type="text" class="raids-payment-id-input" data-raid-id="${escapeHtml(h.raidId)}" value="${escapeHtml(h.paymentId || "")}" placeholder="payment id" /> \u00b7
-          <input type="text" class="raids-cut-input" data-raid-id="${escapeHtml(h.raidId)}" value="${h.cut ? escapeHtml(fmtNumber(h.cut)) : ""}" placeholder="cut" />
+        <li class="raids-history-item" data-orig-raid-id="${escapeHtml(h.raidId)}">
+          <span class="raids-history-line">#${escapeHtml(h.raidId)} \u00b7 ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u00b7 ${escapeHtml(dateText)} \u00b7 ${paymentDisplay} \u00b7 ${cutDisplay}</span>
+          <button class="page-btn raids-hist-edit-btn" type="button">Edit</button>
         </li>`;
     }).join("");
 
-    list.querySelectorAll(".raids-cut-input").forEach((input) => {
-      input.addEventListener("change", () => {
-        const history = loadHistory();
-        const record = history.find((h) => h.raidId === input.dataset.raidId);
-        if (!record) return;
-        const digitsOnly = input.value.replace(/[^\d]/g, "");
-        record.cut = digitsOnly ? parseInt(digitsOnly, 10) : null;
-        saveHistoryLocal(history);
-        saveEntries(loadEntries());
-        renderHistory(); // re-render so the input reflects the formatted value
+    list.querySelectorAll(".raids-hist-edit-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const li = btn.closest(".raids-history-item");
+        historyEditingIds.add(li.dataset.origRaidId);
+        renderHistory();
       });
     });
 
-    list.querySelectorAll(".raids-payment-id-input").forEach((input) => {
-      input.addEventListener("change", () => {
+    list.querySelectorAll(".raids-hist-save-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const li = btn.closest(".raids-history-item");
+        const origRaidId = li.dataset.origRaidId;
         const history = loadHistory();
-        const record = history.find((h) => h.raidId === input.dataset.raidId);
+        const record = history.find((h) => h.raidId === origRaidId);
         if (!record) return;
-        record.paymentId = input.value.trim() || null;
+
+        const newRaidId = li.querySelector(".raids-hist-edit-raidid").value.trim() || origRaidId;
+        record.raidId = newRaidId;
+        record.rl = li.querySelector(".raids-hist-edit-rl").value.trim();
+        record.charRealm = li.querySelector(".raids-hist-edit-char").value.trim();
+
+        const newDateVal = li.querySelector(".raids-hist-edit-date").value; // "YYYY-MM-DDTHH:MM"
+        if (newDateVal) {
+          const [datePart, timePart] = newDateVal.split("T");
+          const [year, month, day] = datePart.split("-");
+          const [hour, minute] = timePart.split(":");
+          record.sortKey = `${year}-${month}-${day}-${hour}-${minute}`;
+        }
+
+        const newPaymentId = li.querySelector(".raids-hist-edit-payment").value.trim();
+        record.paymentId = newPaymentId || null;
+        const newCutDigits = li.querySelector(".raids-hist-edit-cut").value.replace(/[^\d]/g, "");
+        record.cut = newCutDigits ? parseInt(newCutDigits, 10) : null;
+
+        historyEditingIds.delete(origRaidId);
         saveHistoryLocal(history);
         // History-only change -- entries themselves are unchanged, but
         // saveEntries() is still the correct way to sync it: it bundles
         // in whatever loadHistory() currently returns (see
-        // pushRemoteEntries), so this pushes the updated payment id too.
+        // pushRemoteEntries), so this pushes the whole edit too.
         saveEntries(loadEntries());
+        renderHistory();
       });
     });
   }
