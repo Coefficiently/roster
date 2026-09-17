@@ -47,7 +47,14 @@ def main():
 
     req = urllib.request.Request(
         f"https://api.jsonbin.io/v3/b/{bin_id}",
-        headers={"X-Access-Key": access_key},
+        headers={
+            "X-Access-Key": access_key,
+            # Cloudflare (which fronts JSONBin) blocks urllib's default
+            # User-Agent as bot traffic (HTTP 403, Cloudflare error 1010).
+            # A plain, identifiable one avoids that -- same reasoning as
+            # fetch_data.py's User-Agent for wowthing.org.
+            "User-Agent": "roster-site-backup/1.0",
+        },
     )
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
