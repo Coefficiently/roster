@@ -655,6 +655,12 @@
   // character's own kill in this week for whatever's already been sold.
   // Groups with only Unsaved (or no signups at all) aren't flagged --
   // nothing at risk there yet.
+  // For the CURRENT reset week only: every (character, raid, difficulty)
+  // that has an Unsaved run actually scheduled -- these are the ones that
+  // need protecting: if that character gets saved to that raid/difficulty
+  // by anything else (a different signup, a casual personal run) before
+  // the scheduled Unsaved run happens, the sale is ruined. This is a
+  // reminder of what's at stake, not a gap to fill.
   function computeUnsavedNeeded(entries) {
     const currentWeekIndex = computeWeekIndex({ sortKey: nowAsSortKey() });
     const groups = buildLockoutGroups(entries);
@@ -662,14 +668,17 @@
     for (const groupCandidates of groups.values()) {
       const first = groupCandidates[0];
       if (first.weekIndex !== currentWeekIndex) continue;
-      const hasUnsaved = groupCandidates.some((c) => !c.saved);
-      const hasSaved = groupCandidates.some((c) => c.saved);
-      if (hasSaved && !hasUnsaved) {
+      const unsavedCandidates = groupCandidates.filter((c) => !c.saved);
+      for (const c of unsavedCandidates) {
         needed.push({
-          charRealm: first.charRealm,
-          raidName: normalizeRaidName(first.entry.title),
-          difficulty: first.entry.difficulty,
-          savedCount: groupCandidates.filter((c) => c.saved).length,
+          charRealm: c.charRealm,
+          raidName: normalizeRaidName(c.entry.title),
+          difficulty: c.entry.difficulty,
+          weekday: c.entry.weekday,
+          monthName: c.entry.monthName,
+          day: c.entry.day,
+          timeStr: c.entry.timeStr,
+          raidId: c.entry.raidId,
         });
       }
     }
@@ -1023,11 +1032,16 @@
       return;
     }
     section.hidden = false;
-    list.innerHTML = needed.map((n) => `
+    list.innerHTML = needed.map((n) => {
+      const timeText = n.weekday && n.monthName
+        ? `${n.weekday}, ${n.monthName} ${n.day}${n.timeStr ? ` at ${n.timeStr} CT` : ""}`
+        : "";
+      return `
       <li class="raids-unsaved-item">
         ${characterDisplay(n.charRealm)} \u2014 ${escapeHtml(n.raidName)} (${escapeHtml(n.difficulty)})
-        <span class="raids-unsaved-detail">${n.savedCount} Saved sale${n.savedCount === 1 ? "" : "s"} scheduled, no Unsaved run yet</span>
-      </li>`).join("");
+        <span class="raids-unsaved-detail">Unsaved run scheduled ${escapeHtml(timeText)} (Raid #${escapeHtml(n.raidId)}) \u2014 keep this character unsaved until then</span>
+      </li>`;
+    }).join("");
   }
 
   function render() {
