@@ -1253,9 +1253,23 @@
   }
 
   async function init() {
+    // If a passphrase is already cached (the common case on a repeat
+    // visit), the JSONBin sync doesn't actually need to wait for the
+    // roster's data.json fetch+validation to finish first -- both are
+    // independent network round-trips, and the sync only needs the
+    // cached passphrase value, not anything ensureUnlocked() produces.
+    // Starting both at once roughly halves the wait before real content
+    // shows up. On a genuinely first visit (no cached passphrase), there's
+    // nothing to start early with, so this falls back to the previous
+    // sequential behavior automatically.
+    let syncPromise = getSavedPassphrase() ? syncFromRemote() : null;
+
     const rosterData = await ensureUnlocked();
     CHARACTER_LOOKUP = buildCharacterLookup(rosterData);
-    await syncFromRemote();
+
+    if (!syncPromise) syncPromise = syncFromRemote();
+    await syncPromise;
+
     wireAddForm();
     wireHistoryToggle();
     render();
