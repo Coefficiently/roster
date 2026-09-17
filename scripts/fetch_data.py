@@ -141,6 +141,12 @@ RAID_DIFFICULTY_ORDER = [17, 14, 15, 16, 233]
 # as its own row and 14 can be dropped.
 RAID_DIFFICULTY_FORCE = {
     "The Tidebound Grotto": [14, 15, 233],  # Normal (unverified), Heroic, Mythic
+    # The current-tier main raid: N/H/M rows should always be present
+    # (as dashes once nobody's run them yet this reset week) rather than
+    # disappearing and reappearing depending on what's actually been run
+    # since the last reset -- lockout data alone only reflects what
+    # currently has an active lockout, which is weekly and resets.
+    "The Venomous Abyss": [14, 15, 16],
 }
 
 SLOT_NAMES = {
