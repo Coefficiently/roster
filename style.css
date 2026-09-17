@@ -232,7 +232,7 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   text-align: left;
   width: 240px;
 }
-.row-label-sub { padding-left: 1.6rem; font-style: italic; }
+.row-label-sub { padding-left: 1.6rem; }
 
 .row-character th { border-bottom: 1px solid var(--line); background: var(--panel-2); }
 .row-character .row-label { background: var(--panel-2); }
