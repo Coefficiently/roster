@@ -589,12 +589,12 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-size: 0.85rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 .raids-history-item:first-child { border-top: none; }
-.raids-history-line { flex: 1; }
+
 .raids-history-item-editing { gap: 0.35rem; }
 .raids-history-item input {
   background: var(--panel);
