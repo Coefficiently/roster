@@ -27,12 +27,19 @@
       <h1>Raid Sales Calendar</h1>
     </div>
     <div class="topbar-actions">
+      <button id="raids-history-toggle" class="page-btn" type="button">History</button>
       <a href="index.html?v=BUILD_VERSION" class="page-btn raids-nav-link">&larr; Roster</a>
     </div>
   </div>
 </header>
 
 <main class="page raids-page">
+
+  <section id="raids-history-panel" class="raids-history-panel" hidden>
+    <h2 class="raids-history-title">Sale History</h2>
+    <p class="raids-history-hint">Raids that were rostered and have since passed -- recorded automatically for your records.</p>
+    <ul id="raids-history-list" class="raids-history-list"></ul>
+  </section>
 
   <section id="raids-unsaved-dashboard" class="raids-unsaved-dashboard" hidden>
     <h2 class="raids-unsaved-title">&#9888; Needs Unsaved This Week</h2>

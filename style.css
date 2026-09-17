@@ -566,6 +566,31 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-size: 0.78rem;
 }
 
+.raids-history-panel {
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.raids-history-title {
+  margin: 0 0 0.25rem;
+  color: var(--gold-2);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.raids-history-hint {
+  margin: 0 0 0.75rem;
+  color: var(--ink-dim);
+  font-size: 0.78rem;
+}
+.raids-history-list { list-style: none; margin: 0; padding: 0; max-height: 400px; overflow-y: auto; }
+.raids-history-item {
+  padding: 0.5rem 0.1rem;
+  border-top: 1px solid var(--line);
+}
+.raids-history-item:first-child { border-top: none; }
+
 .raids-add-block { margin-bottom: 1.5rem; }
 .raids-add-form {
   margin-top: 0.75rem;

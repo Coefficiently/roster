@@ -280,6 +280,7 @@
 
   // ---------------- Storage ----------------
   const STORAGE_KEY = "raid_sales_entries";
+  const HISTORY_STORAGE_KEY = "raid_sales_history";
 
   // Migrates entries saved before multi-character signups were supported
   // (single top-level charRealm/role/saved + boolean rostered) into the
@@ -310,6 +311,23 @@
     }
   }
 
+  function loadHistory() {
+    try {
+      const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveHistoryLocal(history) {
+    try {
+      localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+    } catch (err) {
+      // storage unavailable/full -- nothing we can do client-side about this
+    }
+  }
+
   // Local-only write, no remote sync -- used when writing data that just
   // came FROM the remote (see syncFromRemote), so that doesn't immediately
   // trigger a redundant push right back to the same bin.
@@ -325,7 +343,11 @@
   // immediately) and fires off a remote push in the background. The push
   // is fire-and-forget -- callers don't wait on it, since local storage is
   // the source of truth for the current tab and network issues shouldn't
-  // block the UI.
+  // block the UI. History syncs bundled in with entries (see
+  // pushRemoteEntries) rather than as a separate call, so a single push
+  // covers whatever just changed -- calling saveEntries() after touching
+  // history alone (with entries unchanged) is the correct way to sync a
+  // history-only change too.
   function saveEntries(entries) {
     saveEntriesLocal(entries);
     pushRemoteEntries(entries).catch(() => { /* see pushRemoteEntries for handling */ });
@@ -376,9 +398,13 @@
   async function pushRemoteEntries(entries) {
     const passphrase = getSavedPassphrase();
     if (!passphrase) return; // not unlocked yet, nothing to sync with
+    // Bundles history in alongside entries so both sync together as one
+    // payload -- see syncFromRemote for the backward-compat handling of
+    // bins that still hold the old shape (entries only, no wrapper).
+    const payload = { entries, history: loadHistory() };
     let envelope;
     try {
-      envelope = await encryptForSync(passphrase, entries);
+      envelope = await encryptForSync(passphrase, payload);
     } catch (err) {
       return; // encryption failed, skip this push
     }
@@ -427,11 +453,20 @@
       const data = await res.json();
       const envelope = data && data.record;
       if (!envelope || !envelope.encrypted) return;
-      const remoteEntries = await decryptEnvelope(envelope, passphrase);
+      const remotePayload = await decryptEnvelope(envelope, passphrase);
+      // Bins synced before history existed hold entries as the top-level
+      // object directly (keyed by raid id), not wrapped in {entries,
+      // history}. Detect the wrapper shape explicitly rather than assuming
+      // it, so old synced data keeps working without needing a re-push.
+      const hasWrapper = remotePayload && typeof remotePayload === "object" &&
+        "entries" in remotePayload && "history" in remotePayload;
+      const remoteEntries = hasWrapper ? remotePayload.entries : remotePayload;
+      const remoteHistory = hasWrapper ? remotePayload.history : [];
       const migrated = {};
-      for (const [id, entry] of Object.entries(remoteEntries)) {
+      for (const [id, entry] of Object.entries(remoteEntries || {})) {
         migrated[id] = migrateEntry(entry);
       }
+      saveHistoryLocal(remoteHistory || []);
       saveEntriesLocal(pruneExpiredEntries(migrated));
     } catch (err) {
       // network/decrypt failure -- fall back to whatever's already local
@@ -530,19 +565,55 @@
   // raid is long over and it's just clutter. Persists the pruned list
   // immediately so this doesn't re-check the same already-expired entries
   // on every subsequent load.
+  // Turns an expiring entry into a history record -- only the rostered
+  // character's info matters here (the other candidate(s), if any, never
+  // actually got played and aren't part of the sales record).
+  function buildHistoryRecord(entry) {
+    const rosteredChar = (entry.characters || []).find((c) => c.charRealm === entry.rosteredCharRealm);
+    return {
+      raidId: entry.raidId,
+      title: entry.title,
+      difficulty: entry.difficulty,
+      rl: entry.rl,
+      charRealm: entry.rosteredCharRealm,
+      role: rosteredChar ? rosteredChar.role : null,
+      saved: rosteredChar ? rosteredChar.saved : null,
+      weekday: entry.weekday,
+      monthName: entry.monthName,
+      day: entry.day,
+      year: entry.year,
+      timeStr: entry.timeStr,
+      sortKey: entry.sortKey,
+    };
+  }
+
   function pruneExpiredEntries(entries) {
     const nowMs = nowAsCentralNaiveMs();
-    let changed = false;
+    let entriesChanged = false;
+    let historyChanged = false;
     const kept = {};
+    const history = loadHistory();
+    const existingHistoryIds = new Set(history.map((h) => h.raidId));
     for (const [id, entry] of Object.entries(entries)) {
       const entryMs = entryTimestampMs(entry);
       if (entryMs !== null && nowMs - entryMs > EXPIRE_AFTER_MS) {
-        changed = true;
+        entriesChanged = true;
+        // Only rostered (actually-played) raids become a history record --
+        // an expired signup nobody got picked for isn't a sale, and just
+        // disappears the same as before. Guard against double-archiving
+        // the same raid id if this runs more than once before a sync
+        // catches up (see the sync-layer comment on last-write-wins).
+        if (entry.rosteredCharRealm && !existingHistoryIds.has(entry.raidId)) {
+          history.push(buildHistoryRecord(entry));
+          existingHistoryIds.add(entry.raidId);
+          historyChanged = true;
+        }
         continue;
       }
       kept[id] = entry;
     }
-    if (changed) saveEntries(kept);
+    if (historyChanged) saveHistoryLocal(history);
+    if (entriesChanged || historyChanged) saveEntries(kept);
     return kept;
   }
 
@@ -910,6 +981,37 @@
     });
   }
 
+  function renderHistory() {
+    const list = document.getElementById("raids-history-list");
+    if (!list) return;
+    const history = loadHistory();
+    if (history.length === 0) {
+      list.innerHTML = `<li class="empty-msg">No completed sales recorded yet.</li>`;
+      return;
+    }
+    // Most recent first -- the natural order for a sales log.
+    const sorted = history.slice().sort((a, b) => (b.sortKey || "").localeCompare(a.sortKey || ""));
+    list.innerHTML = sorted.map((h) => {
+      const dateText = h.weekday && h.monthName ? `${h.weekday}, ${h.monthName} ${h.day}, ${h.year}` : "";
+      const timeText = h.timeStr ? `${h.timeStr} CT` : "";
+      const savedBadgeClass = h.saved ? "raids-badge-saved" : "raids-badge-unsaved";
+      const savedBadge = h.saved !== null && h.saved !== undefined
+        ? `<span class="raids-badge ${savedBadgeClass}">${h.saved ? "Saved" : "Unsaved"}</span>`
+        : "";
+      return `
+        <li class="raids-history-item">
+          <div class="raids-entry-top">
+            <span class="raids-entry-title">${escapeHtml(h.title)}</span>
+            <span class="raids-badge">${escapeHtml(h.difficulty)}</span>
+            ${savedBadge}
+          </div>
+          <div class="raids-entry-meta">
+            Raid #${escapeHtml(h.raidId)} \u00b7 RL: ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u2014 ${escapeHtml(h.role || "")} \u00b7 ${escapeHtml(dateText)} ${escapeHtml(timeText)}
+          </div>
+        </li>`;
+    }).join("");
+  }
+
   function renderUnsavedNeeded(entries) {
     const section = document.getElementById("raids-unsaved-dashboard");
     const list = document.getElementById("raids-unsaved-list");
@@ -931,12 +1033,22 @@
   function render() {
     const entries = loadEntries();
     const conflicts = detectConflicts(entries);
+    renderHistory();
     renderUnsavedNeeded(entries);
     renderCalendar(entries, conflicts);
     renderSummary(entries, conflicts);
   }
 
   // ---------------- Wiring ----------------
+  function wireHistoryToggle() {
+    const toggleBtn = document.getElementById("raids-history-toggle");
+    const panel = document.getElementById("raids-history-panel");
+    if (!toggleBtn || !panel) return;
+    toggleBtn.addEventListener("click", () => {
+      panel.hidden = !panel.hidden;
+    });
+  }
+
   function wireAddForm() {
     const toggleBtn = document.getElementById("raids-add-toggle");
     const formEl = document.getElementById("raids-add-form");
@@ -972,6 +1084,7 @@
     CHARACTER_LOOKUP = buildCharacterLookup(rosterData);
     await syncFromRemote();
     wireAddForm();
+    wireHistoryToggle();
     render();
   }
 
