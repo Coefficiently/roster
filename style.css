@@ -614,6 +614,7 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   width: 6.5rem;
 }
 .raids-hist-edit-raidid, .raids-hist-edit-rl, .raids-hist-edit-char { width: 8rem; }
+.raids-hist-edit-note { width: 12rem; }
 .raids-hist-edit-date { width: 11rem; }
 .raids-hist-edit-btn, .raids-hist-save-btn {
   flex-shrink: 0;

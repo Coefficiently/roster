@@ -595,6 +595,9 @@
       // Gold cut from the payment confirmation -- also nothing to
       // auto-fill from, entered by hand alongside the payment id.
       cut: null,
+      // Free-text note, entered by hand -- only shown in the view line
+      // when it's actually set, so a blank one doesn't clutter every row.
+      note: null,
     };
   }
 
@@ -1040,15 +1043,17 @@
             <input type="datetime-local" class="raids-hist-edit-date" value="${datetimeLocalValue}" />
             <input type="text" class="raids-hist-edit-payment" value="${escapeHtml(h.paymentId || "")}" placeholder="payment id" />
             <input type="text" class="raids-hist-edit-cut" value="${h.cut ? fmtNumber(h.cut) : ""}" placeholder="cut" />
+            <input type="text" class="raids-hist-edit-note" value="${escapeHtml(h.note || "")}" placeholder="note" />
             <button class="page-btn raids-hist-save-btn" type="button">Save</button>
           </li>`;
       }
 
       const paymentDisplay = h.paymentId ? escapeHtml(h.paymentId) : "N/A";
       const cutDisplay = h.cut ? escapeHtml(fmtNumber(h.cut)) : "N/A";
+      const noteDisplay = h.note ? ` \u00b7 ${escapeHtml(h.note)}` : "";
       return `
         <li class="raids-history-item" data-orig-raid-id="${escapeHtml(h.raidId)}">
-          <span class="raids-history-line">#${escapeHtml(h.raidId)} \u00b7 ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u00b7 ${escapeHtml(dateText)} \u00b7 ${paymentDisplay} \u00b7 ${cutDisplay}</span>
+          <span class="raids-history-line">#${escapeHtml(h.raidId)} \u00b7 ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u00b7 ${escapeHtml(dateText)} \u00b7 ${paymentDisplay} \u00b7 ${cutDisplay}${noteDisplay}</span>
           <button class="page-btn raids-hist-edit-btn" type="button">Edit</button>
           <button class="raids-delete-btn raids-hist-delete-btn" type="button">Delete</button>
         </li>`;
@@ -1117,6 +1122,8 @@
         record.paymentId = newPaymentId || null;
         const newCutDigits = li.querySelector(".raids-hist-edit-cut").value.replace(/[^\d]/g, "");
         record.cut = newCutDigits ? parseInt(newCutDigits, 10) : null;
+        const newNote = li.querySelector(".raids-hist-edit-note").value.trim();
+        record.note = newNote || null;
 
         historyEditingIds.delete(origRaidId);
         saveHistoryLocal(history);
@@ -1180,6 +1187,7 @@
       sortKey: nowSortKey,
       paymentId: null,
       cut: null,
+      note: null,
     });
     historyEditingIds.add(newId);
     saveHistoryLocal(history);
