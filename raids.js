@@ -561,17 +561,13 @@
 
   const EXPIRE_AFTER_MS = 4 * 60 * 60 * 1000; // 4 hours past start time
 
-  // Drops any signup more than 4 hours past its start time -- by then the
-  // raid is long over and it's just clutter. Persists the pruned list
-  // immediately so this doesn't re-check the same already-expired entries
-  // on every subsequent load.
-  // Turns an expiring entry into a history record -- only the rostered
-  // character's info matters here (the other candidate(s), if any, never
-  // actually got played and aren't part of the sales record).
   function fmtNumber(n) {
     return (n || 0).toLocaleString("en-US");
   }
 
+  // Turns an expiring entry into a history record -- only the rostered
+  // character's info matters here (the other candidate(s), if any, never
+  // actually got played and aren't part of the sales record).
   function buildHistoryRecord(entry) {
     const rosteredChar = (entry.characters || []).find((c) => c.charRealm === entry.rosteredCharRealm);
     return {
@@ -601,6 +597,10 @@
     };
   }
 
+  // Drops any signup more than 4 hours past its start time -- by then the
+  // raid is long over and it's just clutter. Persists the pruned list
+  // immediately so this doesn't re-check the same already-expired entries
+  // on every subsequent load.
   function pruneExpiredEntries(entries) {
     const nowMs = nowAsCentralNaiveMs();
     let entriesChanged = false;
@@ -660,21 +660,6 @@
     return groups;
   }
 
-  // For the CURRENT reset week only: which (character, raid, difficulty)
-  // groups have at least one Saved sale scheduled but no Unsaved run at
-  // all yet. This is a proactive heads-up -- distinct from
-  // detectConflicts's "Saved scheduled before Unsaved" check, which only
-  // fires once there's an actual ordering problem. This fires earlier:
-  // before anything's gone wrong, as a reminder to still get that
-  // character's own kill in this week for whatever's already been sold.
-  // Groups with only Unsaved (or no signups at all) aren't flagged --
-  // nothing at risk there yet.
-  // For the CURRENT reset week only: every (character, raid, difficulty)
-  // that has an Unsaved run actually scheduled -- these are the ones that
-  // need protecting: if that character gets saved to that raid/difficulty
-  // by anything else (a different signup, a casual personal run) before
-  // the scheduled Unsaved run happens, the sale is ruined. This is a
-  // reminder of what's at stake, not a gap to fill.
   // For the CURRENT reset week only: every (character, difficulty) that
   // has an Unsaved run actually scheduled -- these are the ones that need
   // protecting: if that character gets saved to that difficulty by
