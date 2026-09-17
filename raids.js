@@ -1050,6 +1050,7 @@
         <li class="raids-history-item" data-orig-raid-id="${escapeHtml(h.raidId)}">
           <span class="raids-history-line">#${escapeHtml(h.raidId)} \u00b7 ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u00b7 ${escapeHtml(dateText)} \u00b7 ${paymentDisplay} \u00b7 ${cutDisplay}</span>
           <button class="page-btn raids-hist-edit-btn" type="button">Edit</button>
+          <button class="raids-delete-btn raids-hist-delete-btn" type="button">Delete</button>
         </li>`;
     }).join("");
 
@@ -1058,6 +1059,36 @@
         const li = btn.closest(".raids-history-item");
         historyEditingIds.add(li.dataset.origRaidId);
         renderHistory();
+      });
+    });
+
+    const HIST_DELETE_CONFIRM_TIMEOUT_MS = 4000;
+    list.querySelectorAll(".raids-hist-delete-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.confirming === "true") {
+          clearTimeout(btn._revertTimer);
+          const li = btn.closest(".raids-history-item");
+          const raidId = li.dataset.origRaidId;
+          const history = loadHistory();
+          const idx = history.findIndex((h) => h.raidId === raidId);
+          if (idx === -1) return;
+          lastDeletedHistoryRecord = history[idx];
+          history.splice(idx, 1);
+          saveHistoryLocal(history);
+          saveEntries(loadEntries());
+          const undoRow = document.getElementById("raids-history-undo-row");
+          if (undoRow) undoRow.hidden = false;
+          renderHistory();
+        } else {
+          btn.dataset.confirming = "true";
+          btn.textContent = "Confirm?";
+          btn.classList.add("raids-delete-btn-confirm");
+          btn._revertTimer = setTimeout(() => {
+            btn.dataset.confirming = "false";
+            btn.textContent = "Delete";
+            btn.classList.remove("raids-delete-btn-confirm");
+          }, HIST_DELETE_CONFIRM_TIMEOUT_MS);
+        }
       });
     });
 
@@ -1124,93 +1155,36 @@
   }
 
   // ---------------- Wiring ----------------
-  // One-time recovery tool: walks the bin's version history (JSONBin
-  // keeps one automatically per update unless explicitly disabled, which
-  // this code never did) looking for rostered raids that expired and got
-  // silently deleted before the Sale History feature existed to archive
-  // them. Reading a SPECIFIC version accepts the same scoped Access Key
-  // already used elsewhere here (only the separate version-COUNT endpoint
-  // requires the Master Key, which isn't available/wanted) -- so this
-  // just walks version numbers sequentially from 1 until the first one
-  // that doesn't exist, since versions are created contiguously.
-  async function scanForOlderRaids() {
-    const statusEl = document.getElementById("raids-recover-status");
-    const btn = document.getElementById("raids-recover-btn");
-    if (!statusEl || !btn) return;
+  // The most recently deleted history record, kept in memory (not
+  // persisted) so the Undo button can restore it. Overwritten by the next
+  // delete, cleared once undone -- a single-level undo, not a full stack.
+  let lastDeletedHistoryRecord = null;
 
-    if (!JSONBIN_BIN_ID) {
-      statusEl.textContent = "No sync set up yet -- nothing to scan.";
-      return;
-    }
-    const passphrase = getSavedPassphrase();
-    if (!passphrase) {
-      statusEl.textContent = "Can't scan right now -- not unlocked.";
-      return;
-    }
-
-    btn.disabled = true;
-    const MAX_VERSIONS_TO_CHECK = 500; // safety cap, well within free-tier request limits
+  function addEmptyHistoryEntry() {
     const history = loadHistory();
-    const existingIds = new Set(history.map((h) => h.raidId));
-    const recoveredIds = new Set();
-    let versionsChecked = 0;
-
-    for (let version = 1; version <= MAX_VERSIONS_TO_CHECK; version++) {
-      statusEl.textContent = `Scanning version ${version}\u2026`;
-      let res;
-      try {
-        res = await fetch(`${JSONBIN_BASE_URL}/${JSONBIN_BIN_ID}/${version}`, {
-          headers: { "X-Access-Key": JSONBIN_ACCESS_KEY },
-        });
-      } catch (err) {
-        break; // network failure -- stop where we are, keep whatever was found
-      }
-      if (!res.ok) break; // versions are contiguous, so the first miss means we've reached the end
-      versionsChecked++;
-
-      let data;
-      try {
-        data = await res.json();
-      } catch (err) {
-        continue;
-      }
-      const envelope = data && data.record;
-      if (!envelope || !envelope.encrypted) continue;
-
-      let payload;
-      try {
-        payload = await decryptEnvelope(envelope, passphrase);
-      } catch (err) {
-        continue; // couldn't decrypt this version, skip it
-      }
-
-      const hasWrapper = payload && typeof payload === "object" &&
-        "entries" in payload && "history" in payload;
-      const versionEntries = hasWrapper ? payload.entries : payload;
-      if (!versionEntries || typeof versionEntries !== "object") continue;
-
-      for (const rawEntry of Object.values(versionEntries)) {
-        if (!rawEntry || !rawEntry.raidId) continue;
-        if (existingIds.has(rawEntry.raidId) || recoveredIds.has(rawEntry.raidId)) continue;
-        const migrated = migrateEntry(rawEntry);
-        if (!migrated.rosteredCharRealm) continue; // only rostered (actually-played) raids count as a sale
-        history.push(buildHistoryRecord(migrated));
-        existingIds.add(rawEntry.raidId);
-        recoveredIds.add(rawEntry.raidId);
-      }
-    }
-
-    btn.disabled = false;
-    if (recoveredIds.size > 0) {
-      saveHistoryLocal(history);
-      saveEntries(loadEntries());
-      renderHistory();
-      statusEl.textContent = `Checked ${versionsChecked} version(s) \u2014 recovered ${recoveredIds.size} raid(s).`;
-    } else {
-      statusEl.textContent = versionsChecked > 0
-        ? `Checked ${versionsChecked} version(s) \u2014 nothing new to recover.`
-        : "No version history found for this bin.";
-    }
+    const newId = `manual-${Date.now()}`;
+    const nowSortKey = nowAsSortKey();
+    history.push({
+      raidId: newId,
+      title: "",
+      difficulty: "",
+      rl: "",
+      charRealm: "",
+      role: null,
+      saved: null,
+      weekday: "",
+      monthName: "",
+      day: "",
+      year: "",
+      timeStr: "",
+      sortKey: nowSortKey,
+      paymentId: null,
+      cut: null,
+    });
+    historyEditingIds.add(newId);
+    saveHistoryLocal(history);
+    saveEntries(loadEntries());
+    renderHistory();
   }
 
   function wireHistoryToggle() {
@@ -1220,8 +1194,24 @@
     toggleBtn.addEventListener("click", () => {
       panel.hidden = !panel.hidden;
     });
-    const recoverBtn = document.getElementById("raids-recover-btn");
-    if (recoverBtn) recoverBtn.addEventListener("click", () => { scanForOlderRaids(); });
+
+    const addBtn = document.getElementById("raids-history-add-btn");
+    if (addBtn) addBtn.addEventListener("click", () => { addEmptyHistoryEntry(); });
+
+    const undoBtn = document.getElementById("raids-history-undo-btn");
+    if (undoBtn) {
+      undoBtn.addEventListener("click", () => {
+        if (!lastDeletedHistoryRecord) return;
+        const history = loadHistory();
+        history.push(lastDeletedHistoryRecord);
+        lastDeletedHistoryRecord = null;
+        saveHistoryLocal(history);
+        saveEntries(loadEntries());
+        const undoRow = document.getElementById("raids-history-undo-row");
+        if (undoRow) undoRow.hidden = true;
+        renderHistory();
+      });
+    }
   }
 
   function wireAddForm() {
