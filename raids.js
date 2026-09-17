@@ -1124,6 +1124,95 @@
   }
 
   // ---------------- Wiring ----------------
+  // One-time recovery tool: walks the bin's version history (JSONBin
+  // keeps one automatically per update unless explicitly disabled, which
+  // this code never did) looking for rostered raids that expired and got
+  // silently deleted before the Sale History feature existed to archive
+  // them. Reading a SPECIFIC version accepts the same scoped Access Key
+  // already used elsewhere here (only the separate version-COUNT endpoint
+  // requires the Master Key, which isn't available/wanted) -- so this
+  // just walks version numbers sequentially from 1 until the first one
+  // that doesn't exist, since versions are created contiguously.
+  async function scanForOlderRaids() {
+    const statusEl = document.getElementById("raids-recover-status");
+    const btn = document.getElementById("raids-recover-btn");
+    if (!statusEl || !btn) return;
+
+    if (!JSONBIN_BIN_ID) {
+      statusEl.textContent = "No sync set up yet -- nothing to scan.";
+      return;
+    }
+    const passphrase = getSavedPassphrase();
+    if (!passphrase) {
+      statusEl.textContent = "Can't scan right now -- not unlocked.";
+      return;
+    }
+
+    btn.disabled = true;
+    const MAX_VERSIONS_TO_CHECK = 500; // safety cap, well within free-tier request limits
+    const history = loadHistory();
+    const existingIds = new Set(history.map((h) => h.raidId));
+    const recoveredIds = new Set();
+    let versionsChecked = 0;
+
+    for (let version = 1; version <= MAX_VERSIONS_TO_CHECK; version++) {
+      statusEl.textContent = `Scanning version ${version}\u2026`;
+      let res;
+      try {
+        res = await fetch(`${JSONBIN_BASE_URL}/${JSONBIN_BIN_ID}/${version}`, {
+          headers: { "X-Access-Key": JSONBIN_ACCESS_KEY },
+        });
+      } catch (err) {
+        break; // network failure -- stop where we are, keep whatever was found
+      }
+      if (!res.ok) break; // versions are contiguous, so the first miss means we've reached the end
+      versionsChecked++;
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (err) {
+        continue;
+      }
+      const envelope = data && data.record;
+      if (!envelope || !envelope.encrypted) continue;
+
+      let payload;
+      try {
+        payload = await decryptEnvelope(envelope, passphrase);
+      } catch (err) {
+        continue; // couldn't decrypt this version, skip it
+      }
+
+      const hasWrapper = payload && typeof payload === "object" &&
+        "entries" in payload && "history" in payload;
+      const versionEntries = hasWrapper ? payload.entries : payload;
+      if (!versionEntries || typeof versionEntries !== "object") continue;
+
+      for (const rawEntry of Object.values(versionEntries)) {
+        if (!rawEntry || !rawEntry.raidId) continue;
+        if (existingIds.has(rawEntry.raidId) || recoveredIds.has(rawEntry.raidId)) continue;
+        const migrated = migrateEntry(rawEntry);
+        if (!migrated.rosteredCharRealm) continue; // only rostered (actually-played) raids count as a sale
+        history.push(buildHistoryRecord(migrated));
+        existingIds.add(rawEntry.raidId);
+        recoveredIds.add(rawEntry.raidId);
+      }
+    }
+
+    btn.disabled = false;
+    if (recoveredIds.size > 0) {
+      saveHistoryLocal(history);
+      saveEntries(loadEntries());
+      renderHistory();
+      statusEl.textContent = `Checked ${versionsChecked} version(s) \u2014 recovered ${recoveredIds.size} raid(s).`;
+    } else {
+      statusEl.textContent = versionsChecked > 0
+        ? `Checked ${versionsChecked} version(s) \u2014 nothing new to recover.`
+        : "No version history found for this bin.";
+    }
+  }
+
   function wireHistoryToggle() {
     const toggleBtn = document.getElementById("raids-history-toggle");
     const panel = document.getElementById("raids-history-panel");
@@ -1131,6 +1220,8 @@
     toggleBtn.addEventListener("click", () => {
       panel.hidden = !panel.hidden;
     });
+    const recoverBtn = document.getElementById("raids-recover-btn");
+    if (recoverBtn) recoverBtn.addEventListener("click", () => { scanForOlderRaids(); });
   }
 
   function wireAddForm() {
