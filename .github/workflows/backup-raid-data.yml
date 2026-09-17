@@ -22,7 +22,11 @@ jobs:
           python-version: "3.12"
 
       - name: Back up raid sales data from JSONBin
-        run: python3 scripts/backup_raid_data.py
+        run: |
+          python3 scripts/backup_raid_data.py 2>backup_stderr.txt || {
+            echo "::error::$(cat backup_stderr.txt)"
+            exit 1
+          }
 
       - name: Check for changes
         id: diff

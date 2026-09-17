@@ -14,6 +14,7 @@ duplicated here, so there's a single source of truth for them.
 import json
 import re
 import sys
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -51,8 +52,12 @@ def main():
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             data = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        print(f"Backup fetch failed: HTTP {exc.code} {exc.reason} -- {body}", file=sys.stderr)
+        sys.exit(1)
     except Exception as exc:
-        print(f"Backup fetch failed: {exc}", file=sys.stderr)
+        print(f"Backup fetch failed: {type(exc).__name__}: {exc}", file=sys.stderr)
         sys.exit(1)
 
     record = data.get("record")
