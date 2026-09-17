@@ -1,67 +1,38 @@
-# Current Roster
+# Roster
 
-Personal dashboard: pulls [wowthing.org/user/cta](https://wowthing.org/user/cta),
-writes `data.json`, deployed to GitHub Pages. Level 90+ / ilvl 290+ characters only.
+A personal WoW roster dashboard that pulls character data from wowthing.org
+and deploys it as a static site on GitHub Pages.
 
-## Commands
+## Running it
 
 ```
-python3 scripts/fetch_data.py   # regenerate data.json
-python3 -m http.server 8080     # serve locally
+python3 scripts/fetch_data.py   # pull fresh data into data.json
+python3 -m http.server 8080     # view it locally
 ```
 
-Manual re-scrape: Actions tab -> "Update roster data and deploy" -> Run workflow.
-(The in-page Refresh button only re-fetches `data.json`; it doesn't re-scrape wowthing.)
+To force a re-scrape on the live site without waiting for the schedule,
+use the "Run workflow" button under the Actions tab. (The in-page Refresh
+button just reloads `data.json` -- it doesn't trigger a new scrape.)
 
-## Private data (bag/bank contents, Warband Bank)
+## Private data (bags, warband bank)
 
-wowthing's public feed never includes bag/bank contents or a couple of
-specific tracked items (Spark of Tides, Thalassian Token of Merit) for any
-account -- confirmed in their backend source, not a setting. To get this
-data, `fetch_data.py` optionally uses an authenticated session cookie
-(`WOWTHING_SESSION_COOKIE` repo secret) if set; without it, everything just
-falls back to public data as before.
+Some data needs a logged-in session to fetch. If bag/warband info suddenly
+goes empty, the login cookie has probably expired:
 
-**This cookie expires periodically and needs manual rotation:**
-1. Log into wowthing.org.
-2. DevTools -> Application/Storage -> Cookies -> `wowthing.org` ->
-   `.AspNetCore.Identity.Application` -> copy the value.
-3. Repo Settings -> Secrets and variables -> Actions -> update
-   `WOWTHING_SESSION_COOKIE` with the new value.
+1. Log into wowthing.org
+2. DevTools -> Application/Storage -> Cookies -> copy the
+   `.AspNetCore.Identity.Application` value
+3. Update the `WOWTHING_SESSION_COOKIE` secret in repo settings
 
-If the site's bag/warband data suddenly goes empty again, this is why --
-check the "Fetch latest WoWthing data" Action log for a cookie-expired
-warning before assuming something else broke.
+## Encryption
 
-## Encrypted data.json
+The site's data is encrypted with a passphrase (the
+`DATA_ENCRYPTION_PASSPHRASE` secret) so it isn't readable by anyone who
+just stumbles on the repo. To change the passphrase, update that secret --
+the next scrape re-encrypts with it automatically.
 
-The repo and site are public, but `data.json` is encrypted (AES-256-GCM, key
-derived via PBKDF2) so the raw file itself is unreadable without the
-passphrase -- set via the `DATA_ENCRYPTION_PASSPHRASE` repo secret. The
-browser decrypts it client-side (Web Crypto API) and remembers the
-passphrase in that browser's localStorage after the first correct entry, so
-it won't ask again on that device/browser. Clearing browser data, or using
-a different browser/device, means entering it once more there.
+## Updating for a new season
 
-This is genuinely enough to stop passive discovery (search engines,
-casually finding the repo, someone fetching data.json directly expecting
-plain JSON) -- but it's static-site crypto with no rate-limiting on guesses,
-so it rests entirely on the passphrase being strong. It is not intended to
-resist a determined, resourced attacker. To rotate the passphrase: generate
-a new one, update the `DATA_ENCRYPTION_PASSPHRASE` secret, done -- next
-fetch re-encrypts with it, and any browser with the old one cached will
-just fail to decrypt and re-prompt.
-
-If `DATA_ENCRYPTION_PASSPHRASE` is unset, `data.json` is written as plain
-JSON as before (this is purely additive, not required).
-
-## Season-specific constants (scripts/fetch_data.py) -- bump these when stale
-
-| Constant | Update when | How |
-|---|---|---|
-| `CREST_IDS` | New crest tier | `rawCurrencies` in `.../api/static-*.json`, match by name |
-| `CATALYST_IDS`, `BONUS_ROLL_IDS` | New season renames these | Same, but verify against a real known value -- duplicate-name ids happen (see code comments) |
-| `MYTHIC_PLUS_SEASON_ID`, `MYTHIC_PLUS_DUNGEONS` | New M+ season | wowthing's `seasonMap` / matching `order...` array |
-| `CURRENT_SEASON_BONUS_GROUPS` | New season | wowthing's `seasonItemBonusListGroups` |
-| `TIER_SET_BY_CLASS` | New raid tier | wowthing's `currentTier` in `data/gear.ts` |
-| `CURRENT_EXPANSION_INDEX` | New expansion | +1 |
+A handful of values in `scripts/fetch_data.py` (crest IDs, the M+ dungeon
+list, tier set IDs, etc.) are pinned to the current season and need
+bumping when a new one starts. They're commented in the file itself.
