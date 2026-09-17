@@ -943,6 +943,7 @@
                 Rostered
               </label>
               ${charPicker}
+              ${isRostered ? `<button class="page-btn raids-complete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Mark Complete</button>` : ""}
               <button class="raids-delete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Delete</button>
             </div>
           </div>`;
@@ -984,6 +985,23 @@
         const entry = entries[id];
         if (!entry) return;
         entry.rosteredCharRealm = sel.value || null;
+        saveEntries(entries);
+        render();
+      });
+    });
+
+    container.querySelectorAll(".raids-complete-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const entries = loadEntries();
+        const id = btn.dataset.raidId;
+        const entry = entries[id];
+        if (!entry) return;
+        const history = loadHistory();
+        if (!history.some((h) => h.raidId === entry.raidId)) {
+          history.push(buildHistoryRecord(entry));
+          saveHistoryLocal(history);
+        }
+        delete entries[id];
         saveEntries(entries);
         render();
       });
