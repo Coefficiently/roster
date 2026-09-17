@@ -661,31 +661,33 @@
   // by anything else (a different signup, a casual personal run) before
   // the scheduled Unsaved run happens, the sale is ruined. This is a
   // reminder of what's at stake, not a gap to fill.
+  // For the CURRENT reset week only: every (character, difficulty) that
+  // has an Unsaved run actually scheduled -- these are the ones that need
+  // protecting: if that character gets saved to that difficulty by
+  // anything else (a different signup, a casual personal run) before the
+  // scheduled Unsaved run happens, the sale is ruined. Deduped by
+  // character+difficulty (not per-raid) to keep this a short, simple
+  // list -- if the same character has Unsaved runs on the same
+  // difficulty across two different raids this week, that's still one
+  // line, not two.
   function computeUnsavedNeeded(entries) {
     const currentWeekIndex = computeWeekIndex({ sortKey: nowAsSortKey() });
     const groups = buildLockoutGroups(entries);
+    const seen = new Set();
     const needed = [];
     for (const groupCandidates of groups.values()) {
       const first = groupCandidates[0];
       if (first.weekIndex !== currentWeekIndex) continue;
-      const unsavedCandidates = groupCandidates.filter((c) => !c.saved);
-      for (const c of unsavedCandidates) {
-        needed.push({
-          charRealm: c.charRealm,
-          raidName: normalizeRaidName(c.entry.title),
-          difficulty: c.entry.difficulty,
-          weekday: c.entry.weekday,
-          monthName: c.entry.monthName,
-          day: c.entry.day,
-          timeStr: c.entry.timeStr,
-          raidId: c.entry.raidId,
-        });
-      }
+      const hasUnsaved = groupCandidates.some((c) => !c.saved);
+      if (!hasUnsaved) continue;
+      const key = `${first.charRealm}|${first.entry.difficulty}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      needed.push({ charRealm: first.charRealm, difficulty: first.entry.difficulty });
     }
-    // Stable, readable order: by character name, then raid, then difficulty.
+    // Stable, readable order: by character name, then difficulty.
     needed.sort((a, b) =>
       characterName(a.charRealm).localeCompare(characterName(b.charRealm)) ||
-      a.raidName.localeCompare(b.raidName) ||
       a.difficulty.localeCompare(b.difficulty)
     );
     return needed;
@@ -1032,16 +1034,8 @@
       return;
     }
     section.hidden = false;
-    list.innerHTML = needed.map((n) => {
-      const timeText = n.weekday && n.monthName
-        ? `${n.weekday}, ${n.monthName} ${n.day}${n.timeStr ? ` at ${n.timeStr} CT` : ""}`
-        : "";
-      return `
-      <li class="raids-unsaved-item">
-        ${characterDisplay(n.charRealm)} \u2014 ${escapeHtml(n.raidName)} (${escapeHtml(n.difficulty)})
-        <span class="raids-unsaved-detail">Unsaved run scheduled ${escapeHtml(timeText)} (Raid #${escapeHtml(n.raidId)}) \u2014 keep this character unsaved until then</span>
-      </li>`;
-    }).join("");
+    list.innerHTML = needed.map((n) => `
+      <li class="raids-unsaved-item">${characterDisplay(n.charRealm)} \u2014 ${escapeHtml(n.difficulty)}</li>`).join("");
   }
 
   function render() {

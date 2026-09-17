@@ -559,12 +559,6 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-size: 0.88rem;
   color: var(--ink);
 }
-.raids-unsaved-detail {
-  display: block;
-  margin-top: 0.1rem;
-  color: var(--ink-dim);
-  font-size: 0.78rem;
-}
 
 .raids-history-panel {
   margin-bottom: 1.25rem;
