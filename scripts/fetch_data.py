@@ -89,7 +89,6 @@ CRAFTING_QUALITY_ID_TO_RANK = {13: 1, 14: 2}
 CRAFTING_QUALITY_RANK_NAMES = {1: "Gold", 2: "Silver"}
 
 MIN_LEVEL = 90
-MIN_ITEM_LEVEL = 290
 
 # Current Mythic+ season, hand-pinned (Midnight Season 2). Update each
 # season: season id from apps/frontend/data/mythic-plus.ts `seasonMap`,
@@ -357,8 +356,7 @@ def main():
     qualifying = []
     for c in characters_raw:
         level = c[6]
-        item_level = c[10]
-        if level < MIN_LEVEL or item_level < MIN_ITEM_LEVEL:
+        if level < MIN_LEVEL:
             continue
         qualifying.append(c)
         equipped = c[30] or {}
@@ -369,7 +367,7 @@ def main():
         for item in (c[50] or []):
             needed_item_ids.add(item[3])
 
-    print(f"{len(qualifying)} characters qualify (level>={MIN_LEVEL}, ilvl>={MIN_ITEM_LEVEL})")
+    print(f"{len(qualifying)} characters qualify (level>={MIN_LEVEL})")
 
     # Warband bank contents (account-wide, only present with an
     # authenticated session -- see SESSION_COOKIE above).
@@ -935,7 +933,6 @@ def main():
         "account": WOWTHING_USER,
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "minLevel": MIN_LEVEL,
-        "minItemLevel": MIN_ITEM_LEVEL,
         "warbandGold": user_data.get("warbankGold", 0),
         "warbandItems": warband_items_out,
         "hasPrivateData": is_private,
