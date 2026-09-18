@@ -757,6 +757,48 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   align-items: flex-end;
   gap: 0.5rem;
 }
+.raids-entry-editing {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.raids-entry-edit-fields, .raids-entry-edit-chars, .raids-entry-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.raids-entry-edit-fields input, .raids-entry-edit-chars input {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+}
+.raids-entry-edit-raidid, .raids-entry-edit-rl, .raids-entry-edit-difficulty { width: 7rem; }
+.raids-entry-edit-title { width: 14rem; }
+.raids-entry-edit-note { width: 12rem; }
+.raids-entry-edit-date { width: 11rem; }
+.raids-entry-edit-char-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.raids-entry-edit-char-realm { width: 9rem; }
+.raids-entry-edit-char-role { width: 5rem; }
+.raids-entry-edit-char-saved-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--ink-dim);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
 .raids-rostered-toggle {
   display: flex;
   align-items: center;

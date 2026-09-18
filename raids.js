@@ -175,6 +175,40 @@
     july: "07", august: "08", september: "09", october: "10", november: "11", december: "12",
   };
 
+  // For rebuilding an entry's display fields (weekday, monthName, timeStr,
+  // etc.) from a datetime-local edit -- see datetimeLocalToFields below.
+  const WEEKDAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+
+  // Converts a datetime-local input's value ("YYYY-MM-DDTHH:MM") into the
+  // full set of display fields an entry stores (weekday, monthName, day,
+  // year, timeStr, dateKey, sortKey). Uses Date.UTC() purely as a
+  // calendar calculator (to derive the weekday name) -- there's no real
+  // timezone conversion happening, same principle as computeWeekIndex/
+  // entryTimestampMs elsewhere in this file: these are plain Central-time
+  // calendar values, never actually converted through any timezone.
+  function datetimeLocalToFields(value) {
+    const [datePart, timePart] = value.split("T");
+    const [year, month, day] = datePart.split("-").map(Number);
+    const [hour, minute] = timePart.split(":").map(Number);
+    const weekdayIndex = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+    const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+    const ampm = hour < 12 ? "AM" : "PM";
+    const pad = (n) => String(n).padStart(2, "0");
+    return {
+      weekday: WEEKDAY_NAMES[weekdayIndex],
+      monthName: MONTH_NAMES[month - 1],
+      day: String(day),
+      year: String(year),
+      timeStr: `${hour12}:${pad(minute)} ${ampm}`,
+      dateKey: `${year}-${pad(month)}-${pad(day)}`,
+      sortKey: `${year}-${pad(month)}-${pad(day)}-${pad(hour)}-${pad(minute)}`,
+    };
+  }
+
   // Uses "Raid #<id>" as the entry boundary rather than assuming a fixed
   // number of lines per entry -- a raw clipboard paste from the real page
   // breaks lines differently (and into more pieces, sometimes with icon
@@ -876,6 +910,11 @@
     el.classList.toggle("raids-summary-has-conflicts", conflictCount > 0);
   }
 
+  // Which active signups currently have their edit form open, keyed by
+  // raid id. Module-level so an in-progress edit survives a re-render
+  // triggered by something else (e.g. the periodic conflict recompute).
+  const entryEditingIds = new Set();
+
   function renderCalendar(entries, conflicts) {
     const container = document.getElementById("raids-calendar");
     const list = Object.values(entries);
@@ -915,6 +954,41 @@
 
       html += `<div class="raids-day-header">${escapeHtml(headerText)}</div>`;
       for (const entry of dayEntries) {
+        if (entryEditingIds.has(entry.raidId)) {
+          // sortKey is "YYYY-MM-DD-HH-MM"; datetime-local needs
+          // "YYYY-MM-DDTHH:MM" -- same conversion as history's edit mode.
+          let datetimeLocalValue = "";
+          if (entry.sortKey) {
+            const [year, month, day, hour, minute] = entry.sortKey.split("-");
+            datetimeLocalValue = `${year}-${month}-${day}T${hour}:${minute}`;
+          }
+          const charRows = (entry.characters || []).map((c, idx) => `
+            <div class="raids-entry-edit-char-row" data-idx="${idx}">
+              <input type="text" class="raids-entry-edit-char-realm" value="${escapeHtml(c.charRealm)}" placeholder="char-realm" />
+              <input type="text" class="raids-entry-edit-char-role" value="${escapeHtml(c.role)}" placeholder="role" />
+              <label class="raids-entry-edit-char-saved-label">
+                <input type="checkbox" class="raids-entry-edit-char-saved" ${c.saved ? "checked" : ""} /> Saved
+              </label>
+            </div>`).join("");
+          html += `
+            <div class="raids-entry raids-entry-editing" data-orig-raid-id="${escapeHtml(entry.raidId)}">
+              <div class="raids-entry-edit-fields">
+                <input type="text" class="raids-entry-edit-raidid" value="${escapeHtml(entry.raidId)}" placeholder="raid id" />
+                <input type="text" class="raids-entry-edit-title" value="${escapeHtml(entry.title)}" placeholder="title" />
+                <input type="text" class="raids-entry-edit-difficulty" value="${escapeHtml(entry.difficulty)}" placeholder="difficulty" />
+                <input type="text" class="raids-entry-edit-rl" value="${escapeHtml(entry.rl)}" placeholder="RL" />
+                <input type="datetime-local" class="raids-entry-edit-date" value="${datetimeLocalValue}" />
+                <input type="text" class="raids-entry-edit-note" value="${escapeHtml(entry.note || "")}" placeholder="note" />
+              </div>
+              <div class="raids-entry-edit-chars">${charRows}</div>
+              <div class="raids-entry-edit-actions">
+                <button class="page-btn raids-entry-save-btn" type="button">Save</button>
+                <button class="page-btn raids-entry-cancel-btn" type="button">Cancel</button>
+              </div>
+            </div>`;
+          continue;
+        }
+
         const timeText = entry.timeStr ? `${entry.timeStr} CT` : "";
         const noteText = entry.note ? ` \u2014 ${escapeHtml(entry.note)}` : "";
         const entryConflicts = conflicts.get(entry.raidId);
@@ -983,6 +1057,7 @@
               </label>
               ${charPicker}
               ${isRostered ? `<button class="page-btn raids-complete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Mark Complete</button>` : ""}
+              <button class="page-btn raids-entry-edit-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Edit</button>
               <button class="raids-delete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Delete</button>
             </div>
           </div>`;
@@ -1054,6 +1129,68 @@
       wireConfirmButton(btn, "Delete", "Confirm delete?", () => {
         const entries = loadEntries();
         delete entries[btn.dataset.raidId];
+        saveEntries(entries);
+        render();
+      });
+    });
+
+    container.querySelectorAll(".raids-entry-edit-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        entryEditingIds.add(btn.dataset.raidId);
+        render();
+      });
+    });
+
+    container.querySelectorAll(".raids-entry-cancel-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const div = btn.closest(".raids-entry-editing");
+        entryEditingIds.delete(div.dataset.origRaidId);
+        render();
+      });
+    });
+
+    container.querySelectorAll(".raids-entry-save-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const div = btn.closest(".raids-entry-editing");
+        const origRaidId = div.dataset.origRaidId;
+        const entries = loadEntries();
+        const entry = entries[origRaidId];
+        if (!entry) return;
+
+        const newRaidId = div.querySelector(".raids-entry-edit-raidid").value.trim() || origRaidId;
+        entry.raidId = newRaidId;
+        entry.title = div.querySelector(".raids-entry-edit-title").value.trim();
+        entry.difficulty = div.querySelector(".raids-entry-edit-difficulty").value.trim();
+        entry.rl = div.querySelector(".raids-entry-edit-rl").value.trim();
+        const newNote = div.querySelector(".raids-entry-edit-note").value.trim();
+        entry.note = newNote || null;
+
+        const dateVal = div.querySelector(".raids-entry-edit-date").value;
+        if (dateVal) Object.assign(entry, datetimeLocalToFields(dateVal));
+
+        const newCharacters = [];
+        div.querySelectorAll(".raids-entry-edit-char-row").forEach((row) => {
+          const charRealm = row.querySelector(".raids-entry-edit-char-realm").value.trim();
+          const role = row.querySelector(".raids-entry-edit-char-role").value.trim();
+          const saved = row.querySelector(".raids-entry-edit-char-saved").checked;
+          if (charRealm) newCharacters.push({ charRealm, role, saved });
+        });
+        // If every character row got cleared, keep the original list
+        // rather than leaving the entry with no candidates at all --
+        // clearing all of them was very likely accidental.
+        entry.characters = newCharacters.length > 0 ? newCharacters : entry.characters;
+        // A rostered pick that no longer matches any candidate (edited
+        // away, or that row removed) doesn't make sense to keep.
+        if (entry.rosteredCharRealm && !entry.characters.some((c) => c.charRealm === entry.rosteredCharRealm)) {
+          entry.rosteredCharRealm = null;
+        }
+
+        if (newRaidId !== origRaidId) {
+          delete entries[origRaidId];
+          entries[newRaidId] = entry;
+        }
+
+        entryEditingIds.delete(origRaidId);
         saveEntries(entries);
         render();
       });
