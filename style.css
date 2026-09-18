@@ -576,11 +576,6 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   font-size: 0.9rem;
   font-weight: 700;
 }
-.raids-history-hint {
-  margin: 0 0 0.75rem;
-  color: var(--ink-dim);
-  font-size: 0.78rem;
-}
 .raids-history-actions-row {
   display: flex;
   align-items: center;
