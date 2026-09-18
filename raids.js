@@ -1066,6 +1066,12 @@
   // being called again for unrelated reasons (e.g. adding a new signup).
   const historyEditingIds = new Set();
 
+  // Which individual N/A fields (payment id / cut) currently show an
+  // inline input, keyed as "raidId:field". Separate from
+  // historyEditingIds since this is a much narrower, single-field edit
+  // that only ever applies to a field that's still empty.
+  const historyInlineEditingKeys = new Set();
+
   function renderHistory() {
     const list = document.getElementById("raids-history-list");
     if (!list) return;
@@ -1102,8 +1108,19 @@
           </li>`;
       }
 
-      const paymentDisplay = h.paymentId ? escapeHtml(h.paymentId) : "N/A";
-      const cutDisplay = h.cut ? escapeHtml(fmtNumber(h.cut)) : "N/A";
+      const isPaymentInline = historyInlineEditingKeys.has(`${h.raidId}:paymentId`);
+      const isCutInline = historyInlineEditingKeys.has(`${h.raidId}:cut`);
+
+      const paymentDisplay = h.paymentId
+        ? escapeHtml(h.paymentId)
+        : isPaymentInline
+          ? `<input type="text" class="raids-hist-inline-input" data-raid-id="${escapeHtml(h.raidId)}" data-field="paymentId" placeholder="payment id" />`
+          : `<span class="raids-hist-inline-na" data-raid-id="${escapeHtml(h.raidId)}" data-field="paymentId">N/A</span>`;
+      const cutDisplay = h.cut
+        ? escapeHtml(fmtNumber(h.cut))
+        : isCutInline
+          ? `<input type="text" class="raids-hist-inline-input" data-raid-id="${escapeHtml(h.raidId)}" data-field="cut" placeholder="cut" />`
+          : `<span class="raids-hist-inline-na" data-raid-id="${escapeHtml(h.raidId)}" data-field="cut">N/A</span>`;
       const noteDisplay = h.note ? ` \u00b7 ${escapeHtml(h.note)}` : "";
       return `
         <li class="raids-history-item" data-orig-raid-id="${escapeHtml(h.raidId)}">
@@ -1112,6 +1129,50 @@
           <button class="raids-delete-btn raids-hist-delete-btn" type="button">Delete</button>
         </li>`;
     }).join("");
+
+    // Click an "N/A" (only ever shown when the field is genuinely empty)
+    // to turn just that one field into an inline input -- for the common
+    // case of filling in payment info once it's posted, without a detour
+    // through full Edit mode and its four other, usually-unrelated
+    // fields. Once a field actually has a value, it's no longer
+    // clickable this way; changing an existing value goes through Edit
+    // instead, so a stray click can't accidentally alter something
+    // already correct.
+    list.querySelectorAll(".raids-hist-inline-na").forEach((span) => {
+      span.addEventListener("click", () => {
+        historyInlineEditingKeys.add(`${span.dataset.raidId}:${span.dataset.field}`);
+        renderHistory();
+        const input = list.querySelector(
+          `.raids-hist-inline-input[data-raid-id="${CSS.escape(span.dataset.raidId)}"][data-field="${CSS.escape(span.dataset.field)}"]`
+        );
+        if (input) input.focus();
+      });
+    });
+
+    list.querySelectorAll(".raids-hist-inline-input").forEach((input) => {
+      const commit = () => {
+        const raidId = input.dataset.raidId;
+        const field = input.dataset.field;
+        historyInlineEditingKeys.delete(`${raidId}:${field}`);
+        const history = loadHistory();
+        const record = history.find((h) => h.raidId === raidId);
+        if (record) {
+          if (field === "paymentId") {
+            record.paymentId = input.value.trim() || null;
+          } else if (field === "cut") {
+            const digitsOnly = input.value.replace(/[^\d]/g, "");
+            record.cut = digitsOnly ? parseInt(digitsOnly, 10) : null;
+          }
+          saveHistoryLocal(history);
+          saveEntries(loadEntries());
+        }
+        renderHistory();
+      };
+      input.addEventListener("blur", commit);
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") input.blur(); // triggers commit via the blur handler above
+      });
+    });
 
     list.querySelectorAll(".raids-hist-edit-btn").forEach((btn) => {
       btn.addEventListener("click", () => {

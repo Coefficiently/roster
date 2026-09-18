@@ -610,6 +610,12 @@ body.is-locked > *:not(#lock-screen) { display: none; }
 }
 .raids-hist-edit-raidid, .raids-hist-edit-rl, .raids-hist-edit-char { width: 8rem; }
 .raids-hist-edit-note { width: 12rem; }
+.raids-hist-inline-na {
+  cursor: pointer;
+  border-bottom: 1px dotted var(--ink-dim);
+}
+.raids-hist-inline-na:hover { color: var(--gold-2); border-bottom-color: var(--gold-2); }
+.raids-hist-inline-input { width: 5.5rem; }
 .raids-hist-edit-date { width: 11rem; }
 .raids-hist-edit-btn, .raids-hist-save-btn {
   flex-shrink: 0;
