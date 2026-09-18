@@ -755,8 +755,25 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
+.raids-entry-btn-row {
+  display: flex;
+  gap: 0.4rem;
+}
+.raids-entry-action-btn {
+  flex-shrink: 0;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink-dim);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.raids-entry-action-btn:hover { border-color: var(--gold); color: var(--gold-2); }
 .raids-entry-editing {
   flex-direction: column;
   gap: 0.5rem;

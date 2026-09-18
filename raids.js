@@ -1056,9 +1056,11 @@
                 Rostered
               </label>
               ${charPicker}
-              ${isRostered ? `<button class="page-btn raids-complete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Mark Complete</button>` : ""}
-              <button class="page-btn raids-entry-edit-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Edit</button>
-              <button class="raids-delete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Delete</button>
+              ${isRostered ? `<button class="raids-entry-action-btn raids-complete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Mark Complete</button>` : ""}
+              <div class="raids-entry-btn-row">
+                <button class="raids-entry-action-btn raids-entry-edit-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Edit</button>
+                <button class="raids-entry-action-btn raids-delete-btn" type="button" data-raid-id="${escapeHtml(entry.raidId)}">Delete</button>
+              </div>
             </div>
           </div>`;
       }
