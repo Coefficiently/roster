@@ -550,6 +550,13 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   border: 1px solid var(--red);
   border-radius: 6px;
 }
+/* display:inline-block above has the same specificity as the browser's
+   default [hidden] { display: none } rule, and since this stylesheet
+   loads after the browser's default one, it would otherwise win the tie
+   and silently defeat `hidden` entirely -- the element would stay
+   visible (empty) even after JS correctly sets hidden=true. This rule's
+   higher specificity (class + attribute) ensures hidden always wins. */
+.raids-unsaved-dashboard[hidden] { display: none; }
 .raids-unsaved-title {
   margin: 0 0 0.5rem;
   color: var(--red-light);
