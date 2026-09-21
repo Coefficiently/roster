@@ -1552,6 +1552,15 @@
     await syncPromise;
     initialSyncDone = true;
     render(); // picks up anything that changed remotely since the first render
+
+    // The "Keep Unsaved" dashboard depends on the current time (it drops
+    // an entry once its scheduled time passes -- see computeUnsavedNeeded),
+    // but render() otherwise only runs in response to an action. Without
+    // this, a run's time could pass while the page just sits open, and
+    // the dashboard would keep showing its now-stale state (including
+    // staying visible with nothing actually left to list) until
+    // something else happened to trigger a re-render.
+    setInterval(() => { renderUnsavedNeeded(loadEntries()); }, 60000);
   }
 
   init();
