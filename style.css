@@ -585,19 +585,29 @@ body.is-locked > *:not(#lock-screen) { display: none; }
 .raids-history-undo-row { color: var(--ink-dim); font-size: 0.78rem; }
 .raids-history-list { list-style: none; margin: 0; padding: 0; max-height: 400px; overflow-y: auto; }
 .raids-history-item {
+  display: grid;
+  grid-template-columns: 5.5rem 6.5rem 8rem 7.5rem 4.5rem 6rem 1fr auto auto;
+  align-items: center;
+  column-gap: 0.6rem;
   padding: 0.45rem 0.1rem;
   border-top: 1px solid var(--line);
   color: var(--ink-dim);
   font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 .raids-history-item:first-child { border-top: none; }
 
-.raids-history-item-editing { gap: 0.35rem; }
+.raids-history-item-editing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+.raids-hist-col {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.raids-hist-col-note { white-space: normal; } /* the flexible, catch-all column -- let longer notes wrap instead of truncating */
 .raids-history-item input {
   background: var(--panel);
   border: 1px solid var(--line);

@@ -1260,10 +1260,16 @@
         : isCutInline
           ? `<input type="text" class="raids-hist-inline-input" data-raid-id="${escapeHtml(h.raidId)}" data-field="cut" placeholder="cut" />`
           : `<span class="raids-hist-inline-na" data-raid-id="${escapeHtml(h.raidId)}" data-field="cut">N/A</span>`;
-      const noteDisplay = h.note ? ` \u00b7 ${escapeHtml(h.note)}` : "";
+      const noteDisplay = h.note ? escapeHtml(h.note) : "";
       return `
         <li class="raids-history-item" data-orig-raid-id="${escapeHtml(h.raidId)}">
-          <span class="raids-history-line">#${escapeHtml(h.raidId)} \u00b7 ${escapeHtml(h.rl)} \u00b7 ${characterDisplay(h.charRealm)} \u00b7 ${escapeHtml(dateText)} \u00b7 ${paymentDisplay} \u00b7 ${cutDisplay}${noteDisplay}</span>
+          <span class="raids-hist-col raids-hist-col-raidid">#${escapeHtml(h.raidId)}</span>
+          <span class="raids-hist-col raids-hist-col-rl">${escapeHtml(h.rl)}</span>
+          <span class="raids-hist-col raids-hist-col-char">${characterDisplay(h.charRealm)}</span>
+          <span class="raids-hist-col raids-hist-col-date">${escapeHtml(dateText)}</span>
+          <span class="raids-hist-col raids-hist-col-payment">${paymentDisplay}</span>
+          <span class="raids-hist-col raids-hist-col-cut">${cutDisplay}</span>
+          <span class="raids-hist-col raids-hist-col-note">${noteDisplay}</span>
           <button class="page-btn raids-hist-edit-btn" type="button">Edit</button>
           <button class="raids-delete-btn raids-hist-delete-btn" type="button">Delete</button>
         </li>`;
