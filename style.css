@@ -586,7 +586,8 @@ body.is-locked > *:not(#lock-screen) { display: none; }
 .raids-history-list { list-style: none; margin: 0; padding: 0; max-height: 400px; overflow-y: auto; }
 .raids-history-item {
   display: grid;
-  grid-template-columns: 5.5rem 6.5rem 8rem 7.5rem 4.5rem 6rem 1fr auto auto;
+  grid-template-columns: 5.5rem 6.5rem 8rem 7.5rem 4.5rem 6rem 16rem auto auto;
+  width: fit-content;
   align-items: center;
   column-gap: 0.6rem;
   padding: 0.45rem 0.1rem;
