@@ -693,6 +693,42 @@
     return kept;
   }
 
+  // A read-only variant: computes the same filtered (not-yet-expired)
+  // view WITHOUT saving or pushing anything, ever. Used by the periodic
+  // Keep-Unsaved-dashboard refresh specifically, since that's a purely
+  // time-driven recompute with no user action behind it -- if this tab's
+  // local data has drifted stale relative to a change made elsewhere
+  // (another tab/device that synced more recently), a background
+  // interval is exactly the wrong thing to have silently push that
+  // staleness back out and overwrite the newer change. The real
+  // prune-and-sync still happens normally the next time an actual user
+  // action triggers a full render().
+  function pruneExpiredEntriesReadOnly(entries) {
+    const nowMs = nowAsCentralNaiveMs();
+    const kept = {};
+    for (const [id, entry] of Object.entries(entries)) {
+      const entryMs = entryTimestampMs(entry);
+      if (entryMs !== null && nowMs - entryMs > EXPIRE_AFTER_MS) continue;
+      kept[id] = entry;
+    }
+    return kept;
+  }
+
+  function loadEntriesReadOnly() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      const migrated = {};
+      for (const [id, entry] of Object.entries(parsed)) {
+        migrated[id] = migrateEntry(entry);
+      }
+      return pruneExpiredEntriesReadOnly(migrated);
+    } catch (err) {
+      return {};
+    }
+  }
+
   const MIN_GAP_MINUTES = 90;
 
   // Returns a Map<raidId, string[]> of conflict messages (entries with no
@@ -1560,7 +1596,7 @@
     // the dashboard would keep showing its now-stale state (including
     // staying visible with nothing actually left to list) until
     // something else happened to trigger a re-render.
-    setInterval(() => { renderUnsavedNeeded(loadEntries()); }, 60000);
+    setInterval(() => { renderUnsavedNeeded(loadEntriesReadOnly()); }, 60000);
   }
 
   init();
