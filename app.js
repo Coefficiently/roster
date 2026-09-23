@@ -518,6 +518,14 @@
     const char = DATA.characters.find((c) => c.id === charId);
     if (!char) return;
 
+    // Reveal the panel BEFORE rendering its contents (rather than after),
+    // so the Wowhead widget's icon-injection scan (triggered by
+    // refreshWowheadLinks() below) runs against a container that's
+    // already visible/has real dimensions, not one still sitting at
+    // display:none at the moment of the scan.
+    closeOtherPanels("detail-panel");
+    detailPanel.hidden = false;
+
     document.getElementById("detail-name").textContent = char.name;
     document.getElementById("detail-name").style.color = classColor(char);
     document.getElementById("detail-meta").textContent =
@@ -530,8 +538,6 @@
     );
     refreshWowheadLinks();
 
-    closeOtherPanels("detail-panel");
-    detailPanel.hidden = false;
     if (typeof detailPanel.scrollIntoView === "function") {
       detailPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -575,9 +581,10 @@
     if (!btn || !panel) return;
 
     btn.addEventListener("click", () => {
-      renderWarbandList(DATA.warbandItems);
+      // Reveal before rendering -- see the comment in openDetail() for why.
       closeOtherPanels("warband-panel");
       panel.hidden = false;
+      renderWarbandList(DATA.warbandItems);
       if (typeof panel.scrollIntoView === "function") {
         panel.scrollIntoView({ behavior: "smooth", block: "start" });
       }
@@ -708,13 +715,14 @@
     if (!btn || !panel) return;
 
     btn.addEventListener("click", () => {
+      // Reveal before rendering -- see the comment in openDetail() for why.
+      closeOtherPanels("allitems-panel");
+      panel.hidden = false;
       const items = buildAllItemsAggregate();
       const emptyText = DATA.hasPrivateData
         ? "No items found."
         : "Not available right now -- the private-data session cookie is outdated and needs refreshing (see README).";
       renderGroupedItemList("allitems-list", items, renderAllItemsRow, emptyText);
-      closeOtherPanels("allitems-panel");
-      panel.hidden = false;
       if (typeof panel.scrollIntoView === "function") {
         panel.scrollIntoView({ behavior: "smooth", block: "start" });
       }
