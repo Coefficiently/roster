@@ -169,6 +169,12 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   align-items: center;
   gap: 1rem;
 }
+/* Same [hidden] vs display specificity fix as .outdated-badge and
+   .raids-unsaved-dashboard elsewhere -- without this, pagination
+   controls would stay visible even when there's only one page (JS
+   correctly sets hidden=true, but display:flex above would otherwise
+   silently win the cascade tie and keep them shown). */
+.page-controls[hidden] { display: none; }
 .page-btn {
   background: var(--panel-2);
   border: 1px solid var(--line);
@@ -194,6 +200,15 @@ body.is-locked > *:not(#lock-screen) { display: none; }
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
+/* display:inline-block above has the same CSS specificity as the
+   browser's default [hidden] { display: none } rule, and since author
+   stylesheets load after the browser's default one, it would otherwise
+   win that tie and silently defeat `hidden` entirely -- the badge would
+   stay visible even when JS correctly sets hidden=true because the data
+   isn't actually outdated. This rule's higher specificity (class +
+   attribute) ensures hidden always wins. Same root cause as the earlier
+   Keep Unsaved dashboard fix on the raids page. */
+.outdated-badge[hidden] { display: none; }
 .page-indicator { color: var(--ink-dim); font-size: 0.85rem; }
 
 .table-scroll {
