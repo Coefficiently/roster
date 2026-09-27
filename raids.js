@@ -780,8 +780,19 @@
       // protecting -- one already in the past has presumably either
       // already happened (nothing left to protect) or is still sitting
       // as an active signup regardless of what this dashboard says, so
-      // there's no value in continuing to warn about it here.
-      const hasUpcomingUnsaved = groupCandidates.some((c) => !c.saved && entryTimestampMs(c.entry) > nowMs);
+      // there's no value in continuing to warn about it here. Once a
+      // specific character has actually been rostered for a signup, only
+      // that pick still needs protecting -- the other, unpicked
+      // candidates from the same multi-candidate signup are no longer at
+      // risk for it (their own saved:false status on that signup doesn't
+      // change just because someone else got picked, so this has to be
+      // checked explicitly rather than assumed).
+      const hasUpcomingUnsaved = groupCandidates.some((c) => {
+        if (c.saved) return false;
+        if (entryTimestampMs(c.entry) <= nowMs) return false;
+        if (c.entry.rosteredCharRealm && c.entry.rosteredCharRealm !== c.charRealm) return false;
+        return true;
+      });
       if (!hasUpcomingUnsaved) continue;
       const key = `${first.charRealm}|${first.entry.difficulty}`;
       if (seen.has(key)) continue;
