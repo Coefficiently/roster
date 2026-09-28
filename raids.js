@@ -746,6 +746,16 @@
       const weekIndex = computeWeekIndex(entry);
       if (weekIndex === null) continue;
       for (const char of entry.characters) {
+        // Once a specific character has been rostered for a signup, the
+        // OTHER, unpicked candidates on that same signup weren't
+        // actually chosen -- they're not really "going" on this run, so
+        // this entry shouldn't count toward their own lockout/conflict
+        // reasoning at all (a genuinely real bug: without this, an
+        // unpicked candidate's conflicts from a completely different
+        // signup could get attributed back onto this one, since they're
+        // still technically "an unsaved candidate here" in the raw
+        // data even though someone else got the spot).
+        if (entry.rosteredCharRealm && entry.rosteredCharRealm !== char.charRealm) continue;
         candidates.push({ entry, charRealm: char.charRealm, saved: char.saved, weekIndex });
       }
     }
@@ -780,19 +790,11 @@
       // protecting -- one already in the past has presumably either
       // already happened (nothing left to protect) or is still sitting
       // as an active signup regardless of what this dashboard says, so
-      // there's no value in continuing to warn about it here. Once a
-      // specific character has actually been rostered for a signup, only
-      // that pick still needs protecting -- the other, unpicked
-      // candidates from the same multi-candidate signup are no longer at
-      // risk for it (their own saved:false status on that signup doesn't
-      // change just because someone else got picked, so this has to be
-      // checked explicitly rather than assumed).
-      const hasUpcomingUnsaved = groupCandidates.some((c) => {
-        if (c.saved) return false;
-        if (entryTimestampMs(c.entry) <= nowMs) return false;
-        if (c.entry.rosteredCharRealm && c.entry.rosteredCharRealm !== c.charRealm) return false;
-        return true;
-      });
+      // there's no value in continuing to warn about it here. (Unpicked
+      // candidates on a rostered signup are already filtered out
+      // upstream by buildLockoutGroups, so every candidate reaching this
+      // point is either genuinely undecided or the actual rostered pick.)
+      const hasUpcomingUnsaved = groupCandidates.some((c) => !c.saved && entryTimestampMs(c.entry) > nowMs);
       if (!hasUpcomingUnsaved) continue;
       const key = `${first.charRealm}|${first.entry.difficulty}`;
       if (seen.has(key)) continue;
