@@ -885,20 +885,18 @@
       }
     }
 
-    // A raid's own title declares what kind of run it is -- an "Unsaved"
-    // run means every character signed up needs to genuinely be unsaved
-    // for it (that's the whole point of the run), and a "Saved" run
-    // means the opposite. Flag any candidate whose own per-character
-    // status doesn't match what the run itself is advertised as; titles
-    // that declare no type (see titleDeclaredRunType) aren't checked.
+    // A raid's own title can declare it's specifically an "Unsaved" run
+    // (see titleDeclaredRunType) -- every character signed up for one
+    // needs to genuinely be unsaved for it, that's the whole point of
+    // the run. A Saved character on an Unsaved run is a real conflict.
+    // This only runs one way: a "Saved"-titled run with an Unsaved
+    // character signed up is NOT a conflict (perfectly normal -- an
+    // unsaved buyer can still join a run the group itself is saved to).
     for (const entry of list) {
-      const runType = titleDeclaredRunType(entry.title);
-      if (!runType) continue;
-      const wantSaved = runType === "Saved";
-      const article = runType === "Unsaved" ? "an" : "a";
+      if (titleDeclaredRunType(entry.title) !== "Unsaved") continue;
       for (const char of entry.characters) {
-        if (char.saved !== wantSaved) {
-          addConflict(entry.raidId, `${characterName(char.charRealm)}: This is ${article} ${runType} run, but this character is marked ${char.saved ? "Saved" : "Unsaved"}`);
+        if (char.saved) {
+          addConflict(entry.raidId, `${characterName(char.charRealm)}: This is an Unsaved run, but this character is marked Saved`);
         }
       }
     }
