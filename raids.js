@@ -38,6 +38,19 @@
   // pruneExpiredEntries.
   let initialSyncDone = false;
 
+  // Set whenever a real user action pushes a change (saveEntries) while
+  // the initial sync is still in flight. Guards a related but distinct
+  // race from the one above: syncFromRemote()'s fetch could have already
+  // been sent before that action happened, so it may resolve with data
+  // from BEFORE the action's own push took effect -- applying that
+  // result locally would silently undo the user's own just-made change
+  // (e.g. a history delete) the moment the slow-to-resolve initial sync
+  // finally completes. When this is true, syncFromRemote skips applying
+  // its result entirely: the local state (already reconciled with
+  // remote by the action's own push) is more current than what the sync
+  // fetched, so there's nothing safe to apply.
+  let localChangedDuringInitialSync = false;
+
   function buildCharacterLookup(rosterData) {
     const lookup = {};
     if (!rosterData || !rosterData.characters) return lookup;
@@ -394,6 +407,7 @@
   // history alone (with entries unchanged) is the correct way to sync a
   // history-only change too.
   function saveEntries(entries) {
+    if (!initialSyncDone) localChangedDuringInitialSync = true;
     saveEntriesLocal(entries);
     pushRemoteEntries(entries).catch(() => { /* see pushRemoteEntries for handling */ });
   }
@@ -511,6 +525,12 @@
       for (const [id, entry] of Object.entries(remoteEntries || {})) {
         migrated[id] = migrateEntry(entry);
       }
+      // See localChangedDuringInitialSync above: if a real user action
+      // already pushed its own change while this fetch was in flight,
+      // this result is from before that push and applying it now would
+      // silently undo it. Skip applying entirely in that case -- local
+      // storage is already the more current, correctly-reconciled state.
+      if (localChangedDuringInitialSync) return;
       saveHistoryLocal(remoteHistory || []);
       saveEntriesLocal(pruneExpiredEntries(migrated, { skipRemotePush: true }));
     } catch (err) {
@@ -1209,6 +1229,14 @@
         if (!entry) return;
 
         const newRaidId = div.querySelector(".raids-entry-edit-raidid").value.trim() || origRaidId;
+        // Changing the raid id to one that already belongs to a
+        // DIFFERENT signup would silently overwrite and destroy that
+        // other signup entirely (entries are keyed by raid id) -- block
+        // the whole save rather than let that happen quietly.
+        if (newRaidId !== origRaidId && entries[newRaidId]) {
+          alert(`Raid #${newRaidId} is already used by another signup. Change the raid id to something else, or leave it as #${origRaidId}.`);
+          return;
+        }
         entry.raidId = newRaidId;
         entry.title = div.querySelector(".raids-entry-edit-title").value.trim();
         entry.difficulty = div.querySelector(".raids-entry-edit-difficulty").value.trim();
