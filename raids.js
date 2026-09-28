@@ -581,21 +581,54 @@
     return Math.floor((ms - REF_RESET_UTC_MS) / WEEK_MS);
   }
 
+  // Known raid names for the current tier, with common abbreviations --
+  // used to normalize a title down to just "which raid(s) are involved"
+  // for lockout-grouping purposes. RLs phrase the very same combo run
+  // very differently across different posts -- "VA + TG Last Two H
+  // 5x5" vs "TG + VA Full H" vs "The Venomous Abyss + The Tidebound
+  // Grotto Full H + 1x5 Last Two" are all the same underlying VA+TG
+  // Heroic lockout, but stripping only the Saved/Unsaved label and
+  // trailing boss-count suffix (matching literal remaining text) left
+  // them as different strings and split the same lockout across
+  // several different groups -- silently breaking conflict detection
+  // and the auto-Saved correction between them. Needs a season update
+  // whenever new raids release.
+  const KNOWN_RAID_NAMES = [
+    { canonical: "The Venomous Abyss", aliases: ["the venomous abyss", "venomous abyss", "va"] },
+    { canonical: "The Tidebound Grotto", aliases: ["the tidebound grotto", "tidebound grotto", "tg"] },
+  ];
+
   // Reduces "The Venomous Abyss 9/9H + Group 2 Ula'tek" and
   // "The Venomous Abyss 9/9N" down to the same "The Venomous Abyss" key --
   // the lockout is per raid zone, not per specific sell package/progress
   // count, and difficulty is already tracked separately.
-  // Strips the leading "Saved"/"Unsaved" sale-type label along with the
-  // trailing "+ Group N" and "N/M<letters>" boss-count suffix, so "Saved
-  // The Venomous Abyss 9/9H" and "Unsaved The Venomous Abyss 9/9H"
-  // normalize to the same underlying raid name for lockout-group
-  // purposes -- without this, two signups for the very same raid would
-  // silently land in different groups just because one was labeled
-  // Saved and the other Unsaved, and conflict detection between them
-  // (e.g. the Saved-scheduled-before-Unsaved check) would never fire.
   function normalizeRaidName(title) {
-    return title
-      .replace(/^\s*(Saved|Unsaved)\b\s*/i, "")
+    const stripped = (title || "").replace(/^\s*(Saved|Unsaved)\b\s*/i, "").trim();
+
+    // Detect which known raid(s) are named anywhere in the title
+    // (matching whole words only, so "VA" doesn't match inside some
+    // other word), dedupe, and sort alphabetically so "VA + TG" and
+    // "TG + VA" normalize identically regardless of which order this
+    // particular post happened to list them in.
+    const found = new Set();
+    for (const raid of KNOWN_RAID_NAMES) {
+      for (const alias of raid.aliases) {
+        const escaped = alias.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        if (new RegExp(`\\b${escaped}\\b`, "i").test(stripped)) {
+          found.add(raid.canonical);
+          break;
+        }
+      }
+    }
+    if (found.size > 0) {
+      return [...found].sort().join(" + ");
+    }
+
+    // Fallback for a title that doesn't name any known raid (an older
+    // format, a typo, or a future raid not yet added above) -- strip
+    // the trailing "+ Group N" and boss-count suffix the way this
+    // always used to, rather than losing grouping ability entirely.
+    return stripped
       .replace(/\s*\+\s*Group\s*\d+.*/i, "")
       .replace(/\s*\d+\/\d+[A-Za-z]+\s*$/, "")
       .trim();
