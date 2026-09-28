@@ -807,7 +807,58 @@
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(c);
     }
+
+    // By game mechanics, a character's first kill of a specific raid at
+    // a specific difficulty each week is their only genuine Unsaved
+    // kill for that lockout -- Normal/Heroic/Mythic are separate
+    // lockouts from each other, and different raids (e.g. The Venomous
+    // Abyss vs The Tidebound Grotto) are separate lockouts too, which
+    // is exactly what this grouping key (charRealm + raid + difficulty
+    // + week) already captures. Within one such group, any signup AFTER
+    // the earliest Unsaved one is automatically Saved by then,
+    // regardless of what its own signup text says. Compute this
+    // "effective" status per candidate here so every consumer (the
+    // calendar display, conflict checks, the Keep-Unsaved dashboard)
+    // treats it consistently. This stays a purely computed view rather
+    // than rewriting the underlying signup data, so it automatically
+    // stays correct if an earlier signup is later edited or deleted.
+    for (const group of groups.values()) {
+      const sorted = [...group].sort((a, b) => a.entry.sortKey.localeCompare(b.entry.sortKey));
+      let seenUnsaved = false;
+      for (const c of sorted) {
+        if (c.saved) {
+          c.effectiveSaved = true;
+        } else if (!seenUnsaved) {
+          c.effectiveSaved = false;
+          seenUnsaved = true;
+        } else {
+          c.effectiveSaved = true;
+        }
+      }
+    }
+
     return groups;
+  }
+
+  // A raidId|charRealm -> {effectiveSaved, wasAutoCorrected} lookup for
+  // the calendar display, since renderCalendar works directly off each
+  // entry's own characters array rather than the lockout groups.
+  // wasAutoCorrected distinguishes "genuinely marked Saved in the
+  // signup text" from "auto-corrected to Saved because an earlier
+  // signup already used up this lockout's real Unsaved kill" -- the
+  // display uses it to label the second case differently so it's clear
+  // why it shows Saved when the original signup text said Unsaved.
+  function computeEffectiveSavedMap(entries) {
+    const map = new Map();
+    for (const groupCandidates of buildLockoutGroups(entries).values()) {
+      for (const c of groupCandidates) {
+        map.set(`${c.entry.raidId}|${c.charRealm}`, {
+          effectiveSaved: c.effectiveSaved,
+          wasAutoCorrected: c.effectiveSaved && !c.saved,
+        });
+      }
+    }
+    return map;
   }
 
   // For the CURRENT reset week only: every (character, difficulty) that
@@ -836,7 +887,7 @@
       // candidates on a rostered signup are already filtered out
       // upstream by buildLockoutGroups, so every candidate reaching this
       // point is either genuinely undecided or the actual rostered pick.)
-      const hasUpcomingUnsaved = groupCandidates.some((c) => !c.saved && entryTimestampMs(c.entry) > nowMs);
+      const hasUpcomingUnsaved = groupCandidates.some((c) => !c.effectiveSaved && entryTimestampMs(c.entry) > nowMs);
       if (!hasUpcomingUnsaved) continue;
       const key = `${first.charRealm}|${first.entry.difficulty}`;
       if (seen.has(key)) continue;
@@ -924,14 +975,18 @@
 
     for (const groupCandidates of groups.values()) {
       const charName = characterName(groupCandidates[0].charRealm);
-      const unsaved = groupCandidates.filter((c) => !c.saved);
-      const saved = groupCandidates.filter((c) => c.saved);
-
-      if (unsaved.length > 1) {
-        for (const c of unsaved) {
-          addConflict(c.entry.raidId, `${charName}: ${unsaved.length} Unsaved runs this week for this raid/difficulty (only 1 is possible)`);
-        }
-      }
+      // effectiveSaved (computed in buildLockoutGroups) already folds in
+      // the auto-correction: only the chronologically first Unsaved
+      // signup in a group is ever effectiveSaved===false, so there's
+      // nothing left to warn about for a "second Unsaved run" the way
+      // there used to be -- it just displays as Saved automatically now
+      // (see renderCalendar). What's still worth flagging is an
+      // EXPLICITLY Saved run scheduled before the real Unsaved one,
+      // since that's a scheduling mistake the auto-correction can't fix
+      // for you (selling Saved slots before doing your own Unsaved kill
+      // means you can't go back and do that kill Unsaved anymore).
+      const unsaved = groupCandidates.filter((c) => !c.effectiveSaved);
+      const saved = groupCandidates.filter((c) => c.effectiveSaved);
 
       if (unsaved.length === 1) {
         const unsavedCandidate = unsaved[0];
@@ -1022,7 +1077,7 @@
   // triggered by something else (e.g. the periodic conflict recompute).
   const entryEditingIds = new Set();
 
-  function renderCalendar(entries, conflicts) {
+  function renderCalendar(entries, conflicts, effectiveSavedMap) {
     const container = document.getElementById("raids-calendar");
     const list = Object.values(entries);
     if (list.length === 0) {
@@ -1118,11 +1173,18 @@
 
         const characterLines = displayCharacters.map((c) => {
           const isThisRostered = entry.rosteredCharRealm === c.charRealm;
-          const savedBadgeClass = c.saved ? "raids-badge-saved" : "raids-badge-unsaved";
+          const effective = effectiveSavedMap ? effectiveSavedMap.get(`${entry.raidId}|${c.charRealm}`) : null;
+          const displaySaved = effective ? effective.effectiveSaved : c.saved;
+          const wasAutoCorrected = effective ? effective.wasAutoCorrected : false;
+          const savedBadgeClass = displaySaved ? "raids-badge-saved" : "raids-badge-unsaved";
+          const badgeText = displaySaved ? (wasAutoCorrected ? "Saved (auto)" : "Saved") : "Unsaved";
+          const badgeTitle = wasAutoCorrected
+            ? ` title="Auto-corrected to Saved: this character already has an earlier Unsaved run this week for this raid/difficulty"`
+            : "";
           return `
             <div class="raids-char-line${isThisRostered ? " raids-char-line-rostered" : ""}">
               ${characterDisplay(c.charRealm)} \u2014 ${escapeHtml(c.role)}
-              <span class="raids-badge ${savedBadgeClass}">${c.saved ? "Saved" : "Unsaved"}</span>
+              <span class="raids-badge ${savedBadgeClass}"${badgeTitle}>${badgeText}</span>
               ${isThisRostered ? '<span class="raids-rostered-badge">\u2713 Rostered</span>' : ""}
             </div>`;
         }).join("");
@@ -1516,9 +1578,10 @@
   function render() {
     const entries = loadEntries();
     const conflicts = detectConflicts(entries);
+    const effectiveSavedMap = computeEffectiveSavedMap(entries);
     renderHistory();
     renderUnsavedNeeded(entries);
-    renderCalendar(entries, conflicts);
+    renderCalendar(entries, conflicts, effectiveSavedMap);
     renderSummary(entries, conflicts);
   }
 
