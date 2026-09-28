@@ -585,11 +585,33 @@
   // "The Venomous Abyss 9/9N" down to the same "The Venomous Abyss" key --
   // the lockout is per raid zone, not per specific sell package/progress
   // count, and difficulty is already tracked separately.
+  // Strips the leading "Saved"/"Unsaved" sale-type label along with the
+  // trailing "+ Group N" and "N/M<letters>" boss-count suffix, so "Saved
+  // The Venomous Abyss 9/9H" and "Unsaved The Venomous Abyss 9/9H"
+  // normalize to the same underlying raid name for lockout-group
+  // purposes -- without this, two signups for the very same raid would
+  // silently land in different groups just because one was labeled
+  // Saved and the other Unsaved, and conflict detection between them
+  // (e.g. the Saved-scheduled-before-Unsaved check) would never fire.
   function normalizeRaidName(title) {
     return title
+      .replace(/^\s*(Saved|Unsaved)\b\s*/i, "")
       .replace(/\s*\+\s*Group\s*\d+.*/i, "")
       .replace(/\s*\d+\/\d+[A-Za-z]+\s*$/, "")
       .trim();
+  }
+
+  // The leading "Saved"/"Unsaved" a raid title declares (see
+  // normalizeRaidName above) isn't just descriptive text -- it's the
+  // run's own advertised type: an "Unsaved" run means every character
+  // joining needs to genuinely be unsaved for it, and vice versa for a
+  // "Saved" run. Returns null when the title declares no type (an older
+  // or differently-formatted signup), in which case no check applies.
+  function titleDeclaredRunType(title) {
+    const trimmed = (title || "").trim();
+    if (/^unsaved\b/i.test(trimmed)) return "Unsaved";
+    if (/^saved\b/i.test(trimmed)) return "Saved";
+    return null;
   }
 
   // Numeric ms value for an entry's start time, via Date.UTC() with
@@ -859,6 +881,24 @@
       for (const char of entry.characters) {
         if (char.saved) {
           addConflict(entry.raidId, `${characterName(char.charRealm)}: Mythic can't be a Saved run -- Mythic has no ID-extension, so this is likely a mistake`);
+        }
+      }
+    }
+
+    // A raid's own title declares what kind of run it is -- an "Unsaved"
+    // run means every character signed up needs to genuinely be unsaved
+    // for it (that's the whole point of the run), and a "Saved" run
+    // means the opposite. Flag any candidate whose own per-character
+    // status doesn't match what the run itself is advertised as; titles
+    // that declare no type (see titleDeclaredRunType) aren't checked.
+    for (const entry of list) {
+      const runType = titleDeclaredRunType(entry.title);
+      if (!runType) continue;
+      const wantSaved = runType === "Saved";
+      const article = runType === "Unsaved" ? "an" : "a";
+      for (const char of entry.characters) {
+        if (char.saved !== wantSaved) {
+          addConflict(entry.raidId, `${characterName(char.charRealm)}: This is ${article} ${runType} run, but this character is marked ${char.saved ? "Saved" : "Unsaved"}`);
         }
       }
     }
