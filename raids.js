@@ -601,15 +601,18 @@
   // Reduces "The Venomous Abyss 9/9H + Group 2 Ula'tek" and
   // "The Venomous Abyss 9/9N" down to the same "The Venomous Abyss" key --
   // the lockout is per raid zone, not per specific sell package/progress
-  // count, and difficulty is already tracked separately.
-  function normalizeRaidName(title) {
+  // count, and difficulty is already tracked separately. Returns an
+  // ARRAY, since a combo title ("VA + TG Full H") names more than one
+  // raid, and each one is a fully independent lockout the candidate
+  // needs to be checked against separately (see buildLockoutGroups) --
+  // killing both raids' bosses on a combo run locks the character to
+  // BOTH individually, not to some third, artificial "VA+TG" lockout.
+  function extractRaidNames(title) {
     const stripped = (title || "").replace(/^\s*(Saved|Unsaved)\b\s*/i, "").trim();
 
     // Detect which known raid(s) are named anywhere in the title
     // (matching whole words only, so "VA" doesn't match inside some
-    // other word), dedupe, and sort alphabetically so "VA + TG" and
-    // "TG + VA" normalize identically regardless of which order this
-    // particular post happened to list them in.
+    // other word), and dedupe.
     const found = new Set();
     for (const raid of KNOWN_RAID_NAMES) {
       for (const alias of raid.aliases) {
@@ -621,21 +624,23 @@
       }
     }
     if (found.size > 0) {
-      return [...found].sort().join(" + ");
+      return [...found].sort();
     }
 
     // Fallback for a title that doesn't name any known raid (an older
     // format, a typo, or a future raid not yet added above) -- strip
     // the trailing "+ Group N" and boss-count suffix the way this
     // always used to, rather than losing grouping ability entirely.
-    return stripped
+    // Only one "raid" in this case, since there's nothing to split.
+    const fallback = stripped
       .replace(/\s*\+\s*Group\s*\d+.*/i, "")
       .replace(/\s*\d+\/\d+[A-Za-z]+\s*$/, "")
       .trim();
+    return [fallback];
   }
 
   // The leading "Saved"/"Unsaved" a raid title declares (see
-  // normalizeRaidName above) isn't just descriptive text -- it's the
+  // extractRaidNames above) isn't just descriptive text -- it's the
   // run's own advertised type: an "Unsaved" run means every character
   // joining needs to genuinely be unsaved for it, and vice versa for a
   // "Saved" run. Returns null when the title declares no type (an older
@@ -820,6 +825,12 @@
     for (const entry of list) {
       const weekIndex = computeWeekIndex(entry);
       if (weekIndex === null) continue;
+      // A combo entry (e.g. "VA + TG Full H") names more than one raid --
+      // killing both raids' bosses locks the character to BOTH of them
+      // independently, so this candidate needs to participate in the
+      // lockout reasoning for each individual raid separately, not as
+      // some third, artificial "VA+TG" lockout of its own.
+      const raidNames = extractRaidNames(entry.title);
       for (const char of entry.characters) {
         // Once a specific character has been rostered for a signup, the
         // OTHER, unpicked candidates on that same signup weren't
@@ -831,14 +842,21 @@
         // still technically "an unsaved candidate here" in the raw
         // data even though someone else got the spot).
         if (entry.rosteredCharRealm && entry.rosteredCharRealm !== char.charRealm) continue;
-        candidates.push({ entry, charRealm: char.charRealm, saved: char.saved, weekIndex });
+        candidates.push({ entry, charRealm: char.charRealm, saved: char.saved, weekIndex, raidNames });
       }
     }
+
+    // Build one group per (character, INDIVIDUAL raid, difficulty,
+    // week) -- a combo candidate is pushed into every raid's group it
+    // touches, via the same shared object reference, so effectiveSaved
+    // computed below stays consistent across all of them.
     const groups = new Map();
     for (const c of candidates) {
-      const key = `${c.charRealm}|${normalizeRaidName(c.entry.title)}|${c.entry.difficulty}|${c.weekIndex}`;
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(c);
+      for (const raidName of c.raidNames) {
+        const key = `${c.charRealm}|${raidName}|${c.entry.difficulty}|${c.weekIndex}`;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(c);
+      }
     }
 
     // By game mechanics, a character's first kill of a specific raid at
@@ -846,28 +864,34 @@
     // kill for that lockout -- Normal/Heroic/Mythic are separate
     // lockouts from each other, and different raids (e.g. The Venomous
     // Abyss vs The Tidebound Grotto) are separate lockouts too, which
-    // is exactly what this grouping key (charRealm + raid + difficulty
-    // + week) already captures. Within one such group, any signup AFTER
-    // the earliest Unsaved one is automatically Saved by then,
-    // regardless of what its own signup text says. Compute this
-    // "effective" status per candidate here so every consumer (the
-    // calendar display, conflict checks, the Keep-Unsaved dashboard)
-    // treats it consistently. This stays a purely computed view rather
-    // than rewriting the underlying signup data, so it automatically
-    // stays correct if an earlier signup is later edited or deleted.
-    for (const group of groups.values()) {
-      const sorted = [...group].sort((a, b) => a.entry.sortKey.localeCompare(b.entry.sortKey));
-      let seenUnsaved = false;
-      for (const c of sorted) {
-        if (c.saved) {
-          c.effectiveSaved = true;
-        } else if (!seenUnsaved) {
-          c.effectiveSaved = false;
-          seenUnsaved = true;
-        } else {
-          c.effectiveSaved = true;
-        }
+    // is exactly what each per-raid group above already captures.
+    // First pass: find the chronologically earliest Unsaved-labeled
+    // candidate in each individual-raid group -- that's the one true
+    // fresh kill for that specific lockout.
+    const trueFirstPerGroup = new Map();
+    for (const [key, groupCandidates] of groups) {
+      const sorted = [...groupCandidates].sort((a, b) => a.entry.sortKey.localeCompare(b.entry.sortKey));
+      trueFirstPerGroup.set(key, sorted.find((c) => !c.saved) || null);
+    }
+
+    // Second pass: compute each candidate's overall effective status.
+    // A combo candidate touches multiple raids at once via the same
+    // signup, so it can only count as a genuine fresh (Unsaved) kill if
+    // it's the true first for EVERY raid it touches -- if the character
+    // is already locked to even one of them from a separate, earlier
+    // signup, the whole combo run is no longer a fresh kill and
+    // displays as Saved. This is a purely computed view (never rewrites
+    // the underlying signup data), so it automatically stays correct if
+    // an earlier signup is later edited, rostered elsewhere, or deleted.
+    for (const c of candidates) {
+      if (c.saved) {
+        c.effectiveSaved = true;
+        continue;
       }
+      c.effectiveSaved = !c.raidNames.every((raidName) => {
+        const key = `${c.charRealm}|${raidName}|${c.entry.difficulty}|${c.weekIndex}`;
+        return trueFirstPerGroup.get(key) === c;
+      });
     }
 
     return groups;
