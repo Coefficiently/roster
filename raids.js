@@ -831,17 +831,7 @@
       // lockout reasoning for each individual raid separately, not as
       // some third, artificial "VA+TG" lockout of its own.
       const raidNames = extractRaidNames(entry.title);
-      for (const char of entry.characters) {
-        // Once a specific character has been rostered for a signup, the
-        // OTHER, unpicked candidates on that same signup weren't
-        // actually chosen -- they're not really "going" on this run, so
-        // this entry shouldn't count toward their own lockout/conflict
-        // reasoning at all (a genuinely real bug: without this, an
-        // unpicked candidate's conflicts from a completely different
-        // signup could get attributed back onto this one, since they're
-        // still technically "an unsaved candidate here" in the raw
-        // data even though someone else got the spot).
-        if (entry.rosteredCharRealm && entry.rosteredCharRealm !== char.charRealm) continue;
+      for (const char of activeCandidates(entry)) {
         candidates.push({ entry, charRealm: char.charRealm, saved: char.saved, weekIndex, raidNames });
       }
     }
@@ -888,10 +878,26 @@
         c.effectiveSaved = true;
         continue;
       }
-      c.effectiveSaved = !c.raidNames.every((raidName) => {
+      const isFirstEverywhere = c.raidNames.every((raidName) => {
         const key = `${c.charRealm}|${raidName}|${c.entry.difficulty}|${c.weekIndex}`;
         return trueFirstPerGroup.get(key) === c;
       });
+      if (isFirstEverywhere) {
+        c.effectiveSaved = false;
+      } else if (c.entry.difficulty === "Mythic") {
+        // Mythic has no "Saved" concept at all, unlike Heroic/Normal --
+        // once a character is locked to a Mythic raid's kill that week,
+        // they simply cannot join another Mythic run of it at all,
+        // Saved or otherwise. Auto-correcting this to Saved (as happens
+        // for other difficulties below) would display a state that's
+        // actually impossible, so this stays Unsaved but gets flagged
+        // as a genuine conflict instead -- see the duplicate-Mythic
+        // check in detectConflicts.
+        c.effectiveSaved = false;
+        c.impossibleMythicDuplicate = true;
+      } else {
+        c.effectiveSaved = true;
+      }
     }
 
     return groups;
@@ -969,6 +975,19 @@
     return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}-${pad(d.getUTCHours())}-${pad(d.getUTCMinutes())}`;
   }
 
+  // The character candidates on an entry that are actually relevant for
+  // per-character checks (lockout grouping, Mythic-Saved, title-type
+  // mismatch, etc.): once a specific character has been rostered, the
+  // OTHER, unpicked candidates weren't actually chosen -- they're not
+  // really "going" on this run, so whatever their own saved status or
+  // other per-character data says shouldn't trigger warnings meant for
+  // whoever is actually attending. Before a pick is made, every
+  // candidate is still relevant, since any of them could end up going.
+  function activeCandidates(entry) {
+    if (!entry.rosteredCharRealm) return entry.characters;
+    return entry.characters.filter((c) => c.charRealm === entry.rosteredCharRealm);
+  }
+
   function detectConflicts(entries) {
     const groups = buildLockoutGroups(entries);
     const list = Object.values(entries).filter((e) => e.sortKey && e.characters && e.characters.length > 0);
@@ -986,9 +1005,25 @@
     // mistake (typo, mislabeled signup, etc.), not a valid state.
     for (const entry of list) {
       if (entry.difficulty !== "Mythic") continue;
-      for (const char of entry.characters) {
+      for (const char of activeCandidates(entry)) {
         if (char.saved) {
           addConflict(entry.raidId, `${characterName(char.charRealm)}: Mythic can't be a Saved run -- Mythic has no ID-extension, so this is likely a mistake`);
+        }
+      }
+    }
+
+    // Unlike Heroic/Normal, a later "Unsaved" Mythic signup for a raid
+    // the character is already locked to can't be auto-corrected to
+    // Saved (see impossibleMythicDuplicate above) -- there's no such
+    // thing as a valid Saved Mythic slot, so this is a genuine
+    // scheduling conflict that needs a person to actually resolve it
+    // (the character can only do one of these signups, full stop).
+    for (const groupCandidates of groups.values()) {
+      for (const c of groupCandidates) {
+        if (!c.impossibleMythicDuplicate) continue;
+        const trueFirst = groupCandidates.find((other) => !other.saved && !other.impossibleMythicDuplicate);
+        if (trueFirst) {
+          addConflict(c.entry.raidId, `${characterName(c.charRealm)}: Already has a Mythic kill for this raid this week from Raid #${trueFirst.entry.raidId} -- can't do this one too, Mythic has no Saved option`);
         }
       }
     }
@@ -1002,7 +1037,7 @@
     // unsaved buyer can still join a run the group itself is saved to).
     for (const entry of list) {
       if (titleDeclaredRunType(entry.title) !== "Unsaved") continue;
-      for (const char of entry.characters) {
+      for (const char of activeCandidates(entry)) {
         if (char.saved) {
           addConflict(entry.raidId, `${characterName(char.charRealm)}: This is an Unsaved run, but this character is marked Saved`);
         }
