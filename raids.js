@@ -855,34 +855,56 @@
     // lockouts from each other, and different raids (e.g. The Venomous
     // Abyss vs The Tidebound Grotto) are separate lockouts too, which
     // is exactly what each per-raid group above already captures.
+    // A candidate can only ESTABLISH a lockout (count as the genuine
+    // fresh kill that locks the character for the rest of the week) if
+    // it's actually decided who's going -- either this is the only
+    // candidate on its signup (no ambiguity at all), or this specific
+    // character has actually been rostered for it. An undecided
+    // candidate on a still-multi-candidate, not-yet-rostered signup is
+    // just one of several possibilities -- it hasn't actually happened
+    // yet, so it can't lock anyone out of anything, and auto-correcting
+    // some OTHER signup's candidates to Saved on the strength of it
+    // would be jumping the gun.
+    function isDecided(c) {
+      return c.entry.characters.length === 1 || c.entry.rosteredCharRealm === c.charRealm;
+    }
+
     // First pass: find the chronologically earliest Unsaved-labeled
-    // candidate in each individual-raid group -- that's the one true
-    // fresh kill for that specific lockout.
+    // DECIDED candidate in each individual-raid group -- that's the one
+    // true fresh kill that's actually been established for that
+    // specific lockout. Stays null if nothing decided exists yet (e.g.
+    // several undecided multi-candidate signups with nothing rostered),
+    // in which case nothing in that group has actually locked anything.
     const trueFirstPerGroup = new Map();
     for (const [key, groupCandidates] of groups) {
       const sorted = [...groupCandidates].sort((a, b) => a.entry.sortKey.localeCompare(b.entry.sortKey));
-      trueFirstPerGroup.set(key, sorted.find((c) => !c.saved) || null);
+      trueFirstPerGroup.set(key, sorted.find((c) => !c.saved && isDecided(c)) || null);
     }
 
     // Second pass: compute each candidate's overall effective status.
-    // A combo candidate touches multiple raids at once via the same
-    // signup, so it can only count as a genuine fresh (Unsaved) kill if
-    // it's the true first for EVERY raid it touches -- if the character
-    // is already locked to even one of them from a separate, earlier
-    // signup, the whole combo run is no longer a fresh kill and
-    // displays as Saved. This is a purely computed view (never rewrites
-    // the underlying signup data), so it automatically stays correct if
-    // an earlier signup is later edited, rostered elsewhere, or deleted.
+    // A candidate only gets auto-corrected to Saved if, for at least
+    // one raid it touches, a DIFFERENT, already-established candidate
+    // exists for that same lockout -- meaning someone else's decided
+    // signup already used up the fresh kill. If nothing has been
+    // established yet for any raid this candidate touches (every
+    // trueFirst is null, or it's this candidate itself), nothing
+    // overrides its own raw status -- including for an undecided
+    // candidate on a still-undecided signup, which just keeps showing
+    // its own Unsaved/Saved label as stated until something is actually
+    // decided. This is a purely computed view (never rewrites the
+    // underlying signup data), so it automatically stays correct as
+    // signups get rostered, edited, or deleted.
     for (const c of candidates) {
       if (c.saved) {
         c.effectiveSaved = true;
         continue;
       }
-      const isFirstEverywhere = c.raidNames.every((raidName) => {
+      const blockedByEstablishedOther = c.raidNames.some((raidName) => {
         const key = `${c.charRealm}|${raidName}|${c.entry.difficulty}|${c.weekIndex}`;
-        return trueFirstPerGroup.get(key) === c;
+        const established = trueFirstPerGroup.get(key);
+        return established && established !== c;
       });
-      if (isFirstEverywhere) {
+      if (!blockedByEstablishedOther) {
         c.effectiveSaved = false;
       } else if (c.entry.difficulty === "Mythic") {
         // Mythic has no "Saved" concept at all, unlike Heroic/Normal --
