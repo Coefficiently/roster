@@ -958,8 +958,12 @@
   // A combo candidate sits in several groups as the same object, so the
   // first sighting is enough.
   function computeEffectiveSavedMap(entries) {
+    return effectiveMapFromGroups(buildLockoutGroups(entries));
+  }
+
+  function effectiveMapFromGroups(groups) {
     const map = new Map();
-    for (const group of buildLockoutGroups(entries).values()) {
+    for (const group of groups.values()) {
       for (const c of group) {
         if (c.isHistory) continue;
         const key = `${c.entry.raidId}|${c.charRealm}`;
@@ -972,6 +976,30 @@
       }
     }
     return map;
+  }
+
+  // Splits a signup's candidates into the ones worth showing and the
+  // ones auto-hidden. A candidate is hidden when the signup hasn't been
+  // rostered yet, the run is an Unsaved run, and an earlier rostered or
+  // completed run this week has already saved that character -- they
+  // can't take an Unsaved spot anymore, so they're just clutter in the
+  // pick list. Exception: if that would hide EVERY candidate, they all
+  // stay visible (with warnings), since there'd be nothing left to pick
+  // and the signup itself needs attention.
+  function splitCandidates(entry, effectiveMap) {
+    const chars = entry.characters || [];
+    if (entry.rosteredCharRealm || titleDeclaredRunType(entry.title) !== "Unsaved") {
+      return { visible: chars, hidden: [] };
+    }
+    const hidden = [];
+    const visible = [];
+    for (const c of chars) {
+      const eff = effectiveMap.get(`${entry.raidId}|${c.charRealm}`);
+      if (eff && eff.wasAutoCorrected) hidden.push({ char: c, blockedByRaidId: eff.blockedByRaidId });
+      else visible.push(c);
+    }
+    if (visible.length === 0) return { visible: chars, hidden: [] };
+    return { visible, hidden };
   }
 
   // For the CURRENT reset week only: every (character, difficulty) with
@@ -1013,6 +1041,11 @@
 
   function detectConflicts(entries) {
     const groups = buildLockoutGroups(entries);
+    const effectiveMap = effectiveMapFromGroups(groups);
+    const hiddenKeys = new Set();
+    for (const entry of Object.values(entries)) {
+      for (const h of splitCandidates(entry, effectiveMap).hidden) hiddenKeys.add(`${entry.raidId}|${h.char.charRealm}`);
+    }
     const list = Object.values(entries).filter((e) => e.sortKey && e.characters && e.characters.length > 0);
 
     const conflicts = new Map();
@@ -1054,6 +1087,7 @@
           continue;
         }
         if (titleDeclaredRunType(c.entry.title) === "Unsaved" && c.effectiveSaved) {
+          if (hiddenKeys.has(`${c.entry.raidId}|${c.charRealm}`)) continue;
           if (c.wasAutoCorrected) {
             addConflict(c.entry.raidId, `${name}: This is an Unsaved run, but this character will already be saved from ${source}`);
           } else {
@@ -1241,8 +1275,12 @@
           ? `<div class="raids-entry-conflict-msg">\u26a0 ${entryConflicts.map(escapeHtml).join("; ")}</div>`
           : "";
         const isRostered = !!entry.rosteredCharRealm;
-        const characters = entry.characters || [];
+        const split = effectiveSavedMap ? splitCandidates(entry, effectiveSavedMap) : { visible: entry.characters || [], hidden: [] };
+        const characters = split.visible;
         const hasMultipleCandidates = characters.length > 1;
+        const hiddenNote = split.hidden.length
+          ? `<div class="raids-hidden-note">Hidden \u2014 already saved this week: ${split.hidden.map((h) => `${escapeHtml(characterName(h.char.charRealm))} (Raid #${escapeHtml(h.blockedByRaidId)})`).join(", ")}</div>`
+          : "";
 
         // Once a character has actually been picked as rostered, only
         // that one is shown -- the other candidate(s) aren't relevant
@@ -1250,7 +1288,7 @@
         // signups, which have nothing to pick between), all candidates
         // show.
         const displayCharacters = isRostered
-          ? characters.filter((c) => c.charRealm === entry.rosteredCharRealm)
+          ? (entry.characters || []).filter((c) => c.charRealm === entry.rosteredCharRealm)
           : characters;
 
         const characterLines = displayCharacters.map((c) => {
@@ -1299,6 +1337,7 @@
               </div>
               <div class="raids-entry-meta">Raid #${escapeHtml(entry.raidId)} \u00b7 RL: ${escapeHtml(entry.rl)}${noteText}</div>
               <div class="raids-entry-characters">${characterLines}</div>
+              ${isRostered ? "" : hiddenNote}
               ${conflictBlock}
             </div>
             <div class="raids-entry-actions">
@@ -1328,8 +1367,10 @@
           entry.rosteredCharRealm = null;
           saveEntries(entries);
           render();
-        } else if (entry.characters && entry.characters.length === 1) {
-          entry.rosteredCharRealm = entry.characters[0].charRealm;
+        } else if (splitCandidates(entry, computeEffectiveSavedMap(entries)).visible.length === 1) {
+          // Only one candidate left once auto-hidden ones are excluded
+          // (or there was only ever one) -- nothing to choose between.
+          entry.rosteredCharRealm = splitCandidates(entry, computeEffectiveSavedMap(entries)).visible[0].charRealm;
           saveEntries(entries);
           render();
         } else {
