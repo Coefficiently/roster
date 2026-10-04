@@ -594,8 +594,8 @@
   // and the auto-Saved correction between them. Needs a season update
   // whenever new raids release.
   const KNOWN_RAID_NAMES = [
-    { canonical: "The Venomous Abyss", aliases: ["the venomous abyss", "venomous abyss", "va"] },
-    { canonical: "The Tidebound Grotto", aliases: ["the tidebound grotto", "tidebound grotto", "tg"] },
+    { canonical: "The Venomous Abyss", short: "VA", aliases: ["the venomous abyss", "venomous abyss", "va"] },
+    { canonical: "The Tidebound Grotto", short: "TG", aliases: ["the tidebound grotto", "tidebound grotto", "tg"] },
   ];
 
   // Reduces "The Venomous Abyss 9/9H + Group 2 Ula'tek" and
@@ -813,173 +813,187 @@
 
   // Returns a Map<raidId, string[]> of conflict messages (entries with no
   // conflicts simply aren't in the map).
-  // Groups every character-candidate across all entries by (character,
-  // raid, difficulty, week) -- the natural unit for lockout-related
-  // reasoning, since that's exactly the scope a real WoW lockout covers.
-  // Shared by detectConflicts (which checks for problems within each
-  // group) and computeUnsavedNeeded (which checks for a specific kind of
-  // gap: no Unsaved candidate at all yet, in the CURRENT week only).
+  // Lockout keys are built from text that can arrive formatted
+  // inconsistently -- a realm pasted with different capitalization in a
+  // different post, or a hand-typed "heroic"/"H" on a manually added
+  // history record. Keying on raw text would silently split one real
+  // lockout into two, so both are normalized before keying.
+  function normDifficulty(d) {
+    const s = String(d || "").trim().toLowerCase();
+    if (s === "h" || s.startsWith("heroic")) return "Heroic";
+    if (s === "n" || s.startsWith("normal")) return "Normal";
+    if (s === "m" || s.startsWith("mythic")) return "Mythic";
+    return String(d || "").trim();
+  }
+
+  function normChar(charRealm) {
+    return String(charRealm || "").trim().toLowerCase();
+  }
+
+  // Short display label for a canonical raid name ("VA", "TG"), falling
+  // back to the full name for anything not in KNOWN_RAID_NAMES.
+  function raidShortName(canonical) {
+    const known = KNOWN_RAID_NAMES.find((r) => r.canonical === canonical);
+    return known ? known.short : canonical;
+  }
+
+  // The character candidates on an entry that are actually relevant for
+  // per-character checks: once a specific character has been rostered,
+  // the OTHER, unpicked candidates aren't going on this run, so nothing
+  // about them should count toward lockouts or trigger warnings here.
+  // Before a pick is made, every candidate is still relevant.
+  function activeCandidates(entry) {
+    const chars = entry.characters || [];
+    if (!entry.rosteredCharRealm) return chars;
+    const picked = normChar(entry.rosteredCharRealm);
+    return chars.filter((c) => normChar(c.charRealm) === picked);
+  }
+
+  // Groups every relevant character-candidate by (character, individual
+  // raid, difficulty, reset week) -- exactly the scope a real lockout
+  // covers -- and computes each candidate's effective Saved status.
+  //
+  // Lockout rules (as the user runs their business):
+  //   * Only a run the character has actually been ROSTERED for (or one
+  //     already completed and archived to Sale History) can lock them.
+  //     Merely being signed up as one of several candidates locks
+  //     nothing -- it hasn't been decided that they're going.
+  //   * Any such run locks them, whether it was a Saved or Unsaved run --
+  //     after it, they're saved to that raid at that difficulty.
+  //   * The lock only affects runs strictly LATER that week, never
+  //     earlier ones.
+  //   * Each raid is its own lockout: a combo "VA + TG" run locks the
+  //     character to both VA and TG individually, and a later "VA only"
+  //     run is affected by it. Normal/Heroic/Mythic are separate too.
+  //   * Completed runs (Sale History) keep counting for the rest of the
+  //     week -- otherwise a character would silently flip back to
+  //     Unsaved the moment their run was marked complete or expired.
+  //
+  // Purely computed at display time -- signup data is never rewritten,
+  // so everything stays correct as runs get rostered, edited or deleted.
   function buildLockoutGroups(entries) {
-    const list = Object.values(entries).filter((e) => e.sortKey && e.characters && e.characters.length > 0);
     const candidates = [];
-    for (const entry of list) {
+    const activeIds = new Set();
+
+    for (const entry of Object.values(entries)) {
+      if (!entry.sortKey || !entry.characters || entry.characters.length === 0) continue;
       const weekIndex = computeWeekIndex(entry);
       if (weekIndex === null) continue;
-      // A combo entry (e.g. "VA + TG Full H") names more than one raid --
-      // killing both raids' bosses locks the character to BOTH of them
-      // independently, so this candidate needs to participate in the
-      // lockout reasoning for each individual raid separately, not as
-      // some third, artificial "VA+TG" lockout of its own.
+      activeIds.add(String(entry.raidId));
       const raidNames = extractRaidNames(entry.title);
+      const difficulty = normDifficulty(entry.difficulty);
+      const rostered = entry.rosteredCharRealm ? normChar(entry.rosteredCharRealm) : null;
       for (const char of activeCandidates(entry)) {
-        candidates.push({ entry, charRealm: char.charRealm, saved: char.saved, weekIndex, raidNames });
+        const charKey = normChar(char.charRealm);
+        candidates.push({
+          entry, charRealm: char.charRealm, charKey, saved: !!char.saved,
+          weekIndex, raidNames, difficulty,
+          decided: rostered !== null && rostered === charKey,
+          isHistory: false,
+        });
       }
     }
 
-    // Build one group per (character, INDIVIDUAL raid, difficulty,
-    // week) -- a combo candidate is pushed into every raid's group it
-    // touches, via the same shared object reference, so effectiveSaved
-    // computed below stays consistent across all of them.
+    // Completed runs: always decided (they were rostered and happened).
+    // Skipped if an active entry with the same raid id still exists, so
+    // the same run is never counted twice.
+    for (const h of loadHistory()) {
+      if (!h || !h.sortKey || !h.charRealm || !h.title || !h.difficulty) continue;
+      if (activeIds.has(String(h.raidId))) continue;
+      const weekIndex = computeWeekIndex(h);
+      if (weekIndex === null) continue;
+      candidates.push({
+        entry: h, charRealm: h.charRealm, charKey: normChar(h.charRealm), saved: !!h.saved,
+        weekIndex, raidNames: extractRaidNames(h.title), difficulty: normDifficulty(h.difficulty),
+        decided: true, isHistory: true,
+      });
+    }
+
     const groups = new Map();
     for (const c of candidates) {
       for (const raidName of c.raidNames) {
-        const key = `${c.charRealm}|${raidName}|${c.entry.difficulty}|${c.weekIndex}`;
+        const key = `${c.charKey}|${raidName}|${c.difficulty}|${c.weekIndex}`;
         if (!groups.has(key)) groups.set(key, []);
         groups.get(key).push(c);
       }
     }
 
-    // By game mechanics, a character's first kill of a specific raid at
-    // a specific difficulty each week is their only genuine Unsaved
-    // kill for that lockout -- Normal/Heroic/Mythic are separate
-    // lockouts from each other, and different raids (e.g. The Venomous
-    // Abyss vs The Tidebound Grotto) are separate lockouts too, which
-    // is exactly what each per-raid group above already captures.
-    // A candidate can only ESTABLISH a lockout (count as the genuine
-    // fresh kill that locks the character for the rest of the week) if
-    // it's actually decided who's going -- either this is the only
-    // candidate on its signup (no ambiguity at all), or this specific
-    // character has actually been rostered for it. An undecided
-    // candidate on a still-multi-candidate, not-yet-rostered signup is
-    // just one of several possibilities -- it hasn't actually happened
-    // yet, so it can't lock anyone out of anything, and auto-correcting
-    // some OTHER signup's candidates to Saved on the strength of it
-    // would be jumping the gun.
-    function isDecided(c) {
-      return c.entry.characters.length === 1 || c.entry.rosteredCharRealm === c.charRealm;
+    // For each candidate, find the EARLIEST decided run, from a different
+    // signup, strictly before it, in any lockout it shares -- that run
+    // is what locks the character out of this one.
+    for (const c of candidates) c.blockedBy = null;
+    for (const group of groups.values()) {
+      for (const c of group) {
+        if (c.isHistory) continue;
+        for (const d of group) {
+          if (!d.decided || d.entry === c.entry) continue;
+          if (!(d.entry.sortKey < c.entry.sortKey)) continue;
+          if (!c.blockedBy || d.entry.sortKey < c.blockedBy.entry.sortKey) c.blockedBy = d;
+        }
+      }
     }
 
-    // First pass: find the chronologically earliest Unsaved-labeled
-    // DECIDED candidate in each individual-raid group -- that's the one
-    // true fresh kill that's actually been established for that
-    // specific lockout. Stays null if nothing decided exists yet (e.g.
-    // several undecided multi-candidate signups with nothing rostered),
-    // in which case nothing in that group has actually locked anything.
-    const trueFirstPerGroup = new Map();
-    for (const [key, groupCandidates] of groups) {
-      const sorted = [...groupCandidates].sort((a, b) => a.entry.sortKey.localeCompare(b.entry.sortKey));
-      trueFirstPerGroup.set(key, sorted.find((c) => !c.saved && isDecided(c)) || null);
-    }
-
-    // Second pass: compute each candidate's overall effective status.
-    // A candidate only gets auto-corrected to Saved if, for at least
-    // one raid it touches, a DIFFERENT, already-established candidate
-    // exists for that same lockout -- meaning someone else's decided
-    // signup already used up the fresh kill. If nothing has been
-    // established yet for any raid this candidate touches (every
-    // trueFirst is null, or it's this candidate itself), nothing
-    // overrides its own raw status -- including for an undecided
-    // candidate on a still-undecided signup, which just keeps showing
-    // its own Unsaved/Saved label as stated until something is actually
-    // decided. This is a purely computed view (never rewrites the
-    // underlying signup data), so it automatically stays correct as
-    // signups get rostered, edited, or deleted.
     for (const c of candidates) {
+      c.impossibleMythicDuplicate = false;
       if (c.saved) {
         c.effectiveSaved = true;
-        continue;
-      }
-      const blockedByEstablishedOther = c.raidNames.some((raidName) => {
-        const key = `${c.charRealm}|${raidName}|${c.entry.difficulty}|${c.weekIndex}`;
-        const established = trueFirstPerGroup.get(key);
-        return established && established !== c;
-      });
-      if (!blockedByEstablishedOther) {
+      } else if (!c.blockedBy) {
         c.effectiveSaved = false;
-      } else if (c.entry.difficulty === "Mythic") {
-        // Mythic has no "Saved" concept at all, unlike Heroic/Normal --
-        // once a character is locked to a Mythic raid's kill that week,
-        // they simply cannot join another Mythic run of it at all,
-        // Saved or otherwise. Auto-correcting this to Saved (as happens
-        // for other difficulties below) would display a state that's
-        // actually impossible, so this stays Unsaved but gets flagged
-        // as a genuine conflict instead -- see the duplicate-Mythic
-        // check in detectConflicts.
+      } else if (c.difficulty === "Mythic") {
+        // Mythic has no Saved option at all: once locked, the character
+        // can't join another Mythic run of that raid that week, so this
+        // can't be "corrected" to Saved -- it's flagged as a conflict.
         c.effectiveSaved = false;
         c.impossibleMythicDuplicate = true;
       } else {
         c.effectiveSaved = true;
       }
+      c.wasAutoCorrected = c.effectiveSaved && !c.saved;
     }
 
     return groups;
   }
 
-  // A raidId|charRealm -> {effectiveSaved, wasAutoCorrected} lookup for
-  // the calendar display, since renderCalendar works directly off each
-  // entry's own characters array rather than the lockout groups.
-  // wasAutoCorrected distinguishes "genuinely marked Saved in the
-  // signup text" from "auto-corrected to Saved because an earlier
-  // signup already used up this lockout's real Unsaved kill" -- the
-  // display uses it to label the second case differently so it's clear
-  // why it shows Saved when the original signup text said Unsaved.
+  // raidId|charRealm -> effective status, for the calendar display.
+  // A combo candidate sits in several groups as the same object, so the
+  // first sighting is enough.
   function computeEffectiveSavedMap(entries) {
     const map = new Map();
-    for (const groupCandidates of buildLockoutGroups(entries).values()) {
-      for (const c of groupCandidates) {
-        map.set(`${c.entry.raidId}|${c.charRealm}`, {
+    for (const group of buildLockoutGroups(entries).values()) {
+      for (const c of group) {
+        if (c.isHistory) continue;
+        const key = `${c.entry.raidId}|${c.charRealm}`;
+        if (map.has(key)) continue;
+        map.set(key, {
           effectiveSaved: c.effectiveSaved,
-          wasAutoCorrected: c.effectiveSaved && !c.saved,
+          wasAutoCorrected: c.wasAutoCorrected,
+          blockedByRaidId: c.blockedBy ? c.blockedBy.entry.raidId : null,
         });
       }
     }
     return map;
   }
 
-  // For the CURRENT reset week only: every (character, difficulty) that
-  // has an Unsaved run actually scheduled -- these are the ones that need
-  // protecting: if that character gets saved to that difficulty by
-  // anything else (a different signup, a casual personal run) before the
-  // scheduled Unsaved run happens, the sale is ruined. Deduped by
-  // character+difficulty (not per-raid) to keep this a short, simple
-  // list -- if the same character has Unsaved runs on the same
-  // difficulty across two different raids this week, that's still one
-  // line, not two.
+  // For the CURRENT reset week only: every (character, difficulty) with
+  // an upcoming run they're still effectively Unsaved for, plus which
+  // raid(s) that applies to -- since VA and TG are separate lockouts,
+  // "Heroic" alone would be ambiguous once one of them is already used.
   function computeUnsavedNeeded(entries) {
     const currentWeekIndex = computeWeekIndex({ sortKey: nowAsSortKey() });
     const nowMs = nowAsCentralNaiveMs();
-    const groups = buildLockoutGroups(entries);
-    const seen = new Set();
-    const needed = [];
-    for (const groupCandidates of groups.values()) {
-      const first = groupCandidates[0];
-      if (first.weekIndex !== currentWeekIndex) continue;
-      // Only an Unsaved run that hasn't happened yet still needs
-      // protecting -- one already in the past has presumably either
-      // already happened (nothing left to protect) or is still sitting
-      // as an active signup regardless of what this dashboard says, so
-      // there's no value in continuing to warn about it here. (Unpicked
-      // candidates on a rostered signup are already filtered out
-      // upstream by buildLockoutGroups, so every candidate reaching this
-      // point is either genuinely undecided or the actual rostered pick.)
-      const hasUpcomingUnsaved = groupCandidates.some((c) => !c.effectiveSaved && entryTimestampMs(c.entry) > nowMs);
-      if (!hasUpcomingUnsaved) continue;
-      const key = `${first.charRealm}|${first.entry.difficulty}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      needed.push({ charRealm: first.charRealm, difficulty: first.entry.difficulty });
+    const byCharDiff = new Map();
+    for (const [key, group] of buildLockoutGroups(entries)) {
+      const raidName = key.split("|")[1];
+      for (const c of group) {
+        if (c.isHistory || c.weekIndex !== currentWeekIndex) continue;
+        if (c.effectiveSaved || c.impossibleMythicDuplicate) continue;
+        if (entryTimestampMs(c.entry) <= nowMs) continue;
+        const k = `${c.charKey}|${c.difficulty}`;
+        if (!byCharDiff.has(k)) byCharDiff.set(k, { charRealm: c.charRealm, difficulty: c.difficulty, raids: new Set() });
+        byCharDiff.get(k).raids.add(raidName);
+      }
     }
-    // Stable, readable order: by character name, then difficulty.
+    const needed = [...byCharDiff.values()].map((n) => ({ ...n, raids: [...n.raids].sort() }));
     needed.sort((a, b) =>
       characterName(a.charRealm).localeCompare(characterName(b.charRealm)) ||
       a.difficulty.localeCompare(b.difficulty)
@@ -997,19 +1011,6 @@
     return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}-${pad(d.getUTCHours())}-${pad(d.getUTCMinutes())}`;
   }
 
-  // The character candidates on an entry that are actually relevant for
-  // per-character checks (lockout grouping, Mythic-Saved, title-type
-  // mismatch, etc.): once a specific character has been rostered, the
-  // OTHER, unpicked candidates weren't actually chosen -- they're not
-  // really "going" on this run, so whatever their own saved status or
-  // other per-character data says shouldn't trigger warnings meant for
-  // whoever is actually attending. Before a pick is made, every
-  // candidate is still relevant, since any of them could end up going.
-  function activeCandidates(entry) {
-    if (!entry.rosteredCharRealm) return entry.characters;
-    return entry.characters.filter((c) => c.charRealm === entry.rosteredCharRealm);
-  }
-
   function detectConflicts(entries) {
     const groups = buildLockoutGroups(entries);
     const list = Object.values(entries).filter((e) => e.sortKey && e.characters && e.characters.length > 0);
@@ -1020,13 +1021,10 @@
       if (!conflicts.get(raidId).includes(message)) conflicts.get(raidId).push(message);
     };
 
-    // Mythic has no ID-extension mechanic the way Heroic/Normal do -- once
-    // a character gets their own Mythic kill that week they're locked to
-    // it, full stop, so there's no such thing as a legitimate "Saved"
-    // Mythic sale. A Mythic entry marked Saved in the data is always a
-    // mistake (typo, mislabeled signup, etc.), not a valid state.
+    // Mythic has no ID-extension -- a character marked Saved on a Mythic
+    // signup is always a data mistake.
     for (const entry of list) {
-      if (entry.difficulty !== "Mythic") continue;
+      if (normDifficulty(entry.difficulty) !== "Mythic") continue;
       for (const char of activeCandidates(entry)) {
         if (char.saved) {
           addConflict(entry.raidId, `${characterName(char.charRealm)}: Mythic can't be a Saved run -- Mythic has no ID-extension, so this is likely a mistake`);
@@ -1034,43 +1032,40 @@
       }
     }
 
-    // Unlike Heroic/Normal, a later "Unsaved" Mythic signup for a raid
-    // the character is already locked to can't be auto-corrected to
-    // Saved (see impossibleMythicDuplicate above) -- there's no such
-    // thing as a valid Saved Mythic slot, so this is a genuine
-    // scheduling conflict that needs a person to actually resolve it
-    // (the character can only do one of these signups, full stop).
-    for (const groupCandidates of groups.values()) {
-      for (const c of groupCandidates) {
-        if (!c.impossibleMythicDuplicate) continue;
-        const trueFirst = groupCandidates.find((other) => !other.saved && !other.impossibleMythicDuplicate);
-        if (trueFirst) {
-          addConflict(c.entry.raidId, `${characterName(c.charRealm)}: Already has a Mythic kill for this raid this week from Raid #${trueFirst.entry.raidId} -- can't do this one too, Mythic has no Saved option`);
+    // Per-candidate lockout conflicts. The ONLY lockout conflicts are:
+    //   * a Mythic run the character is already locked out of (no Saved
+    //     option exists to fall back to), and
+    //   * a Saved character -- marked Saved, or auto-saved by an earlier
+    //     rostered/completed run that week -- on a run whose title says
+    //     it's an Unsaved run.
+    // A Saved-titled or untyped run with an auto-saved character is NOT
+    // a conflict; it just displays as Saved (auto).
+    const seen = new Set();
+    for (const group of groups.values()) {
+      for (const c of group) {
+        if (c.isHistory || seen.has(c)) continue;
+        seen.add(c);
+        const name = characterName(c.charRealm);
+        const source = c.blockedBy
+          ? `Raid #${c.blockedBy.entry.raidId}${c.blockedBy.isHistory ? " (completed)" : ""}`
+          : "";
+        if (c.impossibleMythicDuplicate) {
+          addConflict(c.entry.raidId, `${name}: Already locked to this Mythic raid this week from ${source} -- can't do this one too, Mythic has no Saved option`);
+          continue;
         }
-      }
-    }
-
-    // A raid's own title can declare it's specifically an "Unsaved" run
-    // (see titleDeclaredRunType) -- every character signed up for one
-    // needs to genuinely be unsaved for it, that's the whole point of
-    // the run. A Saved character on an Unsaved run is a real conflict.
-    // This only runs one way: a "Saved"-titled run with an Unsaved
-    // character signed up is NOT a conflict (perfectly normal -- an
-    // unsaved buyer can still join a run the group itself is saved to).
-    for (const entry of list) {
-      if (titleDeclaredRunType(entry.title) !== "Unsaved") continue;
-      for (const char of activeCandidates(entry)) {
-        if (char.saved) {
-          addConflict(entry.raidId, `${characterName(char.charRealm)}: This is an Unsaved run, but this character is marked Saved`);
+        if (titleDeclaredRunType(c.entry.title) === "Unsaved" && c.effectiveSaved) {
+          if (c.wasAutoCorrected) {
+            addConflict(c.entry.raidId, `${name}: This is an Unsaved run, but this character will already be saved from ${source}`);
+          } else {
+            addConflict(c.entry.raidId, `${name}: This is an Unsaved run, but this character is marked Saved`);
+          }
         }
       }
     }
 
     // Start-time proximity check: across ALL signups regardless of
-    // character, raid, or difficulty -- this isn't about a lockout, it's
-    // about whether the same person can realistically be in two raids that
-    // close together. O(n^2) pairwise comparison, but n here is a
-    // personal signup list (tens, not thousands), so this is negligible.
+    // character, raid, or difficulty -- whether the same person can
+    // realistically be in two raids that close together.
     for (let i = 0; i < list.length; i++) {
       const a = list[i];
       const aMs = entryTimestampMs(a);
@@ -1083,33 +1078,6 @@
         if (gapMinutes <= MIN_GAP_MINUTES) {
           addConflict(a.raidId, `Starts only ${Math.round(gapMinutes)} min from Raid #${b.raidId}`);
           addConflict(b.raidId, `Starts only ${Math.round(gapMinutes)} min from Raid #${a.raidId}`);
-        }
-      }
-    }
-
-    for (const groupCandidates of groups.values()) {
-      const charName = characterName(groupCandidates[0].charRealm);
-      // effectiveSaved (computed in buildLockoutGroups) already folds in
-      // the auto-correction: only the chronologically first Unsaved
-      // signup in a group is ever effectiveSaved===false, so there's
-      // nothing left to warn about for a "second Unsaved run" the way
-      // there used to be -- it just displays as Saved automatically now
-      // (see renderCalendar). What's still worth flagging is an
-      // EXPLICITLY Saved run scheduled before the real Unsaved one,
-      // since that's a scheduling mistake the auto-correction can't fix
-      // for you (selling Saved slots before doing your own Unsaved kill
-      // means you can't go back and do that kill Unsaved anymore).
-      const unsaved = groupCandidates.filter((c) => !c.effectiveSaved);
-      const saved = groupCandidates.filter((c) => c.effectiveSaved);
-
-      if (unsaved.length === 1) {
-        const unsavedCandidate = unsaved[0];
-        const earlierOrSameSaved = saved.filter((c) => c.entry.sortKey <= unsavedCandidate.entry.sortKey);
-        for (const c of earlierOrSameSaved) {
-          addConflict(c.entry.raidId, `${charName}: Scheduled as Saved before the Unsaved run (Raid #${unsavedCandidate.entry.raidId}) for this raid/difficulty this week`);
-        }
-        if (earlierOrSameSaved.length > 0) {
-          addConflict(unsavedCandidate.entry.raidId, `${charName}: This Unsaved run is scheduled after ${earlierOrSameSaved.length} Saved run(s) for this raid/difficulty this week`);
         }
       }
     }
@@ -1293,7 +1261,7 @@
           const savedBadgeClass = displaySaved ? "raids-badge-saved" : "raids-badge-unsaved";
           const badgeText = displaySaved ? (wasAutoCorrected ? "Saved (auto)" : "Saved") : "Unsaved";
           const badgeTitle = wasAutoCorrected
-            ? ` title="Auto-corrected to Saved: this character already has an earlier Unsaved run this week for this raid/difficulty"`
+            ? ` title="Auto-saved: already rostered for Raid #${effective.blockedByRaidId} earlier this week (same raid and difficulty)"`
             : "";
           return `
             <div class="raids-char-line${isThisRostered ? " raids-char-line-rostered" : ""}">
@@ -1686,7 +1654,7 @@
     }
     section.hidden = false;
     list.innerHTML = needed.map((n) => `
-      <li class="raids-unsaved-item">${characterDisplay(n.charRealm)} \u2014 ${escapeHtml(n.difficulty)}</li>`).join("");
+      <li class="raids-unsaved-item">${characterDisplay(n.charRealm)} \u2014 ${escapeHtml(n.difficulty)} \u00b7 ${escapeHtml(n.raids.map(raidShortName).join(" + "))}</li>`).join("");
   }
 
   function render() {
