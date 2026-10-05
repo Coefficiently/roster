@@ -51,6 +51,18 @@
   // fetched, so there's nothing safe to apply.
   let localChangedDuringInitialSync = false;
 
+  // Canonical "name-realm" key for matching a character across sources.
+  // Signups write realms the way players type them ("zul'jin",
+  // "mal'ganis"), while the roster data uses Blizzard realm slugs
+  // ("zuljin", "malganis", "area-52"), so the realm part is reduced to
+  // just its letters and digits on both sides before comparing.
+  function charKey(charRealm) {
+    const s = String(charRealm || "").trim().toLowerCase();
+    const dash = s.indexOf("-");
+    if (dash === -1) return s;
+    return `${s.slice(0, dash)}-${s.slice(dash + 1).replace(/[^a-z0-9]/g, "")}`;
+  }
+
   function buildCharacterLookup(rosterData) {
     const lookup = {};
     if (!rosterData || !rosterData.characters) return lookup;
@@ -58,7 +70,7 @@
       const realm = rosterData.realms && rosterData.realms[char.realmId];
       const cls = rosterData.classes && rosterData.classes[char.classId];
       if (!realm || !realm.slug || !char.name) continue;
-      const key = `${char.name.toLowerCase()}-${realm.slug.toLowerCase()}`;
+      const key = charKey(`${char.name}-${realm.slug}`);
       lookup[key] = {
         displayName: char.name,
         classColor: (cls && CLASS_COLORS[cls.slug]) || null,
@@ -827,7 +839,7 @@
   }
 
   function normChar(charRealm) {
-    return String(charRealm || "").trim().toLowerCase();
+    return charKey(charRealm);
   }
 
   // Short display label for a canonical raid name ("VA", "TG"), falling
@@ -1156,7 +1168,7 @@
   // contexts like conflict messages. Shares the same lookup/fallback logic
   // as characterDisplay.
   function characterName(charRealm) {
-    const match = CHARACTER_LOOKUP[(charRealm || "").toLowerCase()];
+    const match = CHARACTER_LOOKUP[charKey(charRealm)];
     return match ? match.displayName : charRealm;
   }
 
@@ -1165,7 +1177,7 @@
   // "name-realm" text, uncolored, if there's no match (e.g. roster data
   // wasn't available, or it's a character not tracked on the roster).
   function characterDisplay(charRealm) {
-    const match = CHARACTER_LOOKUP[(charRealm || "").toLowerCase()];
+    const match = CHARACTER_LOOKUP[charKey(charRealm)];
     if (!match) return escapeHtml(charRealm);
     const style = match.classColor ? ` style="color:${match.classColor}"` : "";
     return `<span${style}>${escapeHtml(match.displayName)}</span>`;
